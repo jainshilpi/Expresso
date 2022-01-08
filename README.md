@@ -6,4 +6,4 @@ jupyter nbconvert --to script ChargeFlip.ipynb
 
 ## Run
 
-python ChargeFlip.py
+python Analyzer.ipynb

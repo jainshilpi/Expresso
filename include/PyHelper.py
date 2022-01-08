@@ -174,3 +174,6 @@ class MyAnalyzer:
     def printCutFlow(self,cont):
         self.PD[cont]['RDF'].Report().Print()
         
+def printCutFlow(DF):
+    DF.Report().Print()
+        

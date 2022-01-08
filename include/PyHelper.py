@@ -7,7 +7,11 @@ def Clone(h):
         h.append(hi.Clone())
     return h
 
-def prepareevents(Process,Aliases,Definitions,Selections):
+def prepareevents(Analyzer):
+    Process=Analyzer.Processes
+    Aliases=Analyzer.Aliases
+    Definitions=Analyzer.Definitions
+    Selections=Analyzer.Selections
     import ROOT
     PDs=[]
     for cont in Process.keys():
@@ -114,3 +118,59 @@ def savehistonlyratio(h=[],col=[],op="l"):
     
 def BookHisto(df,Args,Branch):
     return df.Histo1D(Args, Branch)
+
+
+
+
+
+#Classes
+
+class ObjectMask:
+    def __init__(self):
+        self.mask =""
+    def addcut(self,cut):
+        if self.mask!="":
+            self.mask += "&& ("+(cut)+")"
+        else:
+            self.mask += "("+(cut)+")"
+            
+class MyAnalyzer:
+    def __init__(self):
+        self.Definitions ={}
+        self.Aliases ={}
+        self.Selections = {}
+        self.Processes = {}
+        self.PD = {}
+        
+    def definition(self,key,expression):
+        self.Definitions[key]=expression
+        
+    def alias(self,key,expression):
+        self.Aliases[key]=expression
+        
+    def sel(self,key,expression):
+        self.Selections[key]=expression
+        
+    def process(self,key,expression):
+        self.Processes[key]=expression
+        
+    def prepare(self):
+        Process=self.Processes
+        Aliases=self.Aliases
+        Definitions=self.Definitions
+        Selections=self.Selections
+        import ROOT
+        for cont in Process.keys():
+            Files=Process[cont]['Files']
+            Tree=Process[cont]['Tree']
+            df = ROOT.RDataFrame(Tree, Files)
+            for define in Definitions.keys():
+                df = df.Define(define,Definitions[define])
+            for alias in Aliases.keys():
+                df = df.Alias(alias,Aliases[alias])
+            for sel in Selections.keys():
+                df = df.Filter(sel,Selections[sel])
+            self.PD[cont]={'Type':Process[cont]['Type'],'RDF':df,'Xsec':Process[cont]['Xsec']}
+    def printCutFlow(self,cont):
+        self.PD[cont]['RDF'].Report().Print()
+        

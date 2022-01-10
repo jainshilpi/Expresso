@@ -7,7 +7,7 @@ def Clone(h):
         h.append(hi.Clone())
     return h
 
-def prepareevents(Analyzer):
+def prepareevents(Analyzer,RDataFrame):
     Process=Analyzer.Processes
     Aliases=Analyzer.Aliases
     Definitions=Analyzer.Definitions
@@ -17,7 +17,7 @@ def prepareevents(Analyzer):
     for cont in Process.keys():
         Files=Process[cont]['Files']
         Tree=Process[cont]['Tree']
-        df = ROOT.RDataFrame(Tree, Files)
+        df = RDataFrame(Tree, Files)
         for define in Definitions.keys():
             df = df.Define(define,Definitions[define])
         for alias in Aliases.keys():
@@ -27,7 +27,7 @@ def prepareevents(Analyzer):
         PDs.append({'cont':cont,'Type':Process[cont]['Type'],'RDF':df,'Xsec':Process[cont]['Xsec']})
     return PDs
 
-def savehist(h=[],col=[],op="l",norm=False):
+def savehist(h=[],col=[],op="l",norm=False,outfolder=''):
     h=Clone(h)
     c = ROOT.TCanvas("c","example",600,700);
     #pad1 = ROOT.TPad("pad1","pad1",0,0.3,1,1);
@@ -55,10 +55,10 @@ def savehist(h=[],col=[],op="l",norm=False):
     legend.SetTextSize(0.02)
     #h[0].SetAxisRange(h[0].GetMinimum(), 0.2*h[0].GetMaximum(), "Y");
     if norm: c.SaveAs((h[0].GetTitle())+"_norm.pdf")
-    if not norm: c.SaveAs((h[0].GetTitle())+".pdf")
+    if not norm: c.SaveAs(outfolder+"/"+(h[0].GetTitle())+".pdf")
     
     
-def savehistwithratio(h=[],col=[],op="l"):
+def savehistwithratio(h=[],col=[],op="l",outfolder=''):
     h=Clone(h)
     if len(h)!=2:
         print("Only works with 2 hists")
@@ -95,9 +95,9 @@ def savehistwithratio(h=[],col=[],op="l"):
     h1.Draw("text0 ep");
     c1.cd();
     
-    c1.SaveAs((h[0].GetTitle())+".pdf")
+    c1.SaveAs(outfolder+"/"+(h[0].GetTitle())+".pdf")
     
-def savehistonlyratio(h=[],col=[],op="l"):
+def savehistonlyratio(h=[],col=[],op="l",outfolder=''):
     h=Clone(h)
     ROOT.gStyle.SetPaintTextFormat("4.4f");
     if len(h)!=2:
@@ -114,7 +114,7 @@ def savehistonlyratio(h=[],col=[],op="l"):
     #h1.SetMarkerStyle(21);
     h1.SetMarkerSize(1)
     h1.Draw("text0 ep");
-    c1.SaveAs((h[0].GetTitle())+"_ratio.pdf")
+    c1.SaveAs(outfolder+"/"+(h[0].GetTitle())+"_ratio.pdf")
     
 def BookHisto(df,Args,Branch):
     return df.Histo1D(Args, Branch)
@@ -171,6 +171,25 @@ class MyAnalyzer:
             for sel in Selections.keys():
                 df = df.Filter(sel,Selections[sel])
             self.PD[cont]={'Type':Process[cont]['Type'],'RDF':df,'Xsec':Process[cont]['Xsec']}
+    
+    def prepareDASK(self,RDataFrame,npartitions, daskclient):
+        Process=self.Processes
+        Aliases=self.Aliases
+        Definitions=self.Definitions
+        Selections=self.Selections
+        import ROOT
+        for cont in Process.keys():
+            Files=Process[cont]['Files']
+            Tree=Process[cont]['Tree']
+            df = RDataFrame(Tree, Files)#, npartitions = npartitions, daskclient = daskclient)
+            for define in Definitions.keys():
+                df = df.Define(define,Definitions[define])
+            for alias in Aliases.keys():
+                df = df.Alias(alias,Aliases[alias])
+            for sel in Selections.keys():
+                df = df.Filter(sel,Selections[sel])
+            self.PD[cont]={'Type':Process[cont]['Type'],'RDF':df,'Xsec':Process[cont]['Xsec']}
+            
     def printCutFlow(self,cont):
         self.PD[cont]['RDF'].Report().Print()
         

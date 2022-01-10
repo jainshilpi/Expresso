@@ -36,53 +36,53 @@ int ChargeFlip_Category(float MyElectron_pt1,float MyElectron_pt2,float MyElectr
 {
     int el1LMH,el2LMH,el1BE,el2BE;
     el1LMH=1*(MyElectron_pt1<25) + 2*(MyElectron_pt1>=25 && MyElectron_pt1<50) + 3*(MyElectron_pt1>=50);
-    el2LMH=1*(MyElectron_pt2<25) + 2*(MyElectron_pt2>=25 && MyElectron_pt2<50) + 3*(MyElectron_pt2>=50);
+    el2LMH=1*(MyElectron_pt2<25) + 2*((MyElectron_pt2>=25) && (MyElectron_pt2<50)) + 3*(MyElectron_pt2>=50);
     
     el1BE=1*(abs(MyElectron_eta1)<1.479) + 2*(abs(MyElectron_eta1)>=1.479);
     el2BE=1*(abs(MyElectron_eta2)<1.479) + 2*(abs(MyElectron_eta2)>=1.479);
     
     
     if (el1BE==1 && el1LMH==1 && el2BE==1 && el2LMH==1)
-        return 0;
-    if (el1BE==1 && el1LMH==2 && el2BE==1 && el2LMH==1)
         return 1;
-    if (el1BE==1 && el1LMH==2 && el2BE==1 && el2LMH==2)
+    if (el1BE==1 && el1LMH==2 && el2BE==1 && el2LMH==1)
         return 2;
-    if (el1BE==1 && el1LMH==3 && el2BE==1 && el2LMH==1)
+    if (el1BE==1 && el1LMH==2 && el2BE==1 && el2LMH==2)
         return 3;
-    if (el1BE==1 && el1LMH==3 && el2BE==1 && el2LMH==2)
+    if (el1BE==1 && el1LMH==3 && el2BE==1 && el2LMH==1)
         return 4;
-    if (el1BE==1 && el1LMH==3 && el2BE==1 && el2LMH==3)
+    if (el1BE==1 && el1LMH==3 && el2BE==1 && el2LMH==2)
         return 5;
-    if (el1BE==2 && el1LMH==1 && el2BE==2 && el2LMH==1)
+    if (el1BE==1 && el1LMH==3 && el2BE==1 && el2LMH==3)
         return 6;
-    if (el1BE==2 && el1LMH==2 && el2BE==2 && el2LMH==1)
+    if (el1BE==2 && el1LMH==1 && el2BE==2 && el2LMH==1)
         return 7;
-    if (el1BE==2 && el1LMH==2 && el2BE==2 && el2LMH==2)
-        return 8;
-    if (el1BE==2 && el1LMH==3 && el2BE==2 && el2LMH==1)
-        return 9;
-    if (el1BE==2 && el1LMH==3 && el2BE==2 && el2LMH==2)
-        return 10;
-    if (el1BE==2 && el1LMH==3 && el2BE==2 && el2LMH==3)
-        return 11;
-    if (el1BE==1 && el1LMH==1 && el2BE==2 && el2LMH==1)
-        return 12;
-    if (el1BE==1 && el1LMH==2 && el2BE==2 && el2LMH==1)
-        return 13;
     if (el1BE==2 && el1LMH==2 && el2BE==2 && el2LMH==1)
+        return 8;
+    if (el1BE==2 && el1LMH==2 && el2BE==2 && el2LMH==2)
+        return 9;
+    if (el1BE==2 && el1LMH==3 && el2BE==2 && el2LMH==1)
+        return 10;
+    if (el1BE==2 && el1LMH==3 && el2BE==2 && el2LMH==2)
+        return 11;
+    if (el1BE==2 && el1LMH==3 && el2BE==2 && el2LMH==3)
+        return 12;
+    if (el1BE==1 && el1LMH==1 && el2BE==2 && el2LMH==1)
+        return 13;
+    if (el1BE==1 && el1LMH==2 && el2BE==2 && el2LMH==1)
         return 14;
-    if (el1BE==1 && el1LMH==2 && el2BE==2 && el2LMH==2)
+    if (el1BE==2 && el1LMH==2 && el2BE==1 && el2LMH==1)
         return 15;
-    if (el1BE==1 && el1LMH==3 && el2BE==2 && el2LMH==1)
+    if (el1BE==1 && el1LMH==2 && el2BE==2 && el2LMH==2)
         return 16;
-    if (el1BE==2 && el1LMH==3 && el2BE==1 && el2LMH==1)
+    if (el1BE==1 && el1LMH==3 && el2BE==2 && el2LMH==1)
         return 17;
-    if (el1BE==1 && el1LMH==3 && el2BE==2 && el2LMH==2)
+    if (el1BE==2 && el1LMH==3 && el2BE==1 && el2LMH==1)
         return 18;
-    if (el1BE==2 && el1LMH==3 && el2BE==1 && el2LMH==2)
+    if (el1BE==1 && el1LMH==3 && el2BE==2 && el2LMH==2)
         return 19;
-    if (el1BE==1 && el1LMH==3 && el2BE==2 && el2LMH==3)
+    if (el1BE==2 && el1LMH==3 && el2BE==1 && el2LMH==2)
         return 20;
-    return 21;
+    if (el1BE==1 && el1LMH==3 && el2BE==2 && el2LMH==3)
+        return 21;
+    return 22;
 }

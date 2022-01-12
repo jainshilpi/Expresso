@@ -31,3 +31,10 @@ time python Analyzer.py --name 'DY' --file ChargeFlip/output_skim.root --outfold
 
 ```
 
+## Submitting remote jobs (example)
+
+```bash
+lxplus726:~/workspace/2022/FlatAnalyzer$ . getremoteskimcommand.sh DY ChargeFlip $PWD/SampleFiles/DYFiles_example.txt
+```
+
+This will give you the command you need to run to submit condor jobs to skim remote files that are stated in $PWD/SampleFiles/DYFiles_example.txt

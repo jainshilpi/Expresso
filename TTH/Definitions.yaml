@@ -1,0 +1,32 @@
+Nel : Sum(GoodElectrons)
+elpt  :  Take(Electron_pt[GoodElectrons], Reverse(Argsort(Electron_pt[GoodElectrons])))
+eleta  :  Take(Electron_eta[GoodElectrons], Reverse(Argsort(Electron_pt[GoodElectrons])))
+elphi  :  Take(Electron_phi[GoodElectrons], Reverse(Argsort(Electron_pt[GoodElectrons])))
+elmass  :  Take(Electron_mass[GoodElectrons], Reverse(Argsort(Electron_pt[GoodElectrons])))
+elcharge  :  Take(Electron_charge[GoodElectrons], Reverse(Argsort(Electron_pt[GoodElectrons])))
+elgenPartIdx  :  Take(Electron_genPartIdx[GoodElectrons], Reverse(Argsort(Electron_pt[GoodElectrons])))
+eltightCharge  :  Take(Electron_tightCharge[GoodElectrons],Reverse(Argsort(Electron_pt[GoodElectrons])))
+eljetIdx  :  Take(Electron_jetIdx[GoodElectrons], Reverse(Argsort(Electron_pt[GoodElectrons])))
+eldeepjet :  Varbutindices(Jet_btagDeepFlavB,eljetIdx)
+
+#elpt1  :  elpt[0]
+#eleta1 : eleta[0]
+#elphi1 : elphi[0]
+#elmass1 : elmass[0]
+#elcharge1 : elcharge[0]
+#elgenPartIdx1 : elgenPartIdx[0]
+#eljetIdx1 : eljetIdx[0]
+#elmotherpid1 : GenPart_pdgId[GenPart_genPartIdxMother[elgenPartIdx1]]
+#eldeepjet1 : Jet_btagDeepFlavB[eljetIdx1]
+#elpt2 : elpt[1]
+#eleta2 : eleta[1]
+#elphi2 : elphi[1]
+#elmass2 : elmass[1]
+#elcharge2 : elcharge[1]
+#elgenPartIdx2 : elgenPartIdx[1]
+#eljetIdx2 : eljetIdx[1]
+#elmotherpid2 : GenPart_pdgId[GenPart_genPartIdxMother[elgenPartIdx2]]
+#eldeepjet2 : Jet_btagDeepFlavB[eljetIdx2]
+
+Dielectron_mass : ComputeInvariantMass(elpt, eleta, elphi, elmass)
+ChargeFlip_Category : ((elpt.size()>1) ? ChargeFlip_Category(elpt[0],elpt[1],eleta[0],eleta[1]):-999)

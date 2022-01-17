@@ -3,7 +3,7 @@
 ## Create env
 
 ```bash
-source /cvmfs/sft.cern.ch/lcg/views/LCG_100/x86_64-centos7-gcc8-opt/setup.sh
+source BashTools.sh
 ```
 
 ## Create Analyzer
@@ -47,7 +47,15 @@ export X509_USER_PROXY=/afs/cern.ch/user/a/akapoor/proxy/myx509
 
 Run this command in your terminal
 ```bash
-. getremoteskimcommand.sh DY ChargeFlip $PWD/SampleFiles/DYFiles_example.txt TTH
+getremoteskimcommand.sh DY ChargeFlip $PWD/SampleFiles/DYFiles_example.txt TTH
+```
+
+## Sanity checks on Skimmed files
+
+There is Info.csv stored in the Skim output folder, that has information on which files at ran on, how many events in total and how many passed, and the name of the corresponding output file. You can run these commands, to extract information from Info.csv
+
+```bash
+ReadInfocsv <location of Info.csv>
 ```
 
 This will give you the command you need to run to submit condor jobs to skim remote files that are stated in $PWD/SampleFiles/DYFiles_example.txt

@@ -164,6 +164,7 @@ class MyAnalyzer:
             Files=Process[cont]['Files']
             Tree=Process[cont]['Tree']
             df = ROOT.RDataFrame(Tree, Files)
+            E=df.Count()
             for define in Definitions.keys():
                 df = df.Define(define,Definitions[define])
             for alias in Aliases.keys():
@@ -171,6 +172,7 @@ class MyAnalyzer:
             for sel in Selections.keys():
                 df = df.Filter(sel,Selections[sel])
             self.PD[cont]={'Type':Process[cont]['Type'],'RDF':df,'Xsec':Process[cont]['Xsec']}
+        return E 
     
     def prepareDASK(self,RDataFrame,npartitions, daskclient):
         Process=self.Processes

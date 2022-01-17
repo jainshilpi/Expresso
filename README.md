@@ -3,7 +3,7 @@
 ## Create env
 
 ```bash
-source /cvmfs/sft.cern.ch/lcg/views/LCG_98py3cu10/x86_64-centos7-gcc8-opt/setup.sh
+source /cvmfs/sft.cern.ch/lcg/views/LCG_100/x86_64-centos7-gcc8-opt/setup.sh
 ```
 
 ## Create Analyzer
@@ -26,7 +26,7 @@ python Analyzer.py -h
 
 ### Skimming
 ```bash
-python Skimmer-new.py --name DY --file 'root://xrootd-cms.infn.it///store/mc/RunIIFall17NanoAODv7/DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8/NANOAODSIM/PU2017RECOSIMstep_12Apr2018_Nano02Apr2020_102X_mc2017_realistic_v8-v1/110000/12AAE61E-F886-B24E-8F62-57765FBC2CE9.root' --saveroot --outfolder Output --debugprint --analysis TTH --saveroot --outsuffix DY"
+time python Skimmer.py --name DY --file 'root://xrootd-cms.infn.it///eos/cms/store/group/phys_egamma/akapoor/ChargeMisID/newsamples2/06544C90-EFDF-E811-80E6-842B2B6F5D5C.root' --saveroot --outfolder Output --debugprint --analysis TTH --outsuffix DY --multithreaded --xsec 1 --istype mc
 
 ```
 
@@ -47,7 +47,7 @@ export X509_USER_PROXY=/afs/cern.ch/user/a/akapoor/proxy/myx509
 
 Run this command in your terminal
 ```bash
-. getremoteskimcommand.sh DY ChargeFlip $PWD/SampleFiles/DYFiles_example.txt
+. getremoteskimcommand.sh DY ChargeFlip $PWD/SampleFiles/DYFiles_example.txt TTH
 ```
 
 This will give you the command you need to run to submit condor jobs to skim remote files that are stated in $PWD/SampleFiles/DYFiles_example.txt

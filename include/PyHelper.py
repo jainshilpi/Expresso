@@ -54,7 +54,7 @@ def savehist(h=[],col=[],op="l",norm=False,outfolder=''):
     legend.Draw()
     legend.SetTextSize(0.02)
     #h[0].SetAxisRange(h[0].GetMinimum(), 0.2*h[0].GetMaximum(), "Y");
-    if norm: c.SaveAs((h[0].GetTitle())+"_norm.pdf")
+    if norm: c.SaveAs(outfolder+"/"+(h[0].GetTitle())+"_norm.pdf")
     if not norm: c.SaveAs(outfolder+"/"+(h[0].GetTitle())+".pdf")
     
     
@@ -115,6 +115,7 @@ def savehistonlyratio(h=[],col=[],op="l",outfolder=''):
     h1.SetMarkerSize(1)
     h1.Draw("text0 ep");
     c1.SaveAs(outfolder+"/"+(h[0].GetTitle())+"_ratio.pdf")
+    return h1.Clone()
     
 def BookHisto(df,Args,Branch):
     return df.Histo1D(Args, Branch)

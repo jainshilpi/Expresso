@@ -8,6 +8,8 @@ ReadInfocsv (){
     cat $1 | cut -d ',' -f5 | jq -s add
     echo "EventsPassed"
     cat $1 | cut -d ',' -f4 | jq -s add
+    echo "TotalFiles"
+    cat $1 | cut -d ',' -f3 | jq -s length
 }
 
 

@@ -111,3 +111,106 @@ int ChargeFlip_Category(float MyElectron_pt1,float MyElectron_pt2,float MyElectr
 
     return 22;
 }
+
+
+RVecF getMuonWeight(TString type,int nMuon,RVecF Muon_pt,RVecF Muon_eta){
+    
+    
+    RVecF Weight(6);
+    Double_t leptonWeight = 1.0, leptonWeightUp = 1.0, leptonWeightDown = 1.0;
+    Double_t triggerWeight = 1.0, triggerWeightUp = 1.0, triggerWeightDown = 1.0;
+    
+    if(type=="mu"){
+
+	TString muonIsoFileName="/afs/cern.ch/user/a/akapoor/workspace/2022/tWIHEPFramework/config/weights/muon/Efficiencies_muon_generalTracks_Z_Run2016_UL_ISO.root";
+	TString muonIsoHistName="NUM_LooseRelIso_DEN_LooseID_abseta_pt";
+	TString muonIDFileName="/afs/cern.ch/user/a/akapoor/workspace/2022/tWIHEPFramework/config/weights/muon/Efficiencies_muon_generalTracks_Z_Run2016_UL_ID.root";
+	TString muonIDHistName="NUM_MediumID_DEN_TrackerMuons_abseta_pt";
+
+	
+	TFile* muonIsoFile = TFile::Open(muonIsoFileName,"READ");
+
+	if (!muonIsoFile) std::cout << "Muon iso file not found!" << std::endl;
+	auto _muonIsoSF = (TH2F*)muonIsoFile->Get(muonIsoHistName);//+"/pt_abseta_ratio");
+	_muonIsoSF->SetDirectory(0);
+	muonIsoFile->Close();
+
+	TFile* muonIDFile = TFile::Open(muonIDFileName,"READ");
+	if (!muonIDFile) std::cout << "Muon ID file not found!" << std::endl;
+	auto _muonIDSF = (TH2F*)muonIDFile->Get(muonIDHistName);//+"/pt_abseta_ratio");
+	_muonIDSF->SetDirectory(0);
+	muonIDFile->Close();
+
+
+	// TFile* muonTrigFile = TFile::Open(muonTrigFileName,"READ");
+	// if (!muonTrigFile) std::cout << "Muon trig file not found!" << std::endl;
+	// _muonTrigSF = (TH2F*)muonTrigFile->Get(muonTrigHistName+"/pt_abseta_ratio")->Clone();
+	// _muonTrigSF->SetDirectory(0);
+	// muonTrigFile->Close();
+
+	// TFile* muonTkFile = TFile::Open(muonTkFileName,"READ");
+	// if (!muonTkFile) std::cout << "Muon tracker file not found!" << std::endl;
+	// _muonTkSF = (TGraphAsymmErrors*)muonTkFile->Get("ratio_eff_aeta_dr030e030_corr")->Clone();
+	// //  _muonTkSF->SetDirectory(0);
+	// muonTkFile->Close();
+	for (int i=0;i<nMuon;i++){
+	    //std::cout<<Muon_pt[i]<<endl;
+	    //std::cout<<Muon_eta[i]<<endl;
+	    
+	    //Get the bin shared by iso and id SFs
+	    //Int_t xAxisBin = _muonIsoSF->GetXaxis()->FindBin(float(Muon_pt[i]));
+	    //_muonIsoSF->Dump();
+	    
+	    Int_t xAxisBin=_muonIsoSF->GetXaxis()->FindBin(Muon_pt[0]);
+	    
+	    if (Muon_pt[i] > 120.) xAxisBin = _muonIsoSF->GetXaxis()->FindBin(119.);
+	    
+	    Int_t yAxisBin = _muonIsoSF->GetYaxis()->FindBin(std::fabs(Muon_eta[i]));
+	    if (std::fabs(Muon_eta[i]) > 2.4) yAxisBin = _muonIsoSF->GetYaxis()->FindBin(2.39);
+	    
+	    //And now get the iso and id SFs/uncs
+	    Float_t isoSF = _muonIsoSF->GetBinContent(xAxisBin,yAxisBin);
+	    Float_t isoUnc = _muonIsoSF->GetBinError(xAxisBin,yAxisBin);
+	    Float_t idSF = _muonIDSF->GetBinContent(xAxisBin,yAxisBin);
+	    Float_t idUnc = _muonIDSF->GetBinError(xAxisBin,yAxisBin);
+	    
+	    // //Get the bin for trigger SF
+	    // Int_t xAxisBinTrig = _muonTrigSF->GetXaxis()->FindBin(Muon_pt[i]);
+	    // if (Muon_pt[i] > 500.) xAxisBinTrig = _muonTrigSF->GetXaxis()->FindBin(499.);
+	    // Int_t yAxisBinTrig = _muonTrigSF->GetYaxis()->FindBin(std::fabs(Muon_eta[i]));
+	    // if (std::fabs(Muon_eta[i]) > 2.4) yAxisBinTrig = _muonTrigSF->GetYaxis()->FindBin(2.39);
+	    // //Get the trigSF
+	    // Float_t trigSF = _muonTrigSF->GetBinContent(xAxisBinTrig,yAxisBinTrig);
+	    // Float_t trigUnc = _muonTrigSF->GetBinError(xAxisBinTrig,yAxisBinTrig);
+	    
+	    // //Evaluate muon tk
+	    Float_t tkSF = 1;//_muonTkSF->Eval(std::fabs(Muon_eta[i]));
+	    
+	    leptonWeight *= isoSF * idSF * tkSF;
+	    leptonWeightUp *= (isoSF + isoUnc) * (idSF + idUnc) * tkSF;
+	    leptonWeightDown *= (isoSF - isoUnc) * (idSF - idUnc) * tkSF;
+	    
+	    // triggerWeight = trigSF;
+	    // triggerWeightUp = trigSF + trigUnc;
+	    // triggerWeightDown = trigSF - trigUnc;
+
+
+	}
+	Weight[0]=leptonWeight;
+	Weight[1]=leptonWeightUp;
+	Weight[2]=leptonWeightDown;
+	Weight[3]=0;//triggerWeight;
+	Weight[4]=0;//triggerWeightUp;
+	Weight[5]=0;//triggerWeightDown;
+    
+    }
+    else{
+	Weight[0]=0;
+	Weight[1]=0;
+	Weight[2]=0;
+	Weight[3]=0;
+	Weight[4]=0;
+	Weight[5]=0;
+    }
+return Weight;
+}

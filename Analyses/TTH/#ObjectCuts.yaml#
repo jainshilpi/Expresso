@@ -1,0 +1,14 @@
+GoodElectrons: 
+    - Electron_pt > 10
+    - Electron_sieie<(0.011+0.019*(abs(Electron_eta+Electron_deltaEtaSC)>1.479))
+    - abs(Electron_dxy)< 0.05
+    - abs(Electron_dz)< 0.1
+    - Electron_mvaTTH > 0.8
+    - Electron_hoe<0.1
+    - Electron_eInvMinusPInv>-0.04
+    - Electron_sip3d<8
+    - Electron_convVeto
+    - Electron_mvaFall17V2noIso_WPL
+    - Electron_miniPFRelIso_all<0.40
+    - Electron_lostHits==0
+

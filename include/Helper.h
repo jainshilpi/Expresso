@@ -3,6 +3,7 @@
 #include "TCanvas.h"
 #include "TH1D.h"
 #include "TLatex.h"
+#include "TSystem.h"
 #include "Math/Vector4D.h"
 #include "TStyle.h"
  
@@ -12,6 +13,8 @@ using RNode = ROOT::RDF::RNode;
 
 using Vec_t = const ROOT::RVec<float>&;
 using RVecF = RVec<float>;
+
+    
 float ComputeInvariantMass(Vec_t pt, Vec_t eta, Vec_t phi, Vec_t mass) {
     const ROOT::Math::PtEtaPhiMVector p1(pt[0], eta[0], phi[0], mass[0]);
     const ROOT::Math::PtEtaPhiMVector p2(pt[1], eta[1], phi[1], mass[1]);
@@ -122,9 +125,9 @@ RVecF getMuonWeight(TString type,int nMuon,RVecF Muon_pt,RVecF Muon_eta){
     
     if(type=="mu"){
 
-	TString muonIsoFileName="/afs/cern.ch/user/a/akapoor/workspace/2022/tWIHEPFramework/config/weights/muon/Efficiencies_muon_generalTracks_Z_Run2016_UL_ISO.root";
+	TString muonIsoFileName="./config/weights/muon/Efficiencies_muon_generalTracks_Z_Run2016_UL_ISO.root";
 	TString muonIsoHistName="NUM_LooseRelIso_DEN_LooseID_abseta_pt";
-	TString muonIDFileName="/afs/cern.ch/user/a/akapoor/workspace/2022/tWIHEPFramework/config/weights/muon/Efficiencies_muon_generalTracks_Z_Run2016_UL_ID.root";
+	TString muonIDFileName="./config/weights/muon/Efficiencies_muon_generalTracks_Z_Run2016_UL_ID.root";
 	TString muonIDHistName="NUM_MediumID_DEN_TrackerMuons_abseta_pt";
 
 	

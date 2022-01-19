@@ -1,0 +1,1 @@
+- 'auto csetEl_2016postID = correction::CorrectionSet::from_file("/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/EGM/2016postVFP_UL/electron.json.gz")->at("UL-Electron-ID-SF");'

@@ -1,0 +1,11 @@
+NJet : Sum(MyJet)
+MyJet_genJetIdx : Jet_genJetIdx[MyJet]
+MyJet_btagDeepB : Jet_btagDeepB[MyJet]
+MyJet_btagDeepFlavB : Jet_btagDeepFlavB[MyJet]
+MyJet_qgl : Jet_qgl[MyJet]
+MyJet_hadronFlavour : Jet_hadronFlavour[MyJet]
+MyJet_eta : Jet_eta[MyJet]
+MyJet_phi : Jet_phi[MyJet]
+MyJet_pt : Jet_pt[MyJet]
+MyJet_mass : Jet_mass[MyJet]
+MyJet_isFromHadTop : JetIsFromHadTop(GenJet_eta, GenJet_phi, MyJet_genJetIdx, GenPart_eta, GenPart_phi, GenPart_pdgId, GenPart_genPartIdxMother, GenPart_status)

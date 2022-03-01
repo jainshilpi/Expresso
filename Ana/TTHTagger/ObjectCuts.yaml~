@@ -1,0 +1,4 @@
+MyJet:
+- Jet_pt>25
+- abs(Jet_eta) < 2.4
+- Jet_jetId > 0

@@ -1,0 +1,4 @@
+Myevent : event
+Nel : Sum(GoodElectrons)
+elpt  :  Take(Electron_pt[GoodElectrons], Reverse(Argsort(Electron_pt[GoodElectrons])))
+elecorr  :  Take(Electron_eCorr[GoodElectrons], Reverse(Argsort(Electron_pt[GoodElectrons])))

@@ -1,0 +1,12 @@
+QNRJet : Sum(QRMyJet)
+QNJet : Sum(QMyJet)
+QMyJet_genJetIdx : MyJet_genJetIdx[QMyJet]
+QMyJet_btagDeepB : MyJet_btagDeepB[QMyJet]
+QMyJet_btagDeepFlavB : MyJet_btagDeepFlavB[QMyJet]
+QMyJet_qgl : MyJet_qgl[QMyJet]
+QMyJet_hadronFlavour : MyJet_hadronFlavour[QMyJet]
+QMyJet_eta : MyJet_eta[QMyJet]
+QMyJet_phi : MyJet_phi[QMyJet]
+QMyJet_pt : MyJet_pt[QMyJet]
+QMyJet_mass : MyJet_mass[QMyJet]
+QMyJet_isFromHadTop : MyJet_isFromHadTop[QMyJet]

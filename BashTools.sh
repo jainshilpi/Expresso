@@ -13,6 +13,10 @@ ReadInfocsv (){
     cat $1 | cut -d ',' -f3 | jq -s length
 }
 
+nbc (){
+    jupyter nbconvert --to script $1
+}
+
 
 
 getremoteskimcommand(){

@@ -1,0 +1,8 @@
+Sum(GoodElectrons) == 2 : "Two or more good electrons"
+#elmotherpid1==23 && elmotherpid2==23 : Come from Z
+#(eldeepjet[0]<0.3033 && eldeepjet[1]<0.3033 && eldeepjet[0]>-999 && eldeepjet[1]>-999) : "DeepJet cuts on ele"
+(Dielectron_mass<121) && (Dielectron_mass>61) : "Z mass cut"
+((Sum(GoodElectrons) >1) ? DeltaR(eleta[0],elphi[0],eleta[1],elphi[1]):0)>0.4 : "DeltaR cut"
+Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter : "Quality1"
+Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter : "Quality2"
+Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter : "Quality3"

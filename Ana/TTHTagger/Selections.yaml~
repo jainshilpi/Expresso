@@ -1,0 +1,3 @@
+NJet >= 2 : "Atleast 3 jets"
+EventHasW(GenPart_pdgId) : "Event has W gen"
+

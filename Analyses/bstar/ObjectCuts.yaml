@@ -1,13 +1,44 @@
-GoodElectrons: 
-    - Electron_pt > 10
-    - Electron_sieie<(0.011+0.019*(abs(Electron_eta+Electron_deltaEtaSC)>1.479))
-    - abs(Electron_dxy)< 0.05
-    - abs(Electron_dz)< 0.1
-    - Electron_mvaTTH > 0.8
-    - Electron_hoe<0.1
-    - Electron_eInvMinusPInv>-0.04
-    - Electron_sip3d<8
-    - Electron_convVeto
-    #- Electron_mvaFall17V2noIso_WPL
-    - Electron_miniPFRelIso_all<0.40
-    - Electron_lostHits==0
+EleScE:
+	- (Electron_scEtOverPt+1)*Electron_pt)
+
+Ele_hoeEB:
+	- ((0.026+(1.15*EleScE)+((0.0324*fixedGridRhoFastjetAll)/EleScE)) * (abs(Electron_eta)<1.479))
+
+Ele_hoeEE:
+	- ((0.0188+(2.06*EleScE)+((0.183*fixedGridRhoFastjetAll)/EleScE)) * (abs(Electron_eta)<=1.479))
+
+ElectronsTightWOIsolation:
+	- Electron_sieie<(0.0104+0.0353*(abs(Electron_eta+Electron_deltaEtaSC)>1.479))
+	#- abs(Electron_dxy)< 0.05
+	#- abs(Electron_dz)< 0.1
+	#- Electron_hoe<(Ele_hoeEB + Ele_hoeEE)
+	#- Electron_eInvMinusPInv>-0.04
+	#- Electron_sip3d<8
+   	- Electron_convVeto
+	#- Electron_mvaFall17V2noIso_WPL
+	#- Electron_miniPFRelIso_all<0.40
+	- Electron_lostHits==0
+GoodElectrons:
+	- Electron_pt > 53
+	- abs(Electron_eta) < 2.4
+	- ElectronsTightWOIsolation
+
+VetoElectrons:
+	- Electron_pt > 30
+	- abs(Electron_eta) < 2.4
+	- ElectronsTightWOIsolation
+
+TightMuons:
+	-Muon_pt > 53
+	-abs(Muon_eta) < 2.4
+	-Muon_tightId
+
+VetoMuons:
+	-Muon_pt > 30
+	-abs(Muon_eta) < 2.4
+	-Muon_looseId
+
+BoostedJets:
+	-Jet_pt>200
+	-abs(Jet_eta) < 2.4
+	-

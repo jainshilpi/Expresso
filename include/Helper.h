@@ -13,7 +13,29 @@ using RNode = ROOT::RDF::RNode;
 
 using Vec_t = const ROOT::RVec<float>&;
 using RVecF = RVec<float>;
+using RVecI = RVec<int>;
 
+RVecF GenerateDecayTime(RVecI Particle_pid, RVecF Particle_px, RVecF Particle_py, RVecF Particle_pz, RVecF Particle_energy) {
+    int countmesons=0;
+    for (size_t i = 0; i < Particle_pid.size(); i++){
+	if (Particle_pid[i]==4900111){
+	    countmesons=countmesons+1;}
+    }
+    RVecI Particle_DecayTime(countmesons*2000);
+    int iteration=0;
+    for (size_t i = 0; i < Particle_pid.size(); i++){
+	if (Particle_pid[i]==4900111){;
+	    for (size_t k = iteration*2000; k < (iteration+1)*2000 ; k++){
+		
+		//Your exp generator
+		Particle_DecayTime[k]=0;
+		//////////
+	    }
+	    iteration=iteration+1;
+	}
+    }
+    return Particle_DecayTime;
+}
     
 float ComputeInvariantMass(Vec_t pt, Vec_t eta, Vec_t phi, Vec_t mass) {
     const ROOT::Math::PtEtaPhiMVector p1(pt[0], eta[0], phi[0], mass[0]);
@@ -37,6 +59,83 @@ float DeltaR(float eta1,float phi1,float eta2,float phi2)
         deltaPhi = TMath::TwoPi() - deltaPhi;
     return TMath::Sqrt(deltaEta*deltaEta + deltaPhi*deltaPhi);
 }
+
+bool isquark(int pdgid){
+    if (abs(pdgid)==1) return true;
+    if (abs(pdgid)==2) return true;
+    if (abs(pdgid)==3) return true;
+    if (abs(pdgid)==4) return true;
+    if (abs(pdgid)==5) return true;
+    if (abs(pdgid)==6) return true;
+    if (abs(pdgid)==7) return true;
+    if (abs(pdgid)==8) return true;
+    if (abs(pdgid)==21) return true;
+    return false;
+}
+
+
+int IsFromHadronicTop(int MotherMatchpdgid,int Matchpdgid,int GrandMotherMatchpdgid)
+{
+    int FromHadronicTop=0;
+    if (abs(MotherMatchpdgid)==24 || abs(GrandMotherMatchpdgid)==24) FromHadronicTop=1;
+    if (abs(MotherMatchpdgid)==6 || abs(GrandMotherMatchpdgid)==6) FromHadronicTop=1;
+    return FromHadronicTop;
+}
+
+
+
+RVecI JetIsFromHadTop(Vec_t GenJet_eta, Vec_t GenJet_phi, Vec_t Jet_genJetIdx, Vec_t gen_eta, Vec_t gen_phi, Vec_t gen_pdgid, Vec_t gen_genPartIdxMother, Vec_t gen_status, float matchdR=0.3)
+{
+    RVecI Jet_isFromHadronicTop(Jet_genJetIdx.size());
+	for (size_t i = 0; i < Jet_genJetIdx.size(); i++){
+	    if (Jet_genJetIdx[i]==-1){
+		continue;}
+	    float dR=999.0;
+	    int match=0;
+	    float MatchedObject_eta=GenJet_eta[Jet_genJetIdx[i]];
+	    float MatchedObject_phi=GenJet_phi[Jet_genJetIdx[i]];
+	    int foundtop=0;
+	    int foundW=0;
+	    int foundb=0;
+	    for (size_t j = 0; j < gen_eta.size(); j++){
+		if(!isquark(abs(gen_pdgid[j]))) continue;
+		float myDR=DeltaR(MatchedObject_eta,MatchedObject_phi,gen_eta[j],gen_phi[j]);
+		if(myDR<0.3 && myDR<dR){
+		    match=1;
+		    int moindex=j;
+		    for (int k=0;k<9;k++){
+			int pdgid=gen_pdgid[moindex];
+			cout<<"MatchID= "<<pdgid<<endl;
+			if(abs(pdgid)==24) cout<<"Found W"<<endl;
+			if(abs(pdgid)==5) cout<<"Found b"<<endl;
+			if(abs(pdgid)==24){foundW=1;}
+			if(abs(pdgid)==5){foundb=1;}
+			if(abs(pdgid)==6 && abs(gen_pdgid[gen_genPartIdxMother[moindex]])!=6){
+			    cout<<"Found top"<<endl;
+			    foundtop=(1000+(100*foundW)+(10*foundb));
+			    if(pdgid<0)foundtop=-1*(foundtop);
+			    break;}
+			moindex=gen_genPartIdxMother[moindex];
+		    }		    
+		    dR=myDR;}
+		if (abs(foundtop)>0) break;
+	    }
+	    //if(abs(foundtop)==1000){
+		//cout<<"foundtop= "<<foundtop<<endl;}
+	    cout<<"---------------------------"<<endl;
+	    Jet_isFromHadronicTop[i]=foundtop;
+	}
+	return Jet_isFromHadronicTop;
+}
+
+		
+bool EventHasW(Vec_t pdgid)
+{
+    for (size_t i = 0; i < pdgid.size(); i++) {
+	if (abs(pdgid[i])==24) return true;}
+    return false;
+}
+
 
 
 RVecF Varbutindices(Vec_t var, Vec_t indices)

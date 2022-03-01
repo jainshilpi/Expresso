@@ -1,0 +1,1 @@
+time python Skimmer.py --name TTHTagger --file 'root://t3se01.psi.ch:1094//store/user/sesanche/NanoTrees_forAnshul/2016/TTHad_pow.root' --saveroot --outfolder Output --debugprint --analysis Analyses/TTHTagger/ --outsuffix TTHTagger --xsec 1 --multithreaded --istype mc

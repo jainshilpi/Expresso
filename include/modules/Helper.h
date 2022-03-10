@@ -83,13 +83,13 @@ RVecI JetIsFromHadTop(Vec_t GenJet_eta, Vec_t GenJet_phi, Vec_t Jet_genJetIdx, V
 		    int moindex=j;
 		    for (int k=0;k<9;k++){
 			int pdgid=gen_pdgid[moindex];
-			cout<<"MatchID= "<<pdgid<<endl;
-			if(abs(pdgid)==24) cout<<"Found W"<<endl;
-			if(abs(pdgid)==5) cout<<"Found b"<<endl;
+			//cout<<"MatchID= "<<pdgid<<endl;
+			//if(abs(pdgid)==24) cout<<"Found W"<<endl;
+			//if(abs(pdgid)==5) cout<<"Found b"<<endl;
 			if(abs(pdgid)==24){foundW=1;}
 			if(abs(pdgid)==5){foundb=1;}
 			if(abs(pdgid)==6 && abs(gen_pdgid[gen_genPartIdxMother[moindex]])!=6){
-			    cout<<"Found top"<<endl;
+			    //cout<<"Found top"<<endl;
 			    foundtop=(1000+(100*foundW)+(10*foundb));
 			    if(pdgid<0)foundtop=-1*(foundtop);
 			    break;}
@@ -100,8 +100,9 @@ RVecI JetIsFromHadTop(Vec_t GenJet_eta, Vec_t GenJet_phi, Vec_t Jet_genJetIdx, V
 	    }
 	    //if(abs(foundtop)==1000){
 		//cout<<"foundtop= "<<foundtop<<endl;}
-	    cout<<"---------------------------"<<endl;
 	    Jet_isFromHadronicTop[i]=foundtop;
+	    //cout<<"Jet_isFromHadronicTop = "<<Jet_isFromHadronicTop[i]<<endl;
+	    //cout<<"---------------------------"<<endl;
 	}
 	return Jet_isFromHadronicTop;
 }

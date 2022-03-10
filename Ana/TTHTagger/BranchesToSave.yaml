@@ -9,3 +9,4 @@
 - MyJet_pt # Jet_pt[MyJet]
 - MyJet_mass # Jet_mass[MyJet]
 - MyJet_isFromHadTop # JetIsFromHadTop(GenJet_eta, GenJet_phi, MyJet_genJetIdx, GenPart_eta, GenPart_phi, GenPart_pdgId, GenPart_genPartIdxMother, GenPart_status)
+- MyJet_triptag

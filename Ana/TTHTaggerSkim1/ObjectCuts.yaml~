@@ -1,5 +1,0 @@
-QRMyJet:
-- (MyJet_isFromHadTop==1)
-
-QMyJet:
-- (MyJet_isFromHadTop == -1)

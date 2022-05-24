@@ -1,9 +1,0 @@
-Myevent : event
-Nel : Sum(GoodElectrons)
-elpt  :  Take(Electron_pt[GoodElectrons], Reverse(Argsort(Electron_pt[GoodElectrons])))
-eleta  :  Take(Electron_eta[GoodElectrons], Reverse(Argsort(Electron_pt[GoodElectrons])))
-elecorr  :  Take(Electron_eCorr[GoodElectrons], Reverse(Argsort(Electron_pt[GoodElectrons])))
-elphi  :  Take(Electron_phi[GoodElectrons], Reverse(Argsort(Electron_pt[GoodElectrons])))
-elmass  :  Take(Electron_mass[GoodElectrons], Reverse(Argsort(Electron_pt[GoodElectrons])))
-elcharge  :  Take(Electron_charge[GoodElectrons], Reverse(Argsort(Electron_pt[GoodElectrons])))
-leadElSF : 'csetEl_2016preID->evaluate({"2016preVFP", "sf", "Medium", std::abs(eleta[0]), elpt[0]})'

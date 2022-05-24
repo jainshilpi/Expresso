@@ -1,1 +1,1 @@
-time python Skimmer.py --name TTHTagger --file 'root://t3se01.psi.ch:1094//store/user/sesanche/NanoTrees_forAnshul/2016/TTHad_pow.root' --saveroot --outfolder Output --debugprint --analysis Analyses/TTHTagger/ --outsuffix TTHTagger --xsec 1 --multithreaded --istype mc
+python Expresso.py --Sample SAMPLES/background_samples/central_UL/UL16_DY50.json --OutputName results --OutputFolder Analysis/chflip/output --ChunkSize 1000 --NumberOfTasks 4 --Analysis chflip -pre Analysis/chflip/preprocessor.py -plotter Analysis/chflip/plot.py

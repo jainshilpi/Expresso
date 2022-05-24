@@ -1,4 +1,0 @@
-- 'auto csetEl_2016postID = correction::CorrectionSet::from_file("/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/EGM/2016postVFP_UL/electron.json.gz")->at("UL-Electron-ID-SF");'
-- 'auto csetEl_2016preID = correction::CorrectionSet::from_file("/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/EGM/2016preVFP_UL/electron.json.gz")->at("UL-Electron-ID-SF");'
-- 'auto csetEl_2017ID = correction::CorrectionSet::from_file("/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/EGM/2017_UL/electron.json.gz")->at("UL-Electron-ID-SF");'
-- 'auto csetEl_2017ID = correction::CorrectionSet::from_file("/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/EGM/2018_UL/electron.json.gz")->at("UL-Electron-ID-SF");'

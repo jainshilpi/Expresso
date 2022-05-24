@@ -1,0 +1,22 @@
+
+  "xsec": 6025.2
+  "year": "2016"
+  "treeName": "Events"
+  "histAxisName": "DY50_centralUL16"
+  "options": ""
+  "WCnames": []
+  "files": ["/store/mc/RunIISummer20UL16NanoAODv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_mcRun2_asymptotic_v17-v1/30000/A20C5B1A-2CFF-7B42-82A4-06347D0856A7.root"]
+  "nEvents": 71839442
+  "nGenEvents": 71839442
+  "nSumOfWeights": 1220934627963.0718
+  "isData": False
+  "nSumOfWeights_ISRUp": 1216287827787.1978
+  "nSumOfWeights_ISRDown": 1224454367094.0806
+  "nSumOfWeights_FSRUp": 1220268806869.8994
+  "nSumOfWeights_FSRDown": 1221359568369.538
+  "nSumOfWeights_renormUp": 1203674883757.0793
+  "nSumOfWeights_renormDown": 1238084086068.262
+  "nSumOfWeights_factUp": 1251282893558.285
+  "nSumOfWeights_factDown": 1172552700444.6453
+  "nSumOfWeights_renormfactUp": 1242635864725.239
+  "nSumOfWeights_renormfactDown": 1200619132199.2322

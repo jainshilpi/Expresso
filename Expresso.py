@@ -22,6 +22,8 @@ parser.add_argument("--Analysis","-ana"   , default='chflip', help = 'Analysis n
 parser.add_argument("--PreProcessor","-pre"   , default='pre.py', help = 'preprocessor path')
 #parser.add_argument("--PreSelection","-pre"   , default='sel.py', help = 'preselection')
 parser.add_argument("--PlotterScript","-plotter"   , default='', help = 'plotterscript')
+parser.add_argument("--Xrootd","-xrd"   , default='root://cmsxrootd.fnal.gov//', help = 'xrootd redirector')
+
 
 args = parser.parse_args()
 
@@ -64,7 +66,7 @@ Ana.preselection(preselection)
 #------------------- SetYourAnalysis #-------------------###########
 Ana.SetAnalysis(myanalysis)
 #------------------- RunYourAnalysis #-------------------###########
-result=Ana.run(chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks))
+result=Ana.run(xrootd=args.Xrootd,chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks))
 #------------------- Save the Histograms #-------------------###########
 ET.saveHist(result,args.OutputFolder,args.OutputName)
 ET.cprint(f'#---- pkl file with results: {args.OutputFolder}/  ----#',"HEADER")

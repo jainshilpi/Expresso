@@ -17,6 +17,20 @@ import cloudpickle
 import gzip
 import os
 
+#----------------------------------------------------------------------
+def saveroot(varslist,filename='sample',outputfolder='./'):
+    os.system(f'mkdir -p {outputfolder}/{filename}/')
+    outputfolder=outputfolder+'/'+filename+'/'
+    import ROOT
+    from datetime import datetime
+    dt = datetime.now()
+    ts = datetime.timestamp(dt)
+    filename=outputfolder+'/'+filename+'_'+str(ts)+'.root'
+    for key in varslist.keys():
+        varslist[key]=ak.to_numpy(ak.fill_none(varslist[key],-9999))
+    df = ROOT.RDF.MakeNumpyDataFrame(varslist)
+    df.Snapshot("Events",filename)
+    return filename
 
 #--------------------------------------------------------------------- Sorter by conept
 def sortconept(obj):

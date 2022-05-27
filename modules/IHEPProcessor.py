@@ -3,7 +3,7 @@ from coffea.nanoevents import NanoEventsFactory, NanoAODSchema
 from coffea import hist
 
 class IHEPProcessor(processor.ProcessorABC):
-    def __init__(self,preprocess,preselect,analysis,histos,samples):
+    def __init__(self,analysisname,varstosave,preprocess,preselect,analysis,histos,samples):
         histos['cutflow']=hist.Hist(axes=[hist.Cat("selection", "selection"),
                                           hist.Bin("x", "x coordinate [m]", 80, 0, 80)],
                                     label="Cutflow")
@@ -12,6 +12,8 @@ class IHEPProcessor(processor.ProcessorABC):
         self._analysis = analysis
         self._preprocess = preprocess
         self._preselect = preselect
+        self._varstosave = varstosave
+        self._analysisname = analysisname
 
     @property
     def accumulator(self):
@@ -27,6 +29,7 @@ class IHEPProcessor(processor.ProcessorABC):
         #------- preselect and store cutflow
         events,out=self._preselect(isData,events,out)
         #------- run analysis
+        filename=self._varstosave(events,histAxisName,'Analysis/'+self._analysisname+'/output/trees/')
         out = self._analysis(out,events,dataset,isData,histAxisName,year,xsec,sow)
         #------- return accumulator
         return out

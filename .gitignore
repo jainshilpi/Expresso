@@ -5,6 +5,8 @@ include/__pycache__
 */*~
 */*/*~
 */*/*/*/*~
+*/#*
+*/*/#*
 Analysis/*/output/
 condor/test.log
 condor/condor_output/*out

@@ -17,8 +17,42 @@ import cloudpickle
 import gzip
 import os
 
+import ctypes
+libc = ctypes.cdll.LoadLibrary('libc.so.6')
+
+# System dependent, see e.g. /usr/include/x86_64-linux-gnu/asm/unistd_64.h
+SYS_gettid = 186
+
+def autolog(message,logger,level="i"):
+
+    def getThreadId():
+       """Returns OS thread id - Specific to Linux"""
+       return libc.syscall(SYS_gettid)
+    "Automatically log the current function details."
+    import inspect
+    # Get the previous frame in the stack, otherwise it would
+    # be this function!!!
+    func = inspect.currentframe().f_back.f_code
+    # Dump the message + the name of this function to the log.
+    message=f'{message}: {func.co_name} in {func.co_filename}:{func.co_firstlineno}, thread {getThreadId()}'
+    if level=='i':
+        logger.info(message)
+    elif level=='d':
+        logger.debug(message)
+    elif level=='e':
+        logger.error(message)
+    else:
+        logger.warning(message)
+
+    
 #----------------------------------------------------------------------
-def saveroot(varslist,filename='sample',outputfolder='./'):
+def saveroot(logger,varslist,filename='sample',outputfolder='./'):
+
+    #import logging
+    #logger = logging.getLogger(__name__)
+    #logger.error("saving root file")
+    autolog("saving root file",logger)
+
     os.system(f'mkdir -p {outputfolder}/{filename}/')
     outputfolder=outputfolder+'/'+filename+'/'
     import ROOT

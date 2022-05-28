@@ -1,7 +1,7 @@
 import awkward as ak
 import modules.ExpressoTools as ET
 
-def varstosave(events,filename='sample',outputfolder='./'):
+def varstosave(logger,events,filename='sample',outputfolder='./'):
     ###########################################################
     varslist= {
         "event":events['event'],
@@ -11,5 +11,5 @@ def varstosave(events,filename='sample',outputfolder='./'):
         "leading_jetpt": ak.pad_none(events.Jet,1).pt[:,0]
     }
     ###########################################################
-    filename=ET.saveroot(varslist,filename,outputfolder)
+    filename=ET.saveroot(logger,varslist,filename,outputfolder)
     return filename

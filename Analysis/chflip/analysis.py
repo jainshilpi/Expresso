@@ -7,7 +7,7 @@ import modules.objects as obj
 from coffea.analysis_tools import PackedSelection
 #####################################################################################################################
 
-def myanalysis(h,ev,dataset,isData,histAxisName,year,xsec,sow):
+def myanalysis(logger,h,ev,dataset,isData,histAxisName,year,xsec,sow):
 
     #------------------------Start your analysis below this
     

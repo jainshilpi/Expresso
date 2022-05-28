@@ -8,6 +8,8 @@ include/__pycache__
 */#*
 */*/#*
 Analysis/*/output/
+Analysis/*/log/
 condor/test.log
 condor/condor_output/*out
 condor/condor_output/*err
+/notebooks/.ipy*

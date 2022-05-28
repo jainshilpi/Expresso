@@ -3,16 +3,50 @@ import modules.ExpressoTools as ET
 import modules.IHEPProcessor as IHEPProcessor
 from coffea.nanoevents import NanoEventsFactory, NanoAODSchema
 import json
-
+import logging
+import threading
 class IHEPAnalysis:
     
-    def __init__(self,name):
+    def __init__(self,name,loglevel=logging.INFO):
         self.a=0
         self.hists={}
         self.samples=[]
         self.SampleList=[]
         self.AnalysisName=name
+        import inspect, logging
+        import os
+        # Create a custom logger
+        #logging.basicConfig(format="thread %(threadName)s:%(message)s")
+        logger = logging.getLogger(__name__)
+        logger.setLevel(loglevel)
+        # Create handlers
+        logpath='Analysis/'+self.AnalysisName+'/log'
+        if not os.path.isdir(logpath): os.mkdir(logpath)
+        debug_handler = logging.FileHandler('Analysis/'+self.AnalysisName+'/log/logfile_debug.log')
+        info_handler = logging.FileHandler('Analysis/'+self.AnalysisName+'/log/logfile_info.log')
+        warning_handler = logging.FileHandler('Analysis/'+self.AnalysisName+'/log/logfile_warning.log')
+        error_handler = logging.FileHandler('Analysis/'+self.AnalysisName+'/log/logfile_error.log')
+        debug_handler.setLevel(logging.DEBUG)
+        info_handler.setLevel(logging.INFO)
+        warning_handler.setLevel(logging.WARNING)
+        error_handler.setLevel(logging.ERROR)
+        # Create formatters and add it to handlers
+        info_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+        warning_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+        debug_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+        error_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        info_handler.setFormatter(info_format)
+        debug_handler.setFormatter(debug_format)
+        warning_handler.setFormatter(warning_format)
+        error_handler.setFormatter(error_format)
         
+        # Add handlers to the logger
+        logger.addHandler(debug_handler)
+        logger.addHandler(info_handler)
+        logger.addHandler(warning_handler)
+        logger.addHandler(error_handler)
+        self.logger=logger
+        ET.autolog(f'thread from analysis.py: {threading.get_ident()}',self.logger,'i')
     
     def preprocess(self,preprocessor):
         self.preprocess=preprocessor
@@ -42,12 +76,14 @@ class IHEPAnalysis:
             
     def SetAnalysis(self,analysis):
         self.analysis=analysis
+        return self.logger
     
     def run(self,xrootd="root://cmsxrootd.fnal.gov//",chunksize=100,maxchunks=1,saveroot=False):
+        
         for sample in self.samples:
             sample["files"]=[xrootd + file for file in sample["files"]]
             result= processor.run_uproot_job({sample["histAxisName"]:sample["files"]},sample["treeName"],
-                                             IHEPProcessor.IHEPProcessor(self.AnalysisName,self.varstosave,
+                                             IHEPProcessor.IHEPProcessor(self.logger,self.AnalysisName,self.varstosave,
                                                                          self.preprocess,self.preselect,self.analysis,self.hists,sample),
                                              processor.futures_executor,{"schema": NanoAODSchema, 'workers':16} ,
                                              chunksize=chunksize, maxchunks=maxchunks)

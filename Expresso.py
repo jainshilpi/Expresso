@@ -6,10 +6,6 @@ import coffea as coffea
 from coffea import hist
 uproot.open.defaults["xrootd_handler"] = uproot.source.xrootd.MultithreadedXRootDSource
 
-import modules.Analysis as Analysis
-import modules.ExpressoTools as ET
-from modules.selection import *
-from coffea.analysis_tools import PackedSelection
 
 import argparse
 parser = argparse.ArgumentParser(description='Expresso Framework Options')
@@ -28,6 +24,13 @@ parser.add_argument("--Xrootd","-xrd"   , default='root://cmsxrootd.fnal.gov//',
 
 args = parser.parse_args()
 
+import modules.Analysis as Analysis
+import modules.ExpressoTools as ET
+from modules.selection import *
+from coffea.analysis_tools import PackedSelection
+
+
+
 
 ET.cprint(f'#----------------- E X P R E S S O    F R A M E W O R K-------------------#',"HEADER")
 ET.cprint(f'Sample will be picked from: {args.Sample}',"OKCYAN")
@@ -37,6 +40,8 @@ ET.cprint(f'Main-analysis will be picked from: Analysis/{args.Analysis}/analysis
 ET.cprint(f'#------------------ Performing analysis:','OKBLUE')
 ET.cprint(f'sample->pre-processor->pre-selector->main-analysis->save-plots->draw-plots','OKBLUE')
 ET.cprint(f'#----------------- E X P R E S S O    F R A M E W O R K-------------------#',"HEADER")
+
+
 
 PreProcessor=args.PreProcessor
 PreProcessor=PreProcessor.replace(".py","")
@@ -66,7 +71,7 @@ Ana.GetSamples()
 Ana.preprocess(preprocess)
 Ana.preselection(preselection)
 #------------------- SetYourAnalysis #-------------------###########
-Ana.SetAnalysis(myanalysis)
+logger=Ana.SetAnalysis(myanalysis)
 #------------------- RunYourAnalysis #-------------------###########
 
 Ana.SetVarsToSave(args.Analysis,args.SaveRoot)

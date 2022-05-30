@@ -21,7 +21,6 @@ parser.add_argument('--SaveRoot', default=False, action='store_true',help = 'sav
 parser.add_argument("--PlotterScript","-plotter"   , default='', help = 'plotterscript')
 parser.add_argument("--Xrootd","-xrd"   , default='root://cmsxrootd.fnal.gov//', help = 'xrootd redirector')
 
-
 args = parser.parse_args()
 
 import modules.Analysis as Analysis
@@ -30,56 +29,63 @@ from modules.selection import *
 from coffea.analysis_tools import PackedSelection
 
 
-
-
-ET.cprint(f'#----------------- E X P R E S S O    F R A M E W O R K-------------------#',"HEADER")
-ET.cprint(f'Sample will be picked from: {args.Sample}',"OKCYAN")
-ET.cprint(f'Pre-processor will be picked from: {args.PreProcessor}',"OKCYAN")
-ET.cprint(f'Main-analysis will be picked from: Analysis/{args.Analysis}/analysis.py','OKCYAN')
-
-ET.cprint(f'#------------------ Performing analysis:','OKBLUE')
-ET.cprint(f'sample->pre-processor->pre-selector->main-analysis->save-plots->draw-plots','OKBLUE')
-ET.cprint(f'#----------------- E X P R E S S O    F R A M E W O R K-------------------#',"HEADER")
-
-
-
-PreProcessor=args.PreProcessor
-PreProcessor=PreProcessor.replace(".py","")
-PreProcessor=PreProcessor.replace("/",".")
-exec(f"from {PreProcessor} import preprocess")
-
-
-PreSelection='Analysis/'+args.Analysis+'/preselection.py'
-PreSelection=PreSelection.replace(".py","")
-PreSelection=PreSelection.replace("/",".")
-exec(f"from {PreSelection} import preselection")
-
-AnalysisPath='Analysis/'+args.Analysis+'/analysis.py'
-AnalysisPath=AnalysisPath.replace(".py","")
-AnalysisPath=AnalysisPath.replace("/",".")
-exec(f"from {AnalysisPath} import histograms,myanalysis")
-
-
-#------------------- Initialize an IHEPAnalysis #-------------------###########
-Ana=Analysis.IHEPAnalysis(args.Analysis)
-#------------------- Initialize the hists #-------------------###########
-Ana.hists=histograms
-#------------------- GetTheSamples #-------------------###########
-Ana.SampleList=[args.Sample]
-Ana.GetSamples()
-
-Ana.preprocess(preprocess)
-Ana.preselection(preselection)
-#------------------- SetYourAnalysis #-------------------###########
-logger=Ana.SetAnalysis(myanalysis)
-#------------------- RunYourAnalysis #-------------------###########
-
-Ana.SetVarsToSave(args.Analysis,args.SaveRoot)
-    
-result=Ana.run(xrootd=args.Xrootd,chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks))
-#------------------- Save the Histograms #-------------------###########
-ET.saveHist(result,args.OutputFolder,args.OutputName)
-ET.cprint(f'#---- pkl file with results: {args.OutputFolder}/  ----#',"HEADER")
-#------------------- Save the Histograms #-------------------###########
 if args.PlotterScript:
-    print("Plotter Option is under dev")
+    ET.cprint(f'Plotter Script given, will just plot hists',"OKCYAN")
+    PlotterScript=args.PlotterScript
+    PlotterScript=PlotterScript.replace(".py","")
+    PlotterScript=PlotterScript.replace("/",".")
+    exec(f"from {PlotterScript} import histodict")
+    exec('ET.dictplot(histodict,args.Analysis,args.OutputFolder)')
+
+
+else:
+    
+    ET.cprint(f'#----------------- E X P R E S S O    F R A M E W O R K-------------------#',"HEADER")
+    ET.cprint(f'Sample will be picked from: {args.Sample}',"OKCYAN")
+    ET.cprint(f'Pre-processor will be picked from: {args.PreProcessor}',"OKCYAN")
+    ET.cprint(f'Main-analysis will be picked from: Analysis/{args.Analysis}/analysis.py','OKCYAN')
+    
+    ET.cprint(f'#------------------ Performing analysis:','OKBLUE')
+    ET.cprint(f'sample->pre-processor->pre-selector->main-analysis->save-plots->draw-plots','OKBLUE')
+    ET.cprint(f'#----------------- E X P R E S S O    F R A M E W O R K-------------------#',"HEADER")
+    
+    
+    
+    PreProcessor=args.PreProcessor
+    PreProcessor=PreProcessor.replace(".py","")
+    PreProcessor=PreProcessor.replace("/",".")
+    exec(f"from {PreProcessor} import preprocess")
+    
+    
+    PreSelection='Analysis/'+args.Analysis+'/preselection.py'
+    PreSelection=PreSelection.replace(".py","")
+    PreSelection=PreSelection.replace("/",".")
+    exec(f"from {PreSelection} import preselection")
+    
+    AnalysisPath='Analysis/'+args.Analysis+'/analysis.py'
+    AnalysisPath=AnalysisPath.replace(".py","")
+    AnalysisPath=AnalysisPath.replace("/",".")
+    exec(f"from {AnalysisPath} import histograms,myanalysis")
+    
+    
+    #------------------- Initialize an IHEPAnalysis #-------------------###########
+    Ana=Analysis.IHEPAnalysis(args.Analysis)
+    #------------------- Initialize the hists #-------------------###########
+    Ana.hists=histograms
+    #------------------- GetTheSamples #-------------------###########
+    Ana.SampleList=[args.Sample]
+    Ana.GetSamples()
+    
+    Ana.preprocess(preprocess)
+    Ana.preselection(preselection)
+    #------------------- SetYourAnalysis #-------------------###########
+    logger=Ana.SetAnalysis(myanalysis)
+    #------------------- RunYourAnalysis #-------------------###########
+    
+    Ana.SetVarsToSave(args.Analysis,args.SaveRoot)
+    
+    result=Ana.run(xrootd=args.Xrootd,chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks))
+    #------------------- Save the Histograms #-------------------###########
+    ET.saveHist(result,args.OutputFolder,args.OutputName)
+    ET.cprint(f'#---- pkl file with results: {args.OutputFolder}/  ----#',"HEADER")
+    #------------------- Save the Histograms #-------------------###########

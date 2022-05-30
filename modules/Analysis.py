@@ -15,6 +15,10 @@ class IHEPAnalysis:
         self.AnalysisName=name
         import inspect, logging
         import os
+        from datetime import datetime
+        import pwd
+        import platform
+        import sys
         # Create a custom logger
         #logging.basicConfig(format="thread %(threadName)s:%(message)s")
         logger = logging.getLogger(__name__)
@@ -46,7 +50,25 @@ class IHEPAnalysis:
         logger.addHandler(warning_handler)
         logger.addHandler(error_handler)
         self.logger=logger
-        ET.autolog(f'thread from analysis.py: {threading.get_ident()}',self.logger,'i')
+        now = datetime.now()
+        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        ET.autolog('███████ ██   ██ ██████  ██████  ███████ ███████ ███████  ██████  ',self.logger,'i')
+        ET.autolog('██       ██ ██  ██   ██ ██   ██ ██      ██      ██      ██    ██ ',self.logger,'i')
+        ET.autolog('█████     ███   ██████  ██████  █████   ███████ ███████ ██    ██ ',self.logger,'i')
+        ET.autolog('██       ██ ██  ██      ██   ██ ██           ██      ██ ██    ██ ',self.logger,'i')
+        ET.autolog('███████ ██   ██ ██      ██   ██ ███████ ███████ ███████  ██████  ',self.logger,'i')
+        ET.autolog(f'##############################################',self.logger,'i')
+        ET.autolog(f'##############################################',self.logger,'i')
+        ET.autolog(f'##############################################',self.logger,'i')
+        ET.autolog(f'-----Python: {sys.version}--------',self.logger,'i')
+        ET.autolog(f'-----OS: {os.system("uname -a")}--------',self.logger,'i')
+        ET.autolog(f'-----Platform: {platform.version()}--------',self.logger,'i')
+        ET.autolog(f'-----Who: {pwd.getpwuid(os.geteuid())[0]}--------',self.logger,'i')
+        ET.autolog(f'##STARTNG A FRESH {self.AnalysisName} ANALYSIS on ## {dt_string} ##',self.logger,'i')
+        ET.autolog(f'####-----------------------------------####',self.logger,'i')
+        ET.autolog(f'##############################################',self.logger,'i')
+        ET.autolog(f'##############################################',self.logger,'i')
+        ET.autolog(f'##############################################',self.logger,'i')
     
     def preprocess(self,preprocessor):
         self.preprocess=preprocessor
@@ -60,7 +82,7 @@ class IHEPAnalysis:
             print(self.hists)
 
     def SetVarsToSave(self,analysis,saveroot):
-        def savefunc(events,filename='sample',outputfolder=analysis+'/output/trees/'):
+        def savefunc(logger,events,filename='sample',outputfolder=analysis+'/output/trees/'):
             return "no output file saved"
         self.varstosave=savefunc
         if saveroot:

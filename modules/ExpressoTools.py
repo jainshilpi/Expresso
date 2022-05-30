@@ -16,6 +16,7 @@ import yaml
 import cloudpickle
 import gzip
 import os
+import pickle
 
 import ctypes
 libc = ctypes.cdll.LoadLibrary('libc.so.6')
@@ -34,7 +35,7 @@ def autolog(message,logger,level="i"):
     # be this function!!!
     func = inspect.currentframe().f_back.f_code
     # Dump the message + the name of this function to the log.
-    message=f'{message}: {func.co_name} in {func.co_filename}:{func.co_firstlineno}, thread {getThreadId()}'
+    message=f'thread {getThreadId()}, {message}: {func.co_name} in {func.co_filename}:{func.co_firstlineno}'
     if level=='i':
         logger.info(message)
     elif level=='d':
@@ -140,3 +141,44 @@ def getInfo(events,samples):
     sow                = samples["nSumOfWeights"]
     return dataset,isData,histAxisName,year,xsec,sow
 
+
+def get_hist_from_pkl(path_to_pkl,allow_empty=True):
+        h = pickle.load( gzip.open(path_to_pkl) )
+        if not allow_empty:
+            h = {k:v for k,v in h.items() if v.values() != {}}
+        return h
+
+import hist
+import matplotlib.pyplot as plt
+import mplhep as hep
+
+def dictprint(di):
+        for key, value in di.items():
+                print(key, ' : ', value)
+
+def dictplot(histodict,analysis,outputname):
+
+    for hiname in histodict.keys():
+        histo=histodict[hiname]
+        fig, ax = plt.subplots()
+        hep.style.use('CMS')
+        hep.cms.label('', data=False)
+        nostack=[]
+        stack=[]
+        nostacklabels=[]
+        stacklabels=[]
+        for k in histo.keys():
+            dicty=histo[k]
+            histo[k]['h']=get_hist_from_pkl(histo[k]['file'])[k].to_hist().project(histo[k]['axis'])
+            if(histo[k]['stack']==True):
+                stack.append(histo[k]['h'])
+                stacklabels.append(histo[k]['label'])
+            if(histo[k]['stack']==False):
+                nostack.append(histo[k]['h'])
+                nostacklabels.append(histo[k]['label'])
+        if len(stack)!=0:
+            hep.histplot(stack,ax=ax,lw=3,stack=True,histtype='fill',label=stacklabels)
+        if len(nostack)!=0:
+            hep.histplot(nostack,ax=ax,lw=3,stack=False,histtype='step',label=nostacklabels, yerr=True)
+        plt.legend(loc='best')
+        plt.savefig(f"Analysis/{analysis}/{outputname}/{hiname}.pdf", dpi=150)

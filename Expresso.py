@@ -88,5 +88,5 @@ else:
     result,JobFolder=Ana.run(xrootd=args.Xrootd,chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks))
     #------------------- Save the Histograms #-------------------###########
     ET.saveHist(result,JobFolder,args.OutputName)
-    ET.cprint(f'#---- pkl file with results: {args.OutputFolder}/  ----#',"HEADER")
+    ET.cprint(f'#---- pkl file with results: {JobFolder}/  ----#',"HEADER")
     #------------------- Save the Histograms #-------------------###########

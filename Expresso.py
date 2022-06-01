@@ -79,7 +79,7 @@ else:
     Ana.preprocess(preprocess)
     Ana.preselection(preselection)
     #------------------- SetYourAnalysis #-------------------###########
-    logger=Ana.SetAnalysis(myanalysis)
+    Ana.SetAnalysis(myanalysis)
     #------------------- RunYourAnalysis #-------------------###########
     
     Ana.SetVarsToSave(args.Analysis,args.SaveRoot)

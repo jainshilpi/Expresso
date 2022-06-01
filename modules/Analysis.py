@@ -13,62 +13,58 @@ class IHEPAnalysis:
         self.samples=[]
         self.SampleList=[]
         self.AnalysisName=name
+        self.loglevel=loglevel
         import inspect, logging
-        import os
-        from datetime import datetime
-        import pwd
-        import platform
-        import sys
         # Create a custom logger
         #logging.basicConfig(format="thread %(threadName)s:%(message)s")
-        logger = logging.getLogger(__name__)
-        logger.setLevel(loglevel)
-        # Create handlers
-        logpath='Analysis/'+self.AnalysisName+'/log'
-        if not os.path.isdir(logpath): os.mkdir(logpath)
-        debug_handler = logging.FileHandler('Analysis/'+self.AnalysisName+'/log/logfile_debug.log')
-        info_handler = logging.FileHandler('Analysis/'+self.AnalysisName+'/log/logfile_info.log')
-        warning_handler = logging.FileHandler('Analysis/'+self.AnalysisName+'/log/logfile_warning.log')
-        error_handler = logging.FileHandler('Analysis/'+self.AnalysisName+'/log/logfile_error.log')
-        debug_handler.setLevel(logging.DEBUG)
-        info_handler.setLevel(logging.INFO)
-        warning_handler.setLevel(logging.WARNING)
-        error_handler.setLevel(logging.ERROR)
-        # Create formatters and add it to handlers
-        info_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
-        warning_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
-        debug_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
-        error_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        info_handler.setFormatter(info_format)
-        debug_handler.setFormatter(debug_format)
-        warning_handler.setFormatter(warning_format)
-        error_handler.setFormatter(error_format)
+        # logger = logging.getLogger(__name__)
+        # logger.setLevel(loglevel)
+        # # Create handlers
+        # logpath='Analysis/'+self.AnalysisName+'/log'
+        # if not os.path.isdir(logpath): os.mkdir(logpath)
+        # debug_handler = logging.FileHandler('Analysis/'+self.AnalysisName+'/log/logfile_debug.log')
+        # info_handler = logging.FileHandler('Analysis/'+self.AnalysisName+'/log/logfile_info.log')
+        # warning_handler = logging.FileHandler('Analysis/'+self.AnalysisName+'/log/logfile_warning.log')
+        # error_handler = logging.FileHandler('Analysis/'+self.AnalysisName+'/log/logfile_error.log')
+        # debug_handler.setLevel(logging.DEBUG)
+        # info_handler.setLevel(logging.INFO)
+        # warning_handler.setLevel(logging.WARNING)
+        # error_handler.setLevel(logging.ERROR)
+        # # Create formatters and add it to handlers
+        # info_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+        # warning_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+        # debug_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+        # error_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        # info_handler.setFormatter(info_format)
+        # debug_handler.setFormatter(debug_format)
+        # warning_handler.setFormatter(warning_format)
+        # error_handler.setFormatter(error_format)
         
-        # Add handlers to the logger
-        logger.addHandler(debug_handler)
-        logger.addHandler(info_handler)
-        logger.addHandler(warning_handler)
-        logger.addHandler(error_handler)
-        self.logger=logger
-        now = datetime.now()
-        dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-        ET.autolog('███████ ██   ██ ██████  ██████  ███████ ███████ ███████  ██████  ',self.logger,'i')
-        ET.autolog('██       ██ ██  ██   ██ ██   ██ ██      ██      ██      ██    ██ ',self.logger,'i')
-        ET.autolog('█████     ███   ██████  ██████  █████   ███████ ███████ ██    ██ ',self.logger,'i')
-        ET.autolog('██       ██ ██  ██      ██   ██ ██           ██      ██ ██    ██ ',self.logger,'i')
-        ET.autolog('███████ ██   ██ ██      ██   ██ ███████ ███████ ███████  ██████  ',self.logger,'i')
-        ET.autolog(f'##############################################',self.logger,'i')
-        ET.autolog(f'##############################################',self.logger,'i')
-        ET.autolog(f'##############################################',self.logger,'i')
-        ET.autolog(f'-----Python: {sys.version}--------',self.logger,'i')
-        ET.autolog(f'-----OS: {os.system("uname -a")}--------',self.logger,'i')
-        ET.autolog(f'-----Platform: {platform.version()}--------',self.logger,'i')
-        ET.autolog(f'-----Who: {pwd.getpwuid(os.geteuid())[0]}--------',self.logger,'i')
-        ET.autolog(f'##STARTNG A FRESH {self.AnalysisName} ANALYSIS on ## {dt_string} ##',self.logger,'i')
-        ET.autolog(f'####-----------------------------------####',self.logger,'i')
-        ET.autolog(f'##############################################',self.logger,'i')
-        ET.autolog(f'##############################################',self.logger,'i')
-        ET.autolog(f'##############################################',self.logger,'i')
+        # # Add handlers to the logger
+        # logger.addHandler(debug_handler)
+        # logger.addHandler(info_handler)
+        # logger.addHandler(warning_handler)
+        # logger.addHandler(error_handler)
+        # self.logger=logger
+        # now = datetime.now()
+        # dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+        # ET.autolog('███████ ██   ██ ██████  ██████  ███████ ███████ ███████  ██████  ',self.logger,'i')
+        # ET.autolog('██       ██ ██  ██   ██ ██   ██ ██      ██      ██      ██    ██ ',self.logger,'i')
+        # ET.autolog('█████     ███   ██████  ██████  █████   ███████ ███████ ██    ██ ',self.logger,'i')
+        # ET.autolog('██       ██ ██  ██      ██   ██ ██           ██      ██ ██    ██ ',self.logger,'i')
+        # ET.autolog('███████ ██   ██ ██      ██   ██ ███████ ███████ ███████  ██████  ',self.logger,'i')
+        # ET.autolog(f'##############################################',self.logger,'i')
+        # ET.autolog(f'##############################################',self.logger,'i')
+        # ET.autolog(f'##############################################',self.logger,'i')
+        # ET.autolog(f'-----Python: {sys.version}--------',self.logger,'i')
+        # ET.autolog(f'-----OS: {os.system("uname -a")}--------',self.logger,'i')
+        # ET.autolog(f'-----Platform: {platform.version()}--------',self.logger,'i')
+        # ET.autolog(f'-----Who: {pwd.getpwuid(os.geteuid())[0]}--------',self.logger,'i')
+        # ET.autolog(f'##STARTNG A FRESH {self.AnalysisName} ANALYSIS on ## {dt_string} ##',self.logger,'i')
+        # ET.autolog(f'####-----------------------------------####',self.logger,'i')
+        # ET.autolog(f'##############################################',self.logger,'i')
+        # ET.autolog(f'##############################################',self.logger,'i')
+        # ET.autolog(f'##############################################',self.logger,'i')
     
     def preprocess(self,preprocessor):
         self.preprocess=preprocessor
@@ -98,14 +94,14 @@ class IHEPAnalysis:
             
     def SetAnalysis(self,analysis):
         self.analysis=analysis
-        return self.logger
+        #return self.logger
     
     def run(self,xrootd="root://cmsxrootd.fnal.gov//",chunksize=100,maxchunks=1,saveroot=False):
         
         for sample in self.samples:
             sample["files"]=[xrootd + file for file in sample["files"]]
             result= processor.run_uproot_job({sample["histAxisName"]:sample["files"]},sample["treeName"],
-                                             IHEPProcessor.IHEPProcessor(self.logger,self.AnalysisName,self.varstosave,
+                                             IHEPProcessor.IHEPProcessor(self.loglevel,self.AnalysisName,self.varstosave,
                                                                          self.preprocess,self.preselect,self.analysis,self.hists,sample),
                                              processor.futures_executor,{"schema": NanoAODSchema, 'workers':16} ,
                                              chunksize=chunksize, maxchunks=maxchunks)

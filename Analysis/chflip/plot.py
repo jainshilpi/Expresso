@@ -1,5 +1,4 @@
-#################################################################################################
-hin_dict = './Analysis/chflip/output/results.pkl.gz'
+hin_dict = 'results.pkl.gz'
 
 histodict={
 

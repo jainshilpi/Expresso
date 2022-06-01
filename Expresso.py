@@ -15,6 +15,7 @@ parser.add_argument("--OutputFolder","-oF"   , default='./', help = 'Path to the
 parser.add_argument("--ChunkSize","-cs"   , default='./', help = 'chunkSize')
 parser.add_argument("--NumberOfTasks","-Tasks"   , default='./', help = 'threads')
 parser.add_argument("--Analysis","-ana"   , default='chflip', help = 'Analysis name')
+parser.add_argument("--Schema","-schema"   , default='', help = 'schema')
 parser.add_argument("--PreProcessor","-pre"   , default='pre.py', help = 'preprocessor path')
 parser.add_argument('--SaveRoot', default=False, action='store_true',help = 'save a root tree with branches in varstosave.py')
 #parser.add_argument("--PreSelection","-pre"   , default='sel.py', help = 'preselection')
@@ -35,7 +36,7 @@ if args.PlotterScript:
     PlotterScript=PlotterScript.replace(".py","")
     PlotterScript=PlotterScript.replace("/",".")
     exec(f"from {PlotterScript} import histodict")
-    exec('ET.dictplot(histodict,args.Analysis,args.OutputFolder)')
+    exec('ET.dictplot(histodict,args.OutputFolder)')
 
 
 else:

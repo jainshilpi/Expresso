@@ -153,8 +153,9 @@ def dictprint(di):
         for key, value in di.items():
                 print(key, ' : ', value)
 
-def dictplot(histodict,analysis,outputname):
-
+def dictplot(histodict,outputfolder):
+    
+    
     for hiname in histodict.keys():
         histo=histodict[hiname]
         fig, ax = plt.subplots()
@@ -170,7 +171,7 @@ def dictplot(histodict,analysis,outputname):
             if 'scale' in histo[k].keys():
                 scale=histo[k]['scale']
 
-            thist=get_hist_from_pkl(histo[k]['file'])[k]
+            thist=get_hist_from_pkl(outputfolder+"/"+histo[k]['file'])[k]
             thist.scale(scale)
             #histo[k]['h']=get_hist_from_pkl(histo[k]['file'])[k].to_hist().project(histo[k]['axis'])
             histo[k]['h']=thist.to_hist().project(histo[k]['axis'])
@@ -185,4 +186,4 @@ def dictplot(histodict,analysis,outputname):
         if len(nostack)!=0:
             hep.histplot(nostack,ax=ax,lw=3,stack=False,histtype='step',label=nostacklabels, yerr=True)
         plt.legend(loc='best')
-        plt.savefig(f"Analysis/{analysis}/{outputname}/{hiname}.pdf", dpi=150)
+        plt.savefig(f'{outputfolder}/{hiname}.pdf', dpi=150)

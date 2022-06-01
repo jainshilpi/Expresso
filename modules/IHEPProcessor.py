@@ -35,9 +35,36 @@ class IHEPProcessor(processor.ProcessorABC):
         self._loglevel=loglevel
         self._dt = dt
         self._outfolder=outfolder
+        self._summarylog=outfolder+"/log/summary.log"
+        if not os.path.isdir(outfolder+"/log"): os.makedirs(outfolder+"/log")
+        try:
+            open(self._summarylog, 'a').close()
+        except OSError:
+            print('creating summary log')
+        else:
+            print('summary log created')
+
+        def summary(summarylog,message,lastline=False):
+            message=message+" "
+            with open(summarylog, 'a') as f:
+                if not lastline:
+                    print(message, file=f, end =" ")
+                else:
+                    print(message, file=f)
+        #self._summary(self._summarylog,f'sub-job_{threadn}',firstline=True)
+        self._summary=summary
+        
     @property
     def accumulator(self):
         return self._accumulator
+
+    # def summary(self,message,firstline=False):
+    #     message=message+" "
+    #     with open(self._summarylog, 'w') as f:
+    #         if not firstline:
+    #             print(message, file=f, end =" ")
+    #         else:
+    #             print(message, file=f)
 
     # we will receive a NanoEvents instead of a coffea DataFrame
     def process(self, events):
@@ -45,7 +72,7 @@ class IHEPProcessor(processor.ProcessorABC):
         logger.setLevel(self._loglevel)
         threadn=libc.syscall(SYS_gettid)
         # Create handlers
-        logpath=self._outfolder+'/log/MainJob/sub-job_'+str(threadn)
+        logpath=self._outfolder+'/log/sub-job_'+str(threadn)
         if not os.path.isdir(logpath): os.makedirs(logpath)
         debug_handler = logging.FileHandler(logpath+'/logfile_debug.log')
         info_handler = logging.FileHandler(logpath+'/logfile_info.log')
@@ -101,27 +128,29 @@ class IHEPProcessor(processor.ProcessorABC):
             ET.autolog(traceback.print_exc(),self._logger,'e')
             
         #------- preprocess (mostly create objects and special event variables)
-
+        startevents=len(events)
         out['events_processed'].fill(events_processed=np.ones(len(events)))
         out['sumw'].fill(sumw=np.ones(len(events)))
         
         try:
             events,dataset,isData,histAxisName,year,xsec,sow=self._preprocess(self._samples,events)
+            eventsafterpreprocessing=len(events)
             ET.autolog(f'{len(events)} Events after preprocessing',self._logger,'i')
         except Exception:
             ET.autolog(f'Can not preprocess',self._logger,'e')
             ET.autolog(traceback.print_exc(),self._logger,'e')
         #------- preselect and store cutflow
-        
         try:
             events,out=self._preselect(isData,events,out)
+            eventsafterpreselection=len(events)
             ET.autolog(f'{len(events)} Events after preselection',self._logger,'i')
         except Exception:
             ET.autolog(f'Can not preselect',self._logger,'e')
             ET.autolog(traceback.print_exc(),self._logger,'e')
         #------- run analysis
+        self._summary(self._summarylog,f'sub-job_{threadn} {startevents} {eventsafterpreprocessing} {eventsafterpreselection}',lastline=True)
         try:
-            filename=self._varstosave(threadn,self._logger,events,histAxisName,self._outfolder+'/trees/MainTrees')
+            filename=self._varstosave(threadn,self._logger,events,histAxisName,self._outfolder+'/trees/')
             ET.autolog(f'{len(events)} Events after saving to root (Ignore if saveRoot was off)',self._logger,'i')
         except Exception:
             ET.autolog(f'Can not save root file',self._logger,'e')
@@ -143,7 +172,7 @@ class IHEPProcessor(processor.ProcessorABC):
         
         #Job Summary
         for substring in ['error','stderr','warning']:
-            logdirerr='Analysis/'+self._analysisname+'/log/MainJob/*/*'+substring+'*'
+            logdirerr='Analysis/'+self._analysisname+'/log/*/*'+substring+'*'
             for f in glob.glob(logdirerr):
                 #print(f)
                 jobname=os.path.basename(os.path.dirname(f))

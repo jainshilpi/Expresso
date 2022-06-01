@@ -79,13 +79,13 @@ else:
     Ana.preprocess(preprocess)
     Ana.preselection(preselection)
     #------------------- SetYourAnalysis #-------------------###########
-    Ana.SetAnalysis(myanalysis)
+    Ana.SetAnalysis(myanalysis,args.OutputFolder)
     #------------------- RunYourAnalysis #-------------------###########
     
     Ana.SetVarsToSave(args.Analysis,args.SaveRoot)
     
-    result=Ana.run(xrootd=args.Xrootd,chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks))
+    result,JobFolder=Ana.run(xrootd=args.Xrootd,chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks))
     #------------------- Save the Histograms #-------------------###########
-    ET.saveHist(result,args.OutputFolder,args.OutputName)
+    ET.saveHist(result,JobFolder,args.OutputName)
     ET.cprint(f'#---- pkl file with results: {args.OutputFolder}/  ----#',"HEADER")
     #------------------- Save the Histograms #-------------------###########

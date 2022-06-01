@@ -47,7 +47,7 @@ def autolog(message,logger,level="i"):
 
     
 #----------------------------------------------------------------------
-def saveroot(logger,varslist,filename='sample',outputfolder='./'):
+def saveroot(threadn,logger,varslist,filename='sample',outputfolder='./'):
 
     #import logging
     #logger = logging.getLogger(__name__)
@@ -57,10 +57,7 @@ def saveroot(logger,varslist,filename='sample',outputfolder='./'):
     os.system(f'mkdir -p {outputfolder}/{filename}/')
     outputfolder=outputfolder+'/'+filename+'/'
     import ROOT
-    from datetime import datetime
-    dt = datetime.now()
-    ts = datetime.timestamp(dt)
-    filename=outputfolder+'/'+filename+'_'+str(ts)+'.root'
+    filename=outputfolder+'/'+filename+'_sub-job_'+str(threadn)+'.root'
     for key in varslist.keys():
         varslist[key]=ak.to_numpy(ak.fill_none(varslist[key],-9999))
     df = ROOT.RDF.MakeNumpyDataFrame(varslist)
@@ -169,7 +166,14 @@ def dictplot(histodict,analysis,outputname):
         stacklabels=[]
         for k in histo.keys():
             dicty=histo[k]
-            histo[k]['h']=get_hist_from_pkl(histo[k]['file'])[k].to_hist().project(histo[k]['axis'])
+            scale=1.0
+            if 'scale' in histo[k].keys():
+                scale=histo[k]['scale']
+
+            thist=get_hist_from_pkl(histo[k]['file'])[k]
+            thist.scale(scale)
+            #histo[k]['h']=get_hist_from_pkl(histo[k]['file'])[k].to_hist().project(histo[k]['axis'])
+            histo[k]['h']=thist.to_hist().project(histo[k]['axis'])
             if(histo[k]['stack']==True):
                 stack.append(histo[k]['h'])
                 stacklabels.append(histo[k]['label'])

@@ -5,6 +5,8 @@ from coffea.nanoevents import NanoEventsFactory, NanoAODSchema
 import json
 import logging
 import threading
+from datetime import datetime
+from distutils.dir_util import copy_tree
 class IHEPAnalysis:
     
     def __init__(self,name,loglevel=logging.INFO):
@@ -92,22 +94,26 @@ class IHEPAnalysis:
         for sami in self.SampleList:
             self.samples.append(ET.parse_yml(sami))
             
-    def SetAnalysis(self,analysis):
+    def SetAnalysis(self,analysis,outfolder):
         self.analysis=analysis
+        self.outfolder=outfolder
         #return self.logger
     
     def run(self,xrootd="root://cmsxrootd.fnal.gov//",chunksize=100,maxchunks=1,saveroot=False):
         
         for sample in self.samples:
             sample["files"]=[xrootd + file for file in sample["files"]]
+            dt=datetime.now().strftime("%d.%m.%Y-%H:%M:%S")
+            outfolder=self.outfolder+'/'+dt+'/'+'/Analysis/'+self.AnalysisName
+            copy_tree('Analysis/'+self.AnalysisName, outfolder)
             result= processor.run_uproot_job({sample["histAxisName"]:sample["files"]},sample["treeName"],
-                                             IHEPProcessor.IHEPProcessor(self.loglevel,self.AnalysisName,self.varstosave,
+                                             IHEPProcessor.IHEPProcessor(outfolder,dt,self.loglevel,self.AnalysisName,self.varstosave,
                                                                          self.preprocess,self.preselect,self.analysis,self.hists,sample),
                                              processor.futures_executor,{"schema": NanoAODSchema, 'workers':16} ,
                                              chunksize=chunksize, maxchunks=maxchunks)
+            JobFolder=outfolder+'/output/MainOutput'
             
-            
-        return result
+        return result,JobFolder
                        
                          
                           

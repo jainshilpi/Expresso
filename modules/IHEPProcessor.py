@@ -53,6 +53,7 @@ class IHEPProcessor(processor.ProcessorABC):
                     print(message, file=f)
         #self._summary(self._summarylog,f'sub-job_{threadn}',firstline=True)
         self._summary=summary
+        self._summary(self._summarylog,'sub-job_threadn startevents eventsafterpreprocessing eventsafterpreselection',lastline=True)
         
     @property
     def accumulator(self):

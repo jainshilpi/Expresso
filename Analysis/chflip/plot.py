@@ -1,4 +1,4 @@
-hin_dict = 'analysis/results.pkl.gz'
+hin_dict = 'zpeakanalysis/results.pkl.gz'
 
 histodict={
     
@@ -22,6 +22,8 @@ histodict={
                                'ptabseta_flip':{'label':'ptabseta_flip','axis':'pt','file':hin_dict,'stack':False},
                                },
               #plot5
+
+              'Nele':{'Nele':{'label':'Nele','axis':'Nele','file':hin_dict,'stack':False}},
               
               }
     }

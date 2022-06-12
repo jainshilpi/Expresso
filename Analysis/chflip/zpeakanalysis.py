@@ -19,8 +19,11 @@ def myanalysis(logger,h,ev,dataset,isData,histAxisName,year,xsec,sow):
     jets=ev.goodJets
     #----------
 
+    
     el["isTightLep"] = obj.tightSelElec(el.isFO, el.mvaTTH)
     el = el[el.isPres & el.isLooseE & el.isFO & el.isTightLep & (el.tightCharge>=2)]
+
+    h["Nele"].fill(Nele=ak.num(el),sam=histAxisName)
     
     isflip = (el.gen_pdgId == -el.pdgId)
     noflip = (el.gen_pdgId == el.pdgId)
@@ -77,6 +80,11 @@ def myanalysis(logger,h,ev,dataset,isData,histAxisName,year,xsec,sow):
 
 
 histograms={
+    "Nele" : hist.Hist(
+        "Events",
+        hist.Cat("sam", "sam"),
+        hist.Bin("Nele", "Nele", [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]),
+    ),
     "ptabseta_noflip" : hist.Hist(
         "Events",
         hist.Cat("sam", "sam"),

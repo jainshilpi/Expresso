@@ -26,6 +26,7 @@ args = parser.parse_args()
 
 import modules.Analysis as Analysis
 import modules.ExpressoTools as ET
+import modules.ExpressoPlotTools as EPT
 from modules.selection import *
 from coffea.analysis_tools import PackedSelection
 
@@ -36,7 +37,7 @@ if args.PlotterScript:
     PlotterScript=PlotterScript.replace(".py","")
     PlotterScript=PlotterScript.replace("/",".")
     exec(f"from {PlotterScript} import histodict")
-    exec('ET.dictplot(histodict,args.OutputFolder)')
+    exec('EPT.dictplot(histodict,args.OutputFolder)')
 
 
 else:

@@ -53,7 +53,7 @@ class IHEPAnalysis:
         
         for sample in self.samples:
             sample["files"]=[xrootd + file for file in sample["files"]]
-            dt=datetime.now().strftime("%d.%m.%Y-%H:%M:%S")
+            dt=datetime.now().strftime("ExpressoJob.d-%d.%m.%Y-t-%H.%M.%S")
             outfolder=self.outfolder+'/'+dt+'/'+'/Analysis/'+self.AnalysisName
             copy_tree('Analysis/'+self.AnalysisName, outfolder)
             result= processor.run_uproot_job({sample["histAxisName"]:sample["files"]},sample["treeName"],
@@ -62,7 +62,7 @@ class IHEPAnalysis:
                                              processor.futures_executor,{"schema": NanoAODSchema, 'workers':16} ,
                                              chunksize=chunksize, maxchunks=maxchunks)
             JobFolder=outfolder+'/output/'
-            
+            print(f'Your histograms are here:{JobFolder}')
         return result,JobFolder
                        
                          

@@ -24,6 +24,28 @@ histodict={
               #plot5
 
               'Nele':{'Nele':{'label':'Nele','axis':'Nele','file':hin_dict,'stack':False}},
-              
-              }
+              },
+    'ratio':{
+        'pt_noflip':
+        {
+            'pt_noflip_el0':[{'label':'ptabseta_noflip_el0','axis':'pt','file':hin_dict},
+                             {'label':'ptabseta_flip_el0','axis':'pt','file':hin_dict}],
+            'pt_noflip_el1':[{'label':'ptabseta_noflip_el1','axis':'pt','file':hin_dict},
+                             {'label':'ptabseta_flip_el1','axis':'pt','file':hin_dict}],
+            'pt_noflip':[{'label':'ptabseta_noflip','axis':'pt','file':hin_dict},
+                         {'label':'ptabseta_flip','axis':'pt','file':hin_dict}],
+        },
+
+        'abseta_noflip':
+        {
+            'abseta_noflip_el0':[{'label':'ptabseta_noflip_el0','axis':'abseta','file':hin_dict},
+                                 {'label':'ptabseta_flip_el0','axis':'abseta','file':hin_dict}],
+            
+            'abseta_noflip_el1':[{'label':'ptabseta_noflip_el1','axis':'abseta','file':hin_dict},
+                                 {'label':'ptabseta_flip_el1','axis':'abseta','file':hin_dict}],
+            
+            'abseta_noflip':[{'label':'ptabseta_noflip','axis':'abseta','file':hin_dict},
+                             {'label':'ptabseta_flip','axis':'abseta','file':hin_dict}],
+        },
     }
+}

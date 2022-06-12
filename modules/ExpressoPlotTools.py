@@ -15,6 +15,23 @@ def dictprint(di):
         for key, value in di.items():
                 print(key, ' : ', value)
 
+def dictplotratio(histodict,outputfolder):
+    
+    for hiname in histodict.keys():
+        histo=histodict[hiname]
+        fig, ax = plt.subplots()
+        hep.style.use('CMS')
+        hep.cms.label('', data=False)
+        for k in histo.keys():
+            dicty1=histo[k][0]
+            dicty2=histo[k][1]
+            h1=(get_hist_from_pkl(outputfolder+'/'+dicty1['file'])[dicty1['label']].to_hist().project(dicty1['axis']))
+            h2=(get_hist_from_pkl(outputfolder+'/'+dicty2['file'])[dicty2['label']].to_hist().project(dicty2['axis']))
+            (h2/h1).plot(ax=ax, lw=3,label=dicty1['label'])
+        ax.legend()
+        plt.legend(loc='best')
+        plt.savefig(f'{outputfolder}/{hiname}_ratio.pdf', dpi=200)
+                
 def dictplotnormal(histodict,outputfolder):
     
             for hiname in histodict.keys():
@@ -47,7 +64,7 @@ def dictplotnormal(histodict,outputfolder):
                 if len(nostack)!=0:
                         hep.histplot(nostack,ax=ax,lw=3,stack=False,histtype='step',label=nostacklabels, yerr=True)
                 plt.legend(loc='best')
-                plt.savefig(f'{outputfolder}/{hiname}.pdf', dpi=200)
+                plt.savefig(f'{outputfolder}/{hiname}_normal.pdf', dpi=200)
 
 
 def dictplot(histodictall,outputfolder):
@@ -55,5 +72,7 @@ def dictplot(histodictall,outputfolder):
     for allkey in histodictall.keys():
         if allkey=='normal':
             dictplotnormal(histodictall[allkey],outputfolder)
+        if allkey=='ratio':
+            dictplotratio(histodictall[allkey],outputfolder)
 
                 

@@ -142,7 +142,7 @@ class IHEPProcessor(processor.ProcessorABC):
             ET.autolog(traceback.print_exc(),self._logger,'e')
         #------- preselect and store cutflow
         try:
-            events,out=self._preselect(isData,events,out)
+            events,out=self._preselect(year,isData,events,out)
             eventsafterpreselection=len(events)
             ET.autolog(f'{len(events)} Events after preselection',self._logger,'i')
         except Exception:

@@ -21,53 +21,31 @@ def myanalysis(logger,h,ev,dataset,isData,histAxisName,year,xsec,sow):
 
     el["isTightLep"] = obj.tightSelElec(el.isFO, el.mvaTTH)
     el = el[el.isPres & el.isLooseE & el.isFO & el.isTightLep & (el.tightCharge>=2)]
-    
+
+    nomask= (1>0)
     isflip = (el.gen_pdgId == -el.pdgId)
     noflip = (el.gen_pdgId == el.pdgId)
     isprompt = ((el.genPartFlav==1) | (el.genPartFlav == 15))
     truthFlip_mask   = ak.fill_none((isflip & isprompt),False)
     truthNoFlip_mask = ak.fill_none((noflip & isprompt),False)
+    e2 = (ak.num(el)==2)
     
-    dense_objs_flat = ak.flatten(el[truthFlip_mask])
-    h["ptabseta_flip"].fill(pt=dense_objs_flat.pt,abseta=abs(dense_objs_flat.eta),sam=histAxisName)
-
-    dense_objs_flat = ak.flatten(el[truthNoFlip_mask])
-    h["ptabseta_noflip"].fill(pt=dense_objs_flat.pt,abseta=abs(dense_objs_flat.eta),sam=histAxisName)
-
-    #######################  Work with dielectron events ##########################################
-
-    el=el[ak.num(el)==2]
-    
-    el0=el[:,0]
-    el1=el[:,1]
-    
-
-    isflip = (el0.gen_pdgId == -el0.pdgId)
-    noflip = (el0.gen_pdgId == el0.pdgId)
-    isprompt = ((el0.genPartFlav==1) | (el0.genPartFlav == 15))
-    truthFlip_mask   = ak.fill_none((isflip & isprompt),False)
-    truthNoFlip_mask = ak.fill_none((noflip & isprompt),False)
-    
-
-    histmasks={"ptabseta_flip_el0":truthFlip_mask,
-               "ptabseta_noflip_el0":truthNoFlip_mask}
+    histmasks={
+        "Nele":nomask,
+        "ptabseta_flip":truthFlip_mask,
+        "ptabseta_noflip":truthNoFlip_mask,
+        "ptabseta_flip_el0":truthFlip_mask & e2,
+        "ptabseta_noflip_el0":truthNoFlip_mask & e2,
+        "ptabseta_flip_el1":truthFlip_mask & e2,
+        "ptabseta_noflip_el1":truthNoFlip_mask & e2}
 
     for histname in histmasks.keys():
-        dense_objs_flat = el0[histmasks[histname]]
-        h[histname].fill(pt=dense_objs_flat.pt,abseta=abs(dense_objs_flat.eta),sam=histAxisName)
-    
-    isflip = (el1.gen_pdgId == -el1.pdgId)
-    noflip = (el1.gen_pdgId == el1.pdgId)
-    isprompt = ((el1.genPartFlav==1) | (el1.genPartFlav == 15))
-    truthFlip_mask   = ak.fill_none((isflip & isprompt),False)
-    truthNoFlip_mask = ak.fill_none((noflip & isprompt),False)
-
-    histmasks={"ptabseta_flip_el1":truthFlip_mask,
-               "ptabseta_noflip_el1":truthNoFlip_mask}
-
-    for histname in histmasks.keys():
-        dense_objs_flat = el1[histmasks[histname]]
-        h[histname].fill(pt=dense_objs_flat.pt,abseta=abs(dense_objs_flat.eta),sam=histAxisName)
+        print(histname)
+        if 'Nele' in histname:
+            h[histname].fill(Nele=ak.num(el),sam=histAxisName)
+        else:
+            dense_objs_flat = ak.flatten(el[histmasks[histname]])
+            h[histname].fill(pt=dense_objs_flat.pt,abseta=abs(dense_objs_flat.eta),sam=histAxisName)
     
     #------------------------End your analysis here
 
@@ -77,6 +55,11 @@ def myanalysis(logger,h,ev,dataset,isData,histAxisName,year,xsec,sow):
 
 
 histograms={
+    "Nele" : hist.Hist(
+        "Events",
+        hist.Cat("sam", "sam"),
+        hist.Bin("Nele", "Nele", [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]),
+    ),
     "ptabseta_noflip" : hist.Hist(
         "Events",
         hist.Cat("sam", "sam"),

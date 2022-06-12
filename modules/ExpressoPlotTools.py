@@ -42,9 +42,9 @@ def dictplotnormal(histodict,outputfolder):
                     if(histo[k]['stack']==False):
                         nostack.append(histo[k]['h'])
                         nostacklabels.append(histo[k]['label'])
-                    if len(stack)!=0:
+                if len(stack)!=0:
                         hep.histplot(stack,ax=ax,lw=3,stack=True,histtype='fill',label=stacklabels)
-                    if len(nostack)!=0:
+                if len(nostack)!=0:
                         hep.histplot(nostack,ax=ax,lw=3,stack=False,histtype='step',label=nostacklabels, yerr=True)
                 plt.legend(loc='best')
                 plt.savefig(f'{outputfolder}/{hiname}.pdf', dpi=200)

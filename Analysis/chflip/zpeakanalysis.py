@@ -5,6 +5,7 @@ from coffea import hist
 from modules.selection import *
 import modules.ExpressoTools as ET
 import modules.objects as obj
+from modules.paths import IHEP_path
 from coffea.analysis_tools import PackedSelection
 #####################################################################################################################
 
@@ -17,8 +18,7 @@ def myanalysis(logger,h,ev,dataset,isData,histAxisName,year,xsec,sow):
     el=ev.ele_fo
     mu=ev.mu_fo
     jets=ev.goodJets
-    #----------
-
+    #----------    
     
     el["isTightLep"] = obj.tightSelElec(el.isFO, el.mvaTTH)
     el = el[el.isPres & el.isLooseE & el.isFO & el.isTightLep & (el.tightCharge>=2)]

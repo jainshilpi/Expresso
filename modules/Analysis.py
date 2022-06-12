@@ -58,7 +58,7 @@ class IHEPAnalysis:
             
             outfolder=self.outfolder+'/Analysis/'+self.AnalysisName
             logfolder=outfolder+'/logs/'+OutputName+'/'+dt+'/'
-            copy_tree('Analysis/'+self.AnalysisName, logfolder)
+            #copy_tree('Analysis/'+self.AnalysisName, logfolder)
             result= processor.run_uproot_job({sample["histAxisName"]:sample["files"]},sample["treeName"],
                                              IHEPProcessor.IHEPProcessor(logfolder,dt,self.loglevel,self.AnalysisName,self.varstosave,
                                                                          self.preprocess,self.preselect,self.analysis,self.hists,sample),

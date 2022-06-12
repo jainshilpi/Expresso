@@ -112,7 +112,7 @@ class IHEPProcessor(processor.ProcessorABC):
         ET.autolog(f'##############################################',self._logger,'i')
         ET.autolog(f'##############################################',self._logger,'i')
         ET.autolog(f'-----Python: {sys.version}--------',self._logger,'i')
-        ET.autolog(f'-----OS: {os.system("uname -a")}--------',self._logger,'i')
+        #ET.autolog(f'-----OS: {os.system("uname -a")}--------',self._logger,'i')
         ET.autolog(f'-----Platform: {platform.version()}--------',self._logger,'i')
         ET.autolog(f'-----Who: {pwd.getpwuid(os.geteuid())[0]}--------',self._logger,'i')
         ET.autolog(f'##STARTNG A FRESH {self._analysisname} ANALYSIS on ## {dt_string} ##',self._logger,'i')

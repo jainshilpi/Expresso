@@ -47,7 +47,7 @@ def dictplotnormal(histodict,outputfolder):
                     if len(nostack)!=0:
                         hep.histplot(nostack,ax=ax,lw=3,stack=False,histtype='step',label=nostacklabels, yerr=True)
                 plt.legend(loc='best')
-                plt.savefig(f'{outputfolder}/{hiname}.pdf', dpi=150)
+                plt.savefig(f'{outputfolder}/{hiname}.pdf', dpi=200)
 
 
 def dictplot(histodictall,outputfolder):

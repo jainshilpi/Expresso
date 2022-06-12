@@ -10,11 +10,12 @@ uproot.open.defaults["xrootd_handler"] = uproot.source.xrootd.MultithreadedXRoot
 import argparse
 parser = argparse.ArgumentParser(description='Expresso Framework Options')
 parser.add_argument("--Sample","-s", default='modules/json/background_samples/central_UL/UL18_DY50.json', help = 'path of samples')
-parser.add_argument("--OutputName","-oN"   , default='results', help = 'Name of output file')
+#parser.add_argument("--OutputName","-oN"   , default='results', help = 'Name of output file')
 parser.add_argument("--OutputFolder","-oF"   , default='./', help = 'Path to the output directory')
 parser.add_argument("--ChunkSize","-cs"   , default='./', help = 'chunkSize')
 parser.add_argument("--NumberOfTasks","-Tasks"   , default='./', help = 'threads')
 parser.add_argument("--Analysis","-ana"   , default='chflip', help = 'Analysis name')
+parser.add_argument("--AnalysisScript","-anascr"   , default='Analysis/chflip/analysis.py', help = 'Analysis script')
 parser.add_argument("--Schema","-schema"   , default='', help = 'schema')
 parser.add_argument("--PreProcessor","-pre"   , default='pre.py', help = 'preprocessor path')
 parser.add_argument('--SaveRoot', default=False, action='store_true',help = 'save a root tree with branches in varstosave.py')
@@ -64,11 +65,13 @@ else:
     PreSelection=PreSelection.replace("/",".")
     exec(f"from {PreSelection} import preselection")
     
-    AnalysisPath='Analysis/'+args.Analysis+'/analysis.py'
+    AnalysisPath=args.AnalysisScript
     AnalysisPath=AnalysisPath.replace(".py","")
     AnalysisPath=AnalysisPath.replace("/",".")
     exec(f"from {AnalysisPath} import histograms,myanalysis")
-    
+
+    OutputName=(args.AnalysisScript).split('/')[2].replace(".py","")
+    print(OutputName)
     
     #------------------- Initialize an IHEPAnalysis #-------------------###########
     Ana=Analysis.IHEPAnalysis(args.Analysis)
@@ -86,8 +89,8 @@ else:
     
     Ana.SetVarsToSave(args.Analysis,args.SaveRoot)
     
-    result,JobFolder=Ana.run(xrootd=args.Xrootd,chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks))
+    result,JobFolder=Ana.run(OutputName=OutputName,xrootd=args.Xrootd,chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks))
     #------------------- Save the Histograms #-------------------###########
-    ET.saveHist(result,JobFolder,args.OutputName)
+    ET.saveHist(result,JobFolder,"results")
     ET.cprint(f'#---- pkl file with results: {JobFolder}/  ----#',"HEADER")
     #------------------- Save the Histograms #-------------------###########

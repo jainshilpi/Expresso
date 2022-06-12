@@ -1,4 +1,4 @@
-hin_dict = 'results.pkl.gz'
+hin_dict = 'analysis/results.pkl.gz'
 
 histodict={
     

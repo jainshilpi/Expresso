@@ -49,19 +49,22 @@ class IHEPAnalysis:
         self.outfolder=outfolder
         #return self.logger
     
-    def run(self,xrootd="root://cmsxrootd.fnal.gov//",chunksize=100,maxchunks=1,saveroot=False):
+    def run(self,OutputName,xrootd="root://cmsxrootd.fnal.gov//",chunksize=100,maxchunks=1,saveroot=False):
         
         for sample in self.samples:
             sample["files"]=[xrootd + file for file in sample["files"]]
             dt=datetime.now().strftime("ExpressoJob.d-%d.%m.%Y-t-%H.%M.%S")
-            outfolder=self.outfolder+'/'+dt+'/'+'/Analysis/'+self.AnalysisName
-            copy_tree('Analysis/'+self.AnalysisName, outfolder)
+            
+            
+            outfolder=self.outfolder+'/Analysis/'+self.AnalysisName
+            logfolder=outfolder+'/logs/'+OutputName+'/'+dt+'/'
+            copy_tree('Analysis/'+self.AnalysisName, logfolder)
             result= processor.run_uproot_job({sample["histAxisName"]:sample["files"]},sample["treeName"],
-                                             IHEPProcessor.IHEPProcessor(outfolder,dt,self.loglevel,self.AnalysisName,self.varstosave,
+                                             IHEPProcessor.IHEPProcessor(logfolder,dt,self.loglevel,self.AnalysisName,self.varstosave,
                                                                          self.preprocess,self.preselect,self.analysis,self.hists,sample),
                                              processor.futures_executor,{"schema": NanoAODSchema, 'workers':16} ,
                                              chunksize=chunksize, maxchunks=maxchunks)
-            JobFolder=outfolder+'/output/'
+            JobFolder=outfolder+'/output/'+OutputName+'/'
             print(f'Your histograms are here:{JobFolder}')
         return result,JobFolder
                        

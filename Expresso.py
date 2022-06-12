@@ -46,7 +46,7 @@ else:
     ET.cprint(f'#----------------- E X P R E S S O    F R A M E W O R K-------------------#',"HEADER")
     ET.cprint(f'Sample will be picked from: {args.Sample}',"OKCYAN")
     ET.cprint(f'Pre-processor will be picked from: {args.PreProcessor}',"OKCYAN")
-    ET.cprint(f'Main-analysis will be picked from: Analysis/{args.Analysis}/analysis.py','OKCYAN')
+    ET.cprint(f'Main-analysis will be picked from: {args.AnalysisScript}','OKCYAN')
     
     ET.cprint(f'#------------------ Performing analysis:','OKBLUE')
     ET.cprint(f'sample->pre-processor->pre-selector->main-analysis->save-plots->draw-plots','OKBLUE')

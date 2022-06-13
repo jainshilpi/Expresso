@@ -44,7 +44,7 @@ def dictplot2Dratio(histodict,outputfolder):
     
     for hiname in histodict.keys():
         histo=histodict[hiname]
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(figsize=(36,20))
         hep.style.use('CMS')
         hep.cms.label('', data=False)
         dicty1=histo[0]
@@ -53,18 +53,19 @@ def dictplot2Dratio(histodict,outputfolder):
         y1=dicty1['yaxis']
         x2=dicty2['xaxis']
         y2=dicty2['yaxis']
-        h1=get_hist_from_pkl(outputfolder+'/'+dicty1['file'])[dicty1['label']].project(x1,y1)
-        h2=get_hist_from_pkl(outputfolder+'/'+dicty2['file'])[dicty2['label']].project(x2,y2)
-        ratio = (h2.to_hist()/h1.to_hist()).values()
-        err_down, err_up = ratio_uncertainty(h2.to_hist().values(), h1.to_hist().values(), 'poisson-ratio')
+        h1=get_hist_from_pkl(outputfolder+'/'+dicty1['file'])[dicty1['label']].project(y1,x1)
+        h2=get_hist_from_pkl(outputfolder+'/'+dicty2['file'])[dicty2['label']].project(y2,x2)
+        ratio = (h1.to_hist()/h2.to_hist())
+        err_up, err_down = ratio_uncertainty(h1.to_hist().values(), h2.to_hist().values(), 'poisson-ratio')
         labels = []
-        for ra, u, d in zip(ratio.ravel(), err_up.ravel(), err_down.ravel()):
-                ra, u, d = f'{ra:.2f}', f'{u:.2f}', f'{d:.2f}'
+        for ra, u, d in zip(ratio.values().ravel(), err_up.ravel(), err_down.ravel()):
+                ra, u, d = f'{ra:.3f}', f'{u:.1e}', f'{d:.1e}'
                 st = '$'+ra+'_{-'+d+'}^{+'+u+'}$'
                 labels.append(st)
         labels = np.array(labels).reshape(5,8)
 
-        hep.hist2dplot(ratio, labels=labels, cmap='cividis');
+        hep.hist2dplot(ratio, labels=labels, cmap='cividis',ax=ax)
+        #ax.tick_params(labelsize=10)
         #hist.plot2d(hist=ratio,xaxis=x1,ax=ax,clear=True)
         ax.legend()
         plt.legend(loc='best')

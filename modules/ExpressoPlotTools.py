@@ -59,7 +59,7 @@ def dictplot2Dratio(histodict,outputfolder):
         err_up, err_down = ratio_uncertainty(h1.to_hist().values(), h2.to_hist().values(), 'poisson-ratio')
         labels = []
         for ra, u, d in zip(ratio.values().ravel(), err_up.ravel(), err_down.ravel()):
-                ra, u, d = f'{ra:.3f}', f'{u:.1e}', f'{d:.1e}'
+                ra, u, d = f'{ra:.5f}', f'{u:.5f}', f'{d:.5f}'
                 st = '$'+ra+'_{-'+d+'}^{+'+u+'}$'
                 labels.append(st)
         labels = np.array(labels).reshape(5,8)

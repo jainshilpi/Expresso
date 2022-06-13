@@ -25,20 +25,24 @@ def dictplotratio(histodict,outputfolder):
         hep.style.use('CMS')
         hep.cms.label('', data=False)
         for k in histo.keys():
-            dicty1=histo[k][0]
-            dicty2=histo[k][1]
-            h1=get_hist_from_pkl(outputfolder+'/'+dicty1['file'])[dicty1['label']].project(dicty1['axis'])
-            h2=get_hist_from_pkl(outputfolder+'/'+dicty2['file'])[dicty2['label']].project(dicty2['axis'])
-            hist.plotratio(
-                    num=h2,
-                    denom=h1,
-                    clear=False,
-                    error_opts={'color': histo[k][2]['color'], 'marker': '.'},
-                    unc='num',ax=ax,label=dicty1['label'])
-            #(h2/h1).plot(ax=ax, lw=3,label=dicty1['label'])
-        ax.legend()
-        plt.legend(loc='best')
-        plt.savefig(f'{outputfolder}/{hiname}_ratio.pdf', dpi=200)
+                
+
+                dicty1=histo[k][0]
+                dicty2=histo[k][1]
+                print(dicty1)
+                print(dicty2)
+                h1=get_hist_from_pkl(outputfolder+'/'+dicty1['file'])[dicty1['label']].project(dicty1['axis'])
+                h2=get_hist_from_pkl(outputfolder+'/'+dicty2['file'])[dicty2['label']].project(dicty2['axis'])
+                hist.plotratio(
+                        num=h2,
+                        denom=h1,
+                        clear=False,
+                        error_opts={'color': histo[k][2]['color'], 'marker': '.'},
+                        unc='num',ax=ax,label=dicty1['label'])
+                #(h2/h1).plot(ax=ax, lw=3,label=dicty1['label'])
+                ax.legend()
+                plt.legend(loc='best')
+                plt.savefig(f'{outputfolder}/{hiname}_ratio.pdf', dpi=200)
 
 def dictplot2Dratio(histodict,outputfolder):
     

@@ -4,7 +4,8 @@ import pickle
 import coffea.hist as hist
 import matplotlib.pyplot as plt
 import mplhep as hep
-
+from hist.intervals import ratio_uncertainty
+import numpy as np
 def get_hist_from_pkl(path_to_pkl,allow_empty=True):
         h = pickle.load( gzip.open(path_to_pkl) )
         if not allow_empty:
@@ -38,6 +39,36 @@ def dictplotratio(histodict,outputfolder):
         ax.legend()
         plt.legend(loc='best')
         plt.savefig(f'{outputfolder}/{hiname}_ratio.pdf', dpi=200)
+
+def dictplot2Dratio(histodict,outputfolder):
+    
+    for hiname in histodict.keys():
+        histo=histodict[hiname]
+        fig, ax = plt.subplots()
+        hep.style.use('CMS')
+        hep.cms.label('', data=False)
+        dicty1=histo[0]
+        dicty2=histo[1]
+        x1=dicty1['xaxis']
+        y1=dicty1['yaxis']
+        x2=dicty2['xaxis']
+        y2=dicty2['yaxis']
+        h1=get_hist_from_pkl(outputfolder+'/'+dicty1['file'])[dicty1['label']].project(x1,y1)
+        h2=get_hist_from_pkl(outputfolder+'/'+dicty2['file'])[dicty2['label']].project(x2,y2)
+        ratio = (h2.to_hist()/h1.to_hist()).values()
+        err_down, err_up = ratio_uncertainty(h2.to_hist().values(), h1.to_hist().values(), 'poisson-ratio')
+        labels = []
+        for ra, u, d in zip(ratio.ravel(), err_up.ravel(), err_down.ravel()):
+                ra, u, d = f'{ra:.2f}', f'{u:.2f}', f'{d:.2f}'
+                st = '$'+ra+'_{-'+d+'}^{+'+u+'}$'
+                labels.append(st)
+        labels = np.array(labels).reshape(5,8)
+
+        hep.hist2dplot(ratio, labels=labels, cmap='cividis');
+        #hist.plot2d(hist=ratio,xaxis=x1,ax=ax,clear=True)
+        ax.legend()
+        plt.legend(loc='best')
+        plt.savefig(f'{outputfolder}/{hiname}_2Dratio.pdf', dpi=200)
                 
 def dictplotnormal(histodict,outputfolder):
     
@@ -81,5 +112,7 @@ def dictplot(histodictall,outputfolder):
             dictplotnormal(histodictall[allkey],outputfolder)
         if allkey=='ratio':
             dictplotratio(histodictall[allkey],outputfolder)
+        if allkey=='2Dratio':
+            dictplot2Dratio(histodictall[allkey],outputfolder)
 
                 

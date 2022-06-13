@@ -51,7 +51,12 @@ histodict={
             
             'abseta_noflip':[{'label':'ptabseta_noflip','axis':'abseta','file':hin_dict},
                              {'label':'ptabseta_flip','axis':'abseta','file':hin_dict},
-                             {'color':'yellow'}],
+                             {'color':'yellow'}]
+        }
         },
-    }
+    '2Dratio':{
+        'pt_eta':[{'label':'ptabseta_noflip','xaxis':'pt','yaxis':'abseta','file':hin_dict},
+                  {'label':'ptabseta_flip','xaxis':'pt','yaxis':'abseta','file':hin_dict}]
+        }
+
 }

@@ -4,13 +4,11 @@ import coffea as coffea
 from coffea import hist
 from coffea.analysis_tools import PackedSelection
 #from coffea.lumi_tools import LumiMask
-uproot.open.defaults["xrootd_handler"] = uproot.source.xrootd.MultithreadedXRootDSource
-import modules.Analysis as Analysis
 from modules.GetValuesFromJsons import get_param
 from modules.objects import *
-from modules.corrections import SFevaluator, GetBTagSF, ApplyJetCorrections, GetBtagEff, AttachMuonSF, AttachElectronSF, AttachPerLeptonFR, GetPUSF, ApplyRochesterCorrections, ApplyJetSystematics, AttachPSWeights, AttachPdfWeights, AttachScaleWeights, GetTriggerSF
-from modules.selection import *
-from modules.paths import IHEP_path
+# from modules.corrections import SFevaluator, GetBTagSF, ApplyJetCorrections, GetBtagEff, AttachMuonSF, AttachElectronSF, AttachPerLeptonFR, GetPUSF, ApplyRochesterCorrections, ApplyJetSystematics, AttachPSWeights, AttachPdfWeights, AttachScaleWeights, GetTriggerSF
+# from modules.selection import *
+# from modules.paths import IHEP_path
 
 import yaml
 import cloudpickle

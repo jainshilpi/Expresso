@@ -1,16 +1,15 @@
 {
   "xsec": 1.0,
-  "year": -1,
+  "year": "2016APV",
   "treeName": "Events",
   "histAxisName": "",
   "options": "",
   "WCnames": [],
-  "files": [
-    "/store/user/sesanche/NanoTrees_UL_v2_060422/2016/DYJetsToLL_M50.root"
+  "files": ["/store/mc/RunIISummer20UL16NanoAODAPVv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_mcRun2_asymptotic_preVFP_v11-v1/130000/DDF5A378-C948-134F-B7F7-2312C83160B5.root"
   ],
   "nEvents": 6004183,
   "nGenEvents": 71839442,
   "nSumOfWeights": 1220934627963.0718,
   "isData": false,
-  "path": "/store/user/sesanche/NanoTrees_UL_v2_060422/2016/DYJetsToLL_M50.root"
+  "path" :"/store/mc/RunIISummer20UL16NanoAODAPVv9/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/106X_mcRun2_asymptotic_preVFP_v11-v1/130000/DDF5A378-C948-134F-B7F7-2312C83160B5.root"
 }

@@ -25,10 +25,10 @@ parser.add_argument("--Xrootd","-xrd"   , default='root://cmsxrootd.fnal.gov//',
 
 args = parser.parse_args()
 
-import modules.Analysis as Analysis
+import AnalysisX as AnalysisX
+#import modules.Analysis as Analysis
 import modules.ExpressoTools as ET
 import modules.ExpressoPlotTools as EPT
-from modules.selection import *
 from coffea.analysis_tools import PackedSelection
 
 
@@ -74,7 +74,7 @@ else:
     print(OutputName)
     
     #------------------- Initialize an IHEPAnalysis #-------------------###########
-    Ana=Analysis.IHEPAnalysis(args.Analysis)
+    Ana=AnalysisX.IHEPAnalysis(args.Analysis)
     #------------------- Initialize the hists #-------------------###########
     Ana.hists=histograms
     #------------------- GetTheSamples #-------------------###########

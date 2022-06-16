@@ -16,7 +16,6 @@ import sys
 import glob
 import awkward as ak
 import numpy as np
-
 class IHEPProcessor(processor.ProcessorABC):
     def __init__(self,outfolder,dt,ET,loglevel,analysisname,varstosave,preprocess,preselect,analysis,histos,samples):
         histos['sumw']=hist.Hist(axes=[hist.Bin("sumw", "sumw", 10, 0, 10)],

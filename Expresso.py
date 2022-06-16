@@ -1,12 +1,4 @@
 #!/usr/bin/env python
-
-import awkward as ak
-import uproot
-import coffea as coffea
-from coffea import hist
-uproot.open.defaults["xrootd_handler"] = uproot.source.xrootd.MultithreadedXRootDSource
-
-
 import argparse
 parser = argparse.ArgumentParser(description='Expresso Framework Options')
 parser.add_argument("--Sample","-s", default='modules/json/background_samples/central_UL/UL18_DY50.json', help = 'path of samples')
@@ -16,41 +8,38 @@ parser.add_argument("--ChunkSize","-cs"   , default='./', help = 'chunkSize')
 parser.add_argument("--NumberOfTasks","-Tasks"   , default='./', help = 'threads')
 parser.add_argument("--Analysis","-ana"   , default='chflip', help = 'Analysis name')
 parser.add_argument("--AnalysisScript","-anascr"   , default='Analysis/chflip/analysis.py', help = 'Analysis script')
-parser.add_argument("--Schema","-schema"   , default='', help = 'schema')
+parser.add_argument("--Schema","-schema"   , default='NanoAODSchema', help = 'schema')
 parser.add_argument("--PreProcessor","-pre"   , default='pre.py', help = 'preprocessor path')
 parser.add_argument('--SaveRoot', default=False, action='store_true',help = 'save a root tree with branches in varstosave.py')
 #parser.add_argument("--PreSelection","-pre"   , default='sel.py', help = 'preselection')
 parser.add_argument("--PlotterScript","-plotter"   , default='', help = 'plotterscript')
 parser.add_argument("--Xrootd","-xrd"   , default='root://cmsxrootd.fnal.gov//', help = 'xrootd redirector')
+parser.add_argument("--Mode","-mode"   , default='local', help = 'mode of running: local, wq')
 
 args = parser.parse_args()
 
-import AnalysisX as AnalysisX
-#import modules.Analysis as Analysis
-import modules.ExpressoTools as ET
-import modules.ExpressoPlotTools as EPT
-from coffea.analysis_tools import PackedSelection
-
+from modules.ExpressoTools import cprint,saveHist
+from modules.ExpressoPlotTools import dictplot
 
 if args.PlotterScript:
-    ET.cprint(f'Plotter Script given, will just plot hists',"OKCYAN")
+    cprint(f'Plotter Script given, will just plot hists',"OKCYAN")
     PlotterScript=args.PlotterScript
     PlotterScript=PlotterScript.replace(".py","")
     PlotterScript=PlotterScript.replace("/",".")
     exec(f"from {PlotterScript} import histodict")
-    exec('EPT.dictplot(histodict,args.OutputFolder)')
+    exec('dictplot(histodict,args.OutputFolder)')
 
 
 else:
     
-    ET.cprint(f'#----------------- E X P R E S S O    F R A M E W O R K-------------------#',"HEADER")
-    ET.cprint(f'Sample will be picked from: {args.Sample}',"OKCYAN")
-    ET.cprint(f'Pre-processor will be picked from: {args.PreProcessor}',"OKCYAN")
-    ET.cprint(f'Main-analysis will be picked from: {args.AnalysisScript}','OKCYAN')
+    cprint(f'#----------------- E X P R E S S O    F R A M E W O R K-------------------#',"HEADER")
+    cprint(f'Sample will be picked from: {args.Sample}',"OKCYAN")
+    cprint(f'Pre-processor will be picked from: {args.PreProcessor}',"OKCYAN")
+    cprint(f'Main-analysis will be picked from: {args.AnalysisScript}','OKCYAN')
     
-    ET.cprint(f'#------------------ Performing analysis:','OKBLUE')
-    ET.cprint(f'sample->pre-processor->pre-selector->main-analysis->save-plots->draw-plots','OKBLUE')
-    ET.cprint(f'#----------------- E X P R E S S O    F R A M E W O R K-------------------#',"HEADER")
+    cprint(f'#------------------ Performing analysis:','OKBLUE')
+    cprint(f'sample->pre-processor->pre-selector->main-analysis->save-plots->draw-plots','OKBLUE')
+    cprint(f'#----------------- E X P R E S S O    F R A M E W O R K-------------------#',"HEADER")
     
     
     
@@ -74,6 +63,7 @@ else:
     print(OutputName)
     
     #------------------- Initialize an IHEPAnalysis #-------------------###########
+    import AnalysisX as AnalysisX
     Ana=AnalysisX.IHEPAnalysis(args.Analysis)
     #------------------- Initialize the hists #-------------------###########
     Ana.hists=histograms
@@ -89,8 +79,9 @@ else:
     
     Ana.SetVarsToSave(args.Analysis,args.SaveRoot)
     
-    result,JobFolder=Ana.run(OutputName=OutputName,xrootd=args.Xrootd,chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks))
+    result,JobFolder=Ana.run(OutputName=OutputName,xrootd=args.Xrootd,chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks),
+                             mode=args.Mode, schema=args.Schema)
     #------------------- Save the Histograms #-------------------###########
-    ET.saveHist(result,JobFolder,"results")
-    ET.cprint(f'#---- pkl file with results: {JobFolder}/  ----#',"HEADER")
+    saveHist(result,JobFolder,"results")
+    cprint(f'#---- pkl file with results: {JobFolder}/  ----#',"HEADER")
     #------------------- Save the Histograms #-------------------###########

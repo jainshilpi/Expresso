@@ -72,10 +72,12 @@ class IHEPAnalysis:
             if mode=='wq':
                 mastername='{}-wq-coffea'.format(os.environ['USER'])
                 print(mastername)
-                MyWQ=WQ({'master_name':mastername,
-                         'wrapper':'wrap',
-                         'x509_proxy':'/afs/cern.ch/user/a/akapoor/proxy/myx509'}).getwq()
-                executor = processor.work_queue_executor(**executor_args)
+                ar={'master_name':mastername,
+                      #'wrapper':'wrap',
+                      'x509_proxy':'/afs/cern.ch/user/a/akapoor/proxy/myx509'}
+                MyWQ=WQ(ar).getwq()
+                print(MyWQ)
+                executor = processor.work_queue_executor(**MyWQ)
             if mode=='local':
                 
                 ar={'workers':20}

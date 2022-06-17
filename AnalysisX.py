@@ -1,6 +1,6 @@
 from coffea import processor#,hist
 import modules.ExpressoTools as ET
-import IHEPProcessor as IHEPProcessor
+import modules.IHEPProcessor as IHEPProcessor
 from coffea.nanoevents import NanoAODSchema
 import json
 import logging
@@ -73,11 +73,59 @@ class IHEPAnalysis:
                 mastername='{}-wq-coffea'.format(os.environ['USER'])
                 print(mastername)
                 ar={'master_name':mastername,
+                    'port':8787,
+                    #'password_file':os.getcwd()+'pass.txt',
                       #'wrapper':'wrap',
-                      'x509_proxy':'/afs/cern.ch/user/a/akapoor/proxy/myx509'}
+                      #'x509_proxy':'/afs/cern.ch/user/a/akapoor/proxy/myx509'}
+                    }
                 MyWQ=WQ(ar).getwq()
                 print(MyWQ)
                 executor = processor.work_queue_executor(**MyWQ)
+
+            if mode=='dask':
+                from dask.distributed import Client
+                #from dask_jobqueue.htcondor import HTCondorCluster
+                
+                #cluster = HTCondorCluster(
+                #    job_extra={
+                #        'GetEnv':'false',
+                #        'universe':'vanilla',
+                #        'Output':'logs/$(Name).out',
+                #        'Error': 'logs/$(Name).err',
+                #        'Log' : 'logs/$(Name).log',
+                #        'should_transfer_files' : 'YES',
+                #        'when_to_transfer_output' :'ON_EXIT'
+                #    },
+                #    local_directory=os.getcwd()+'/workers',
+                #    env_extra=[
+                #        'source /afs/cern.ch/user/a/akapoor/.bashrc',
+                #        'cd /afs/cern.ch/user/a/akapoor/workspace/HEP2022/Expresso',
+                #        'source /cvmfs/sft.cern.ch/lcg/views/dev3cuda/latest/x86_64-centos7-gcc8-opt/setup.sh',
+                #        'pip install -e .'
+                #    ],
+                #    log_directory=os.getcwd()+'/workers',
+                #    cores=24,
+                #    memory="4GB", 
+                #    disk="4GB")
+                
+                #cluster.scale(jobs=10)
+                
+                client = Client(os.environ['DASK_SCHEDULER'])
+                # mastername='{}-wq-coffea'.format(os.environ['USER'])
+                # print(mastername)
+                config = {
+                    'client': client,
+                    'compression': 1,
+                    #'savemetrics': 1,
+                    # 'xrootdconfig': {
+                    #     'chunkbytes': 1024*128,
+                    #     'limitbytes': 200 * 1024**2
+                    # },
+                    #'cachestrategy': 'dask-worker',
+                    #'worker_affinity': True,
+                }
+                executor = processor.DaskExecutor(**config)
+                
             if mode=='local':
                 
                 ar={'workers':20}

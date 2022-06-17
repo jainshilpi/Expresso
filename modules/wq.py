@@ -13,7 +13,7 @@ class WQ:
                 'transactions_log': 'tr.log',
                 'stats_log': 'stats.log',
                 #'environment_file': 'my-coffea-env.tar.gz',
-                'extra_input_files': ["IHEPProcessor.py"],#,"modules/ExpressoTools.py","modules/ExpressoPlotTools.py","modules/paths.py"],
+                'extra_input_files': ["modules/IHEPProcessor.py"],#,"modules/ExpressoTools.py","modules/ExpressoPlotTools.py","modules/paths.py"],
 
                 'retries': 3,
 

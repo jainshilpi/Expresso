@@ -24,6 +24,8 @@ histodict={
               #plot5
 
               'Nele':{'Nele':{'label':'Nele','axis':'Nele','file':hin_dict,'stack':False}},
+              #'hptabseta_flip_bins':{'ptabseta_flip_bins':{'label':'ptabseta_flip_bins','axis':'Flipbins','file':hin_dict,'stack':False}},
+              #'hptabseta_Noflip_bins':{'ptabseta_Noflip_bins':{'label':'ptabseta_Noflip_bins','axis':'Flipbins','file':hin_dict,'stack':False}},
               },
     'ratio':{
         'hpt_flip':
@@ -52,8 +54,19 @@ histodict={
             'abseta_flip':[{'label':'ptabseta','axis':'abseta','file':hin_dict},
                            {'label':'ptabseta_flip','axis':'abseta','file':hin_dict},
                            {'color':'yellow'}],
-        }
         },
+    
+        '''
+        'hflipBins':
+        {
+            'flipbins_el':[{'label':'ptabseta_Noflip_bins','axis':'Flipbins','file':hin_dict},
+                               {'label':'ptabseta_flip_bins','axis':'Flipbins','file':hin_dict},
+                               {'color':'k'}],
+
+        },
+        '''
+    },
+
     '2Dratio':{
         'hpt_eta':[{'label':'ptabseta_flip','xaxis':'pt','yaxis':'abseta','file':hin_dict},
                    {'label':'ptabseta','xaxis':'pt','yaxis':'abseta','file':hin_dict}]

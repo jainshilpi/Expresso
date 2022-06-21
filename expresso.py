@@ -38,7 +38,7 @@ else:
     cprint(f'Main-analysis will be picked from: {args.AnalysisScript}','OKCYAN')
     
     cprint(f'#------------------ Performing analysis:','OKBLUE')
-    cprint(f'sample->pre-processor->pre-selector->main-analysis->save-plots->draw-plots','OKBLUE')
+    cprint(f'sample->pre-processor->pre-selector->main-analysis->save-plots','OKBLUE')
     cprint(f'#----------------- E X P R E S S O    F R A M E W O R K-------------------#',"HEADER")
     
     
@@ -63,7 +63,7 @@ else:
     print(OutputName)
     
     #------------------- Initialize an IHEPAnalysis #-------------------###########
-    import AnalysisX as AnalysisX
+    import x_analysis as AnalysisX
     Ana=AnalysisX.IHEPAnalysis(args.Analysis)
     #------------------- Initialize the hists #-------------------###########
     Ana.hists=histograms

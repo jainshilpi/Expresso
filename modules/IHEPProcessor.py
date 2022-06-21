@@ -53,7 +53,7 @@ class IHEPProcessor(processor.ProcessorABC):
                     print(message, file=f)
         #self._summary(self._summarylog,f'sub-job_{threadn}',firstline=True)
         self._summary=summary
-        self._summary(self._summarylog,'sub-job_threadn startevents eventsafterpreprocessing eventsafterpreselection',lastline=True)
+        self._summary(self._summarylog,f'sub-job_threadn startevents eventsafterpreprocessing eventsafterpreselection eventsaftersavingtoroot eventsgoingtoanalysis',lastline=True)
         self._summary(self._summarylog,'Initialized IHEPProcessor',lastline=True)
         
     @property
@@ -70,11 +70,13 @@ class IHEPProcessor(processor.ProcessorABC):
 
     # we will receive a NanoEvents instead of a coffea DataFrame
     def process(self, events):
+        
+        
         logger = logging.getLogger(__name__)
         logger.setLevel(self._loglevel)
         threadn=libc.syscall(SYS_gettid)
         # Create handlers
-        logpath=self._outfolder+'/log/sub-job_'+str(threadn)+str(datetime.now().strftime(".t-%H.%M.%S"))
+        logpath=self._outfolder+'/log/sub-job_'+str(threadn)+str(datetime.now().strftime("_t-%H_%M_%S"))
         if not os.path.isdir(logpath): os.makedirs(logpath)
         debug_handler = logging.FileHandler(logpath+'/logfile_debug.log')
         info_handler = logging.FileHandler(logpath+'/logfile_info.log')
@@ -140,6 +142,7 @@ class IHEPProcessor(processor.ProcessorABC):
             self._ET.autolog(f'{len(events)} Events after preprocessing',self._logger,'i')
         except Exception:
             self._ET.autolog(f'Can not preprocess',self._logger,'e')
+            eventsafterpreprocessing=0
             self._ET.autolog(traceback.print_exc(),self._logger,'e')
         
         #------- preselect and store cutflow
@@ -149,23 +152,28 @@ class IHEPProcessor(processor.ProcessorABC):
             self._ET.autolog(f'{len(events)} Events after preselection',self._logger,'i')
         except Exception:
             self._ET.autolog(f'Can not preselect',self._logger,'e')
+            eventsafterpreselection=0
             self._ET.autolog(traceback.print_exc(),self._logger,'e')
         #------- run analysis
-        self._summary(self._summarylog,f'sub-job_{threadn} {startevents} {eventsafterpreprocessing} {eventsafterpreselection}',lastline=True)
         try:
-            filename=self._varstosave(threadn,self._logger,events,histAxisName,self._outfolder+'/trees/')
+            filename,events=self._varstosave(threadn,self._logger,events,histAxisName,self._outfolder+'/trees/')
             self._ET.autolog(f'{len(events)} Events after saving to root (Ignore if saveRoot was off)',self._logger,'i')
+            eventsaftersavingtoroot=len(events)
         except Exception:
             self._ET.autolog(f'Can not save root file',self._logger,'e')
+            eventsaftersavingtoroot=0
             self._ET.autolog(traceback.print_exc(),self._logger,'e')
             
         try:
+            eventsgoingtoanalysis=len(events)
             out = self._analysis(self._logger,out,events,dataset,isData,histAxisName,year,xsec,sow)
             self._ET.autolog(f'{len(events)} Events after full analysis to root',self._logger,'i')
         except Exception:
+            eventsgoingtoanalysis=0
             self._ET.autolog(f'Can not analyze',self._logger,'e')
             self._ET.autolog(traceback.print_exc(),self._logger,'e')
         #------- return accumulator
+        self._summary(self._summarylog,f'sub-job_{threadn} {startevents} {eventsafterpreprocessing} {eventsafterpreselection} {eventsaftersavingtoroot} {eventsgoingtoanalysis}',lastline=True)
         sys.stdout.close()
         sys.stderr.close()
         

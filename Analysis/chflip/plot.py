@@ -1,4 +1,4 @@
-hin_dict = 'analysis/results.pkl.gz'
+hin_dict = 'analysis2/results.pkl.gz'
 
 histodict={
     
@@ -23,9 +23,9 @@ histodict={
                                },
               #plot5
 
-              'Nele':{'Nele':{'label':'Nele','axis':'Nele','file':hin_dict,'stack':False}},
-              #'hptabseta_flip_bins':{'ptabseta_flip_bins':{'label':'ptabseta_flip_bins','axis':'Flipbins','file':hin_dict,'stack':False}},
-              #'hptabseta_Noflip_bins':{'ptabseta_Noflip_bins':{'label':'ptabseta_Noflip_bins','axis':'Flipbins','file':hin_dict,'stack':False}},
+              'hNele':{'Nele':{'label':'Nele','axis':'Nele','file':hin_dict,'stack':False}},
+              'hptabseta_flip_bins':{'ptabseta_flip_bins':{'label':'ptabseta_flip_bins','axis':'Flipbins','file':hin_dict,'stack':False}},
+              'hptabseta_Noflip_bins':{'ptabseta_Noflip_bins':{'label':'ptabseta_Noflip_bins','axis':'Flipbins','file':hin_dict,'stack':False}},
               },
     'ratio':{
         'hpt_flip':
@@ -56,7 +56,7 @@ histodict={
                            {'color':'yellow'}],
         },
     
-        '''
+        
         'hflipBins':
         {
             'flipbins_el':[{'label':'ptabseta_Noflip_bins','axis':'Flipbins','file':hin_dict},
@@ -64,7 +64,7 @@ histodict={
                                {'color':'k'}],
 
         },
-        '''
+        
     },
 
     '2Dratio':{

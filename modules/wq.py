@@ -33,7 +33,7 @@ class WQ:
                 'chunks_per_accum': 25,
                 'chunks_accum_in_mem': 2,
                 'fast_terminate_workers': 0,
-                'wrapper':'/publicfs/cms/user/kapoor/2022/Expresso/wrap.sh',
+                'wrapper':'/modules/scripts/wrap.sh',
                 'verbose': False,
                 'print_stdout': False,
             }

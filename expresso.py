@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+
+import os
+os.environ['OPENBLAS_NUM_THREADS'] = '1'
+
+
 import argparse
 parser = argparse.ArgumentParser(description='Expresso Framework Options')
 parser.add_argument("--Sample","-s", default='modules/json/background_samples/central_UL/UL18_DY50.json', help = 'path of samples')
@@ -12,25 +17,16 @@ parser.add_argument("--Schema","-schema"   , default='NanoAODSchema', help = 'sc
 parser.add_argument("--PreProcessor","-pre"   , default='pre.py', help = 'preprocessor path')
 parser.add_argument('--SaveRoot', default=False, action='store_true',help = 'save a root tree with branches in varstosave.py')
 #parser.add_argument("--PreSelection","-pre"   , default='sel.py', help = 'preselection')
-parser.add_argument("--PlotterScript","-plotter"   , default='', help = 'plotterscript')
-parser.add_argument("--Xrootd","-xrd"   , default='root://cmsxrootd.fnal.gov//', help = 'xrootd redirector')
+parser.add_argument("--PlotterScript","-plotter"   , default='No', help = 'plotterscript')
+parser.add_argument("--Xrootd","-xrd"   , default='root://xrootd-cms.infn.it///', help = 'xrootd redirector')
 parser.add_argument("--Mode","-mode"   , default='local', help = 'mode of running: local, wq')
+parser.add_argument("--Port","-port"   , default='8866', help = 'port of running: wq')
 
 args = parser.parse_args()
 
 from modules.ExpressoTools import cprint,saveHist
-from modules.ExpressoPlotTools import dictplot
 
-if args.PlotterScript:
-    cprint(f'Plotter Script given, will just plot hists',"OKCYAN")
-    PlotterScript=args.PlotterScript
-    PlotterScript=PlotterScript.replace(".py","")
-    PlotterScript=PlotterScript.replace("/",".")
-    exec(f"from {PlotterScript} import histodict")
-    exec('dictplot(histodict,args.OutputFolder)')
-
-
-else:
+if args.PlotterScript=='No':
     
     cprint(f'#----------------- E X P R E S S O    F R A M E W O R K-------------------#',"HEADER")
     cprint(f'Sample will be picked from: {args.Sample}',"OKCYAN")
@@ -79,9 +75,18 @@ else:
     
     Ana.SetVarsToSave(args.Analysis,args.SaveRoot)
     
-    result,JobFolder=Ana.run(OutputName=OutputName,xrootd=args.Xrootd,chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks),
-                             mode=args.Mode, schema=args.Schema)
+    result,JobFolder,hname=Ana.run(OutputName=OutputName,xrootd=args.Xrootd,chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks),
+                             mode=args.Mode, schema=args.Schema, port=int(args.Port))
     #------------------- Save the Histograms #-------------------###########
-    saveHist(result,JobFolder,"results")
+    saveHist(result,JobFolder,hname.replace(" ", ""))
     cprint(f'#---- pkl file with results: {JobFolder}/  ----#',"HEADER")
     #------------------- Save the Histograms #-------------------###########
+
+else:
+
+    from modules.ExpressoPlotTools import dictplot
+    PlotterScript=args.PlotterScript
+    PlotterScript=PlotterScript.replace(".py","")
+    PlotterScript=PlotterScript.replace("/",".")
+    exec(f"from {PlotterScript} import histodict")
+    exec('dictplot(histodict,args.OutputFolder)')

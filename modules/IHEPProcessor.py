@@ -9,6 +9,7 @@ import ctypes
 libc = ctypes.cdll.LoadLibrary('libc.so.6')
 SYS_gettid = 186
 import os
+os.environ['OPENBLAS_NUM_THREADS'] = '1'
 from datetime import datetime
 import pwd
 import platform
@@ -70,7 +71,6 @@ class IHEPProcessor(processor.ProcessorABC):
 
     # we will receive a NanoEvents instead of a coffea DataFrame
     def process(self, events):
-        
         
         logger = logging.getLogger(__name__)
         logger.setLevel(self._loglevel)

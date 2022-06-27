@@ -9,6 +9,7 @@ setup(
     # Include data files (Note: "include_package_data=True" does not seem to work)
     package_data={
         "modules" : [
+            "scripts/*sh",
             "cfg/*.cfg",
             "json/*",
             "data/scaleFactors/*.root",

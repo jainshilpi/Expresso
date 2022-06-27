@@ -128,6 +128,12 @@ def myanalysis(logger,h,ev,dataset,isData,histAxisName,year,xsec,sow):
         print(histname)
         if 'Nele' in histname:
             h[histname].fill(Nele=ak.num(el),sam=histAxisName)
+        elif 'el0' in histname:
+            dense_objs_flat = ak.flatten(el0[histmasks[histname]])
+            h[histname].fill(pt=dense_objs_flat.pt,abseta=abs(dense_objs_flat.eta),sam=histAxisName)
+        elif 'el1' in histname:
+            dense_objs_flat = ak.flatten(el1[histmasks[histname]])
+            h[histname].fill(pt=dense_objs_flat.pt,abseta=abs(dense_objs_flat.eta),sam=histAxisName)
         else:
             dense_objs_flat = ak.flatten(el[histmasks[histname]])
             h[histname].fill(pt=dense_objs_flat.pt,abseta=abs(dense_objs_flat.eta),sam=histAxisName)

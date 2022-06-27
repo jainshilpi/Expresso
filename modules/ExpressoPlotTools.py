@@ -1,5 +1,8 @@
 import gzip
-import pickle
+try:
+        import pickle5 as pickle
+except ImportError:
+        import pickle
 #import hist
 import coffea.hist as hist
 import matplotlib.pyplot as plt
@@ -17,7 +20,7 @@ def dictprint(di):
         for key, value in di.items():
                 print(key, ' : ', value)
 
-def dictplotratio(histodict,outputfolder):
+def dictplotratio(histodict,outputfolder,SSaveLocation):
     
     for hiname in histodict.keys():
         histo=histodict[hiname]
@@ -29,8 +32,8 @@ def dictplotratio(histodict,outputfolder):
 
                 dicty1=histo[k][0]
                 dicty2=histo[k][1]
-                print(dicty1)
-                print(dicty2)
+                #print(dicty1)
+                #print(dicty2)
                 
                 try:
                         h1=get_hist_from_pkl(outputfolder+'/'+dicty1['file'])[dicty1['label']].project(dicty1['axis'])
@@ -49,9 +52,9 @@ def dictplotratio(histodict,outputfolder):
                 #(h2/h1).plot(ax=ax, lw=3,label=dicty1['label'])
                 ax.legend()
                 plt.legend(loc='best')
-                plt.savefig(f'{outputfolder}/{hiname}_ratio.pdf', dpi=200)
+                plt.savefig(f'{SSaveLocation}/{hiname}_ratio.pdf', dpi=200)
 
-def dictplot2Dratio(histodict,outputfolder):
+def dictplot2Dratio(histodict,outputfolder,SSaveLocation):
     
     for hiname in histodict.keys():
         histo=histodict[hiname]
@@ -80,9 +83,9 @@ def dictplot2Dratio(histodict,outputfolder):
         #hist.plot2d(hist=ratio,xaxis=x1,ax=ax,clear=True)
         ax.legend()
         plt.legend(loc='best')
-        plt.savefig(f'{outputfolder}/{hiname}_2Dratio.pdf', dpi=200)
+        plt.savefig(f'{SSaveLocation}/{hiname}_2Dratio.pdf', dpi=200)
                 
-def dictplotnormal(histodict,outputfolder):
+def dictplotnormal(histodict,outputfolder,SSaveLocation):
     
             for hiname in histodict.keys():
                 histo=histodict[hiname]
@@ -114,17 +117,17 @@ def dictplotnormal(histodict,outputfolder):
                 if len(nostack)!=0:
                         hep.histplot(nostack,ax=ax,lw=3,stack=False,histtype='step',label=nostacklabels, yerr=True)
                 plt.legend(loc='best')
-                plt.savefig(f'{outputfolder}/{hiname}_normal.pdf', dpi=200)
+                plt.savefig(f'{SSaveLocation}/{hiname}_normal.pdf', dpi=200)
 
 
-def dictplot(histodictall,outputfolder):
-    
-    for allkey in histodictall.keys():
-        if allkey=='normal':
-            dictplotnormal(histodictall[allkey],outputfolder)
-        if allkey=='ratio':
-            dictplotratio(histodictall[allkey],outputfolder)
-        if allkey=='2Dratio':
-            dictplot2Dratio(histodictall[allkey],outputfolder)
+def dictplot(histodictall,outputfolder,SaveLocation='./'):
+        import os
+        SSaveLocation=SaveLocation
+        if SaveLocation=='./': SSaveLocation='plots'
+        os.system(f'mkdir -p {SSaveLocation}')
+        for allkey in histodictall.keys():
+                if allkey=='normal': dictplotnormal(histodictall[allkey],outputfolder,SSaveLocation)
+                if allkey=='ratio': dictplotratio(histodictall[allkey],outputfolder,SSaveLocation)
+                if allkey=='2Dratio': dictplot2Dratio(histodictall[allkey],outputfolder,SSaveLocation)
 
                 

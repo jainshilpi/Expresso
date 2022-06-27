@@ -15,7 +15,7 @@ import os.path
 from modules.wq import WQ
 class IHEPAnalysis:
     
-    def __init__(self,name,loglevel=logging.INFO):
+    def __init__(self,name,saveroot,loglevel=logging.INFO):
 
 
         self.a=0
@@ -23,6 +23,7 @@ class IHEPAnalysis:
         self.samples=[]
         self.SampleList=[]
         self.AnalysisName=name
+        self.saveroot=saveroot
         self.loglevel=loglevel
         import inspect, logging
     
@@ -37,9 +38,10 @@ class IHEPAnalysis:
             self.hists = json.load(json_file)
             print(self.hists)
 
-    def SetVarsToSave(self,analysis,saveroot):
+    def SetVarsToSave(self,analysis):
+        saveroot=self.saveroot
         def savefunc(threadn,logger,events,filename='sample',outputfolder=analysis+'/output/trees/'):
-            return "no output file saved"
+            return filename,events[0>1]
         self.varstosave=savefunc
         if saveroot:
             savef='Analysis/'+analysis+'/varstosave.py'
@@ -57,7 +59,7 @@ class IHEPAnalysis:
         self.outfolder=outfolder
         #return self.logger
     
-    def run(self,OutputName,xrootd="root://cmsxrootd.fnal.gov//",chunksize=100,maxchunks=1,saveroot=False,mode='local',schema='NanoAODSchema',port=8865):
+    def run(self,OutputName,xrootd="root://cmsxrootd.fnal.gov//",chunksize=100,maxchunks=1,mode='local',schema='NanoAODSchema',port=8865):
         import time
         tstart = time.time()
         
@@ -112,7 +114,7 @@ class IHEPAnalysis:
         exec('Schema='+schema)
         runner = processor.Runner(executor, schema=Schema, chunksize=chunksize, maxchunks=maxchunks, skipbadfiles=False, xrootdtimeout=360)
         processor_instance=IHEPProcessor.IHEPProcessor(logfolder,dt,ET,self.loglevel,self.AnalysisName,self.varstosave,
-                                                       self.preprocess,self.preselect,self.analysis,self.hists,sample)
+                                                       self.preprocess,self.preselect,self.analysis,self.hists,sample,self.saveroot)
             
         result = runner({sample["histAxisName"]:sample["files"]}, sample["treeName"],processor_instance)
         JobFolder=outfolder+'/output/'+OutputName+'/'

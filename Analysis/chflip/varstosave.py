@@ -13,4 +13,4 @@ def varstosave(threadn,logger,events,filename='sample',outputfolder='./'):
     }
     ###########################################################
     filename=ET.saveroot(threadn,logger,varslist,filename,outputfolder)
-    return filename
+    return filename,events

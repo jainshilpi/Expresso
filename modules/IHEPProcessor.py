@@ -18,7 +18,7 @@ import glob
 import awkward as ak
 import numpy as np
 class IHEPProcessor(processor.ProcessorABC):
-    def __init__(self,outfolder,dt,ET,loglevel,analysisname,varstosave,preprocess,preselect,analysis,histos,samples):
+    def __init__(self,outfolder,dt,ET,loglevel,analysisname,varstosave,preprocess,preselect,analysis,histos,samples,saveroot):
         histos['sumw']=hist.Hist(axes=[hist.Bin("sumw", "sumw", 10, 0, 10)],
                                  label="sumw")
         histos['cutflow']=hist.Hist(axes=[hist.Cat("selection", "selection"),
@@ -33,6 +33,7 @@ class IHEPProcessor(processor.ProcessorABC):
         self._preselect = preselect
         self._varstosave = varstosave
         self._analysisname = analysisname
+        self._saveroot = saveroot
         self._loglevel=loglevel
         self._dt = dt
         self._outfolder=outfolder
@@ -54,8 +55,7 @@ class IHEPProcessor(processor.ProcessorABC):
                     print(message, file=f)
         #self._summary(self._summarylog,f'sub-job_{threadn}',firstline=True)
         self._summary=summary
-        self._summary(self._summarylog,f'sub-job_threadn startevents eventsafterpreprocessing eventsafterpreselection eventsaftersavingtoroot eventsgoingtoanalysis',lastline=True)
-        self._summary(self._summarylog,'Initialized IHEPProcessor',lastline=True)
+        self._summary(self._summarylog,f'sub-job_threadn,startevents,eventsafterpreprocessing,eventsafterpreselection,eventsaftersavingtoroot,eventsgoingtoanalysis',lastline=True)
         
     @property
     def accumulator(self):
@@ -155,15 +155,17 @@ class IHEPProcessor(processor.ProcessorABC):
             eventsafterpreselection=0
             self._ET.autolog(traceback.print_exc(),self._logger,'e')
         #------- run analysis
-        try:
+
+        if(self._saveroot):
             filename,events=self._varstosave(threadn,self._logger,events,histAxisName,self._outfolder+'/trees/')
             self._ET.autolog(f'{len(events)} Events after saving to root (Ignore if saveRoot was off)',self._logger,'i')
             eventsaftersavingtoroot=len(events)
-        except Exception:
-            self._ET.autolog(f'Can not save root file',self._logger,'e')
+        else:
+            #self._ET.autolog(f'Can not save root file',self._logger,'e')
             eventsaftersavingtoroot=0
-            self._ET.autolog(traceback.print_exc(),self._logger,'e')
-            
+            #self._ET.autolog(traceback.print_exc(),self._logger,'e')
+
+        
         try:
             eventsgoingtoanalysis=len(events)
             out = self._analysis(self._logger,out,events,dataset,isData,histAxisName,year,xsec,sow)
@@ -172,8 +174,9 @@ class IHEPProcessor(processor.ProcessorABC):
             eventsgoingtoanalysis=0
             self._ET.autolog(f'Can not analyze',self._logger,'e')
             self._ET.autolog(traceback.print_exc(),self._logger,'e')
+            
         #------- return accumulator
-        self._summary(self._summarylog,f'sub-job_{threadn} {startevents} {eventsafterpreprocessing} {eventsafterpreselection} {eventsaftersavingtoroot} {eventsgoingtoanalysis}',lastline=True)
+        self._summary(self._summarylog,f'sub-job_{threadn},{startevents},{eventsafterpreprocessing},{eventsafterpreselection},{eventsaftersavingtoroot},{eventsgoingtoanalysis}',lastline=True)
         sys.stdout.close()
         sys.stderr.close()
         
@@ -184,7 +187,7 @@ class IHEPProcessor(processor.ProcessorABC):
         
         #Job Summary
         for substring in ['error','stderr','warning']:
-            logdirerr='Analysis/'+self._analysisname+'/log/*/*'+substring+'*'
+            logdirerr=self._outfolder+'*/*/*'+substring+'*'
             for f in glob.glob(logdirerr):
                 #print(f)
                 jobname=os.path.basename(os.path.dirname(f))
@@ -192,6 +195,12 @@ class IHEPProcessor(processor.ProcessorABC):
                 # checking if it is a file
                 if os.path.isfile(f):
                     if os.stat(f).st_size != 0:
+                        print(f)
                         print(f'{jobname} has some {substring}, check logfile_{substring} file!')
-
+        print('Find your summary log here:')
+        print(f'{self._summarylog}')
+        import pandas as pd
+        summarydata=pd.read_csv(f'{self._summarylog}')
+        summarydata.loc['Total']= summarydata.sum(numeric_only=True)
+        print(summarydata.to_markdown())
         return accumulator

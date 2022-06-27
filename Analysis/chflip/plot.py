@@ -1,4 +1,4 @@
-hin_dict = '2017DYJetsToLL_M-50.pkl.gz'
+hin_dict = 'rnd.pkl.gz'
 
 histodict={
     

@@ -9,6 +9,7 @@ parser = argparse.ArgumentParser(description='Expresso Framework Options')
 parser.add_argument("--Sample","-s", default='modules/json/background_samples/central_UL/UL18_DY50.json', help = 'path of samples')
 #parser.add_argument("--OutputName","-oN"   , default='results', help = 'Name of output file')
 parser.add_argument("--OutputFolder","-oF"   , default='./', help = 'Path to the output directory')
+parser.add_argument("--SaveLocation","-oS"   , default='./', help = 'directory to save plots')
 parser.add_argument("--ChunkSize","-cs"   , default='./', help = 'chunkSize')
 parser.add_argument("--NumberOfTasks","-Tasks"   , default='./', help = 'threads')
 parser.add_argument("--Analysis","-ana"   , default='chflip', help = 'Analysis name')
@@ -60,7 +61,7 @@ if args.PlotterScript=='No':
     
     #------------------- Initialize an IHEPAnalysis #-------------------###########
     import x_analysis as AnalysisX
-    Ana=AnalysisX.IHEPAnalysis(args.Analysis)
+    Ana=AnalysisX.IHEPAnalysis(args.Analysis,args.SaveRoot)
     #------------------- Initialize the hists #-------------------###########
     Ana.hists=histograms
     #------------------- GetTheSamples #-------------------###########
@@ -73,7 +74,7 @@ if args.PlotterScript=='No':
     Ana.SetAnalysis(myanalysis,args.OutputFolder)
     #------------------- RunYourAnalysis #-------------------###########
     
-    Ana.SetVarsToSave(args.Analysis,args.SaveRoot)
+    Ana.SetVarsToSave(args.Analysis)
     
     result,JobFolder,hname=Ana.run(OutputName=OutputName,xrootd=args.Xrootd,chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks),
                              mode=args.Mode, schema=args.Schema, port=int(args.Port))
@@ -88,5 +89,6 @@ else:
     PlotterScript=args.PlotterScript
     PlotterScript=PlotterScript.replace(".py","")
     PlotterScript=PlotterScript.replace("/",".")
+    SaveLocation=args.SaveLocation
     exec(f"from {PlotterScript} import histodict")
-    exec('dictplot(histodict,args.OutputFolder)')
+    exec('dictplot(histodict,args.OutputFolder,SaveLocation)')

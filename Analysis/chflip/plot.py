@@ -1,4 +1,4 @@
-hin_dict = 'analysis2/results.pkl.gz'
+hin_dict = '2017DYJetsToLL_M-50.pkl.gz'
 
 histodict={
     
@@ -12,55 +12,55 @@ histodict={
               'hevents_processed':{'events_processed':{'label':'events_processed','axis':'events_processed','file':hin_dict,'stack':False}},
               #plot3
               
-              'hptabseta':{'ptabseta_el0':{'label':'ptabseta_noflip_el0','axis':'pt','file':hin_dict,'stack':True},
-                                 'ptabseta_el1':{'label':'ptabseta_noflip_el1','axis':'pt','file':hin_dict,'stack':True,'scale':1},
-                                 'ptabseta':{'label':'ptabseta_noflip','axis':'pt','file':hin_dict,'stack':False}},
+              'hpteta':{'pteta_el0':{'label':'noflip_el0','axis':'pt','file':hin_dict,'stack':True},
+                                 'pteta_el1':{'label':'noflip_el1','axis':'pt','file':hin_dict,'stack':True,'scale':1},
+                                 'pteta':{'label':'noflip','axis':'pt','file':hin_dict,'stack':False}},
               #plot4
               
-              'hptabseta_flip':{'ptabseta_flip_el0':{'label':'ptabseta_flip_el0','axis':'pt','file':hin_dict,'stack':True},
-                               'ptabseta_flip_el1':{'label':'ptabseta_flip_el1','axis':'pt','file':hin_dict,'stack':True},
-                               'ptabseta_flip':{'label':'ptabseta_flip','axis':'pt','file':hin_dict,'stack':False},
+              'hpteta_flip':{'pteta_flip_el0':{'label':'flip_el0','axis':'pt','file':hin_dict,'stack':True},
+                               'pteta_flip_el1':{'label':'flip_el1','axis':'pt','file':hin_dict,'stack':True},
+                               'pteta_flip':{'label':'flip','axis':'pt','file':hin_dict,'stack':False},
                                },
               #plot5
 
               'hNele':{'Nele':{'label':'Nele','axis':'Nele','file':hin_dict,'stack':False}},
-              'hptabseta_flip_bins':{'ptabseta_flip_bins':{'label':'ptabseta_flip_bins','axis':'Flipbins','file':hin_dict,'stack':False}},
-              'hptabseta_Noflip_bins':{'ptabseta_Noflip_bins':{'label':'ptabseta_Noflip_bins','axis':'Flipbins','file':hin_dict,'stack':False}},
+              'hpteta_flip_bins':{'pteta_flip_bins':{'label':'flip_bins','axis':'Flipbins','file':hin_dict,'stack':False}},
+              'hpteta_Noflip_bins':{'pteta_Noflip_bins':{'label':'Noflip_bins','axis':'Flipbins','file':hin_dict,'stack':False}},
               },
     'ratio':{
         'hpt_flip':
         {
-            'pt_flip_el0':[{'label':'ptabseta_el0','axis':'pt','file':hin_dict},
-                           {'label':'ptabseta_flip_el0','axis':'pt','file':hin_dict},
+            'pt_flip_el0':[{'label':'pteta_el0','axis':'pt','file':hin_dict},
+                           {'label':'pteta_flip_el0','axis':'pt','file':hin_dict},
                            {'color':'k'}],
-            'pt_flip_el1':[{'label':'ptabseta_el1','axis':'pt','file':hin_dict},
-                           {'label':'ptabseta_flip_el1','axis':'pt','file':hin_dict},
+            'pt_flip_el1':[{'label':'pteta_el1','axis':'pt','file':hin_dict},
+                           {'label':'pteta_flip_el1','axis':'pt','file':hin_dict},
                            {'color':'blue'}],
-            'pt_flip':[{'label':'ptabseta','axis':'pt','file':hin_dict},
-                       {'label':'ptabseta_flip','axis':'pt','file':hin_dict},
+            'pt_flip':[{'label':'pteta','axis':'pt','file':hin_dict},
+                       {'label':'pteta_flip','axis':'pt','file':hin_dict},
                        {'color':'red'}],
         },
 
         'habseta_flip':
         {
-            'abseta_flip_el0':[{'label':'ptabseta_el0','axis':'abseta','file':hin_dict},
-                               {'label':'ptabseta_flip_el0','axis':'abseta','file':hin_dict},
+            'abseta_flip_el0':[{'label':'pteta_el0','axis':'abseta','file':hin_dict},
+                               {'label':'pteta_flip_el0','axis':'abseta','file':hin_dict},
                                {'color':'k'}],
             
-            'abseta_flip_el1':[{'label':'ptabseta_el1','axis':'abseta','file':hin_dict},
-                               {'label':'ptabseta_flip_el1','axis':'abseta','file':hin_dict},
+            'abseta_flip_el1':[{'label':'pteta_el1','axis':'abseta','file':hin_dict},
+                               {'label':'pteta_flip_el1','axis':'abseta','file':hin_dict},
                                {'color':'blue'}],
             
-            'abseta_flip':[{'label':'ptabseta','axis':'abseta','file':hin_dict},
-                           {'label':'ptabseta_flip','axis':'abseta','file':hin_dict},
+            'abseta_flip':[{'label':'pteta','axis':'abseta','file':hin_dict},
+                           {'label':'pteta_flip','axis':'abseta','file':hin_dict},
                            {'color':'yellow'}],
         },
     
         
         'hflipBins':
         {
-            'flipbins_el':[{'label':'ptabseta_Noflip_bins','axis':'Flipbins','file':hin_dict},
-                               {'label':'ptabseta_flip_bins','axis':'Flipbins','file':hin_dict},
+            'flipbins_el':[{'label':'pteta_Noflip_bins','axis':'Flipbins','file':hin_dict},
+                               {'label':'pteta_flip_bins','axis':'Flipbins','file':hin_dict},
                                {'color':'k'}],
 
         },
@@ -68,8 +68,8 @@ histodict={
     },
 
     '2Dratio':{
-        'hpt_eta':[{'label':'ptabseta_flip','xaxis':'pt','yaxis':'abseta','file':hin_dict},
-                   {'label':'ptabseta','xaxis':'pt','yaxis':'abseta','file':hin_dict}]
+        'hpt_eta':[{'label':'pteta_flip','xaxis':'pt','yaxis':'abseta','file':hin_dict},
+                   {'label':'pteta','xaxis':'pt','yaxis':'abseta','file':hin_dict}]
         }
 
 }

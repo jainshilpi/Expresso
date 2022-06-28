@@ -2,7 +2,6 @@ from coffea import processor
 from coffea.nanoevents import NanoEventsFactory, NanoAODSchema
 from coffea import hist
 import threading
-import logging
 #import modules.ExpressoTools as ET
 import traceback
 import ctypes
@@ -17,6 +16,29 @@ import sys
 import glob
 import awkward as ak
 import numpy as np
+import logging
+def reset_logging():
+    manager = logging.root.manager
+    manager.disabled = logging.NOTSET
+    for logger in manager.loggerDict.values():
+        if isinstance(logger, logging.Logger):
+            logger.setLevel(logging.NOTSET)
+            logger.propagate = True
+            logger.disabled = False
+            logger.filters.clear()
+            handlers = logger.handlers.copy()
+            for handler in handlers:
+                # Copied from `logging.shutdown`.
+                try:
+                    handler.acquire()
+                    handler.flush()
+                    handler.close()
+                except (OSError, ValueError):
+                    pass
+                finally:
+                    handler.release()
+                logger.removeHandler(handler)
+
 class IHEPProcessor(processor.ProcessorABC):
     def __init__(self,outfolder,dt,ET,loglevel,analysisname,varstosave,preprocess,preselect,analysis,histos,samples,saveroot):
         histos['sumw']=hist.Hist(axes=[hist.Bin("sumw", "sumw", 10, 0, 10)],
@@ -71,17 +93,17 @@ class IHEPProcessor(processor.ProcessorABC):
 
     # we will receive a NanoEvents instead of a coffea DataFrame
     def process(self, events):
-        
+        reset_logging()
         logger = logging.getLogger(__name__)
         logger.setLevel(self._loglevel)
         threadn=libc.syscall(SYS_gettid)
         # Create handlers
         logpath=self._outfolder+'/log/sub-job_'+str(threadn)+str(datetime.now().strftime("_t-%H_%M_%S"))
         if not os.path.isdir(logpath): os.makedirs(logpath)
-        debug_handler = logging.FileHandler(logpath+'/logfile_debug.log')
-        info_handler = logging.FileHandler(logpath+'/logfile_info.log')
-        warning_handler = logging.FileHandler(logpath+'/logfile_warning.log')
-        error_handler = logging.FileHandler(logpath+'/logfile_error.log')
+        debug_handler = logging.FileHandler(logpath+'/logfile_debug.log',mode='w')
+        info_handler = logging.FileHandler(logpath+'/logfile_info.log',mode='w')
+        warning_handler = logging.FileHandler(logpath+'/logfile_warning.log',mode='w')
+        error_handler = logging.FileHandler(logpath+'/logfile_error.log',mode='w')
         sys.stdout = open(logpath+'/logfile_stdout.log', 'w')
         sys.stderr = open(logpath+'/logfile_stderr.log', 'w')
         debug_handler.setLevel(logging.DEBUG)

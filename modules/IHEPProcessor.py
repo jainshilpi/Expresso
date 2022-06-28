@@ -55,7 +55,7 @@ class IHEPProcessor(processor.ProcessorABC):
                     print(message, file=f)
         #self._summary(self._summarylog,f'sub-job_{threadn}',firstline=True)
         self._summary=summary
-        self._summary(self._summarylog,f'sub-job_threadn,events_in_sample,events_after_preprocessing,events_after_preselection,events_after_savingtoroot,events_going_to_analysis',lastline=True)
+        self._summary(self._summarylog,f'sub-job_threadn,ev_sample,ev_preprocessing,ev_preselection,ev_savingtoroot,ev_analysis',lastline=True)
         
     @property
     def accumulator(self):
@@ -133,50 +133,50 @@ class IHEPProcessor(processor.ProcessorABC):
         
         
         #------- preprocess (mostly create objects and special event variables)
-        events_in_sample=len(events)
+        ev_sample=len(events)
         out['events_processed'].fill(events_processed=np.ones(len(events)))
         out['sumw'].fill(sumw=np.ones(len(events)))
         try:
             events,dataset,isData,histAxisName,year,xsec,sow=self._preprocess(self._samples,events)
-            events_after_preprocessing=len(events)
+            ev_preprocessing=len(events)
             self._ET.autolog(f'{len(events)} Events after preprocessing',self._logger,'i')
         except Exception:
             self._ET.autolog(f'Can not preprocess',self._logger,'e')
-            events_after_preprocessing=0
+            ev_preprocessing=0
             self._ET.autolog(traceback.print_exc(),self._logger,'e')
         
         #------- preselect and store cutflow
         try:
             events,out=self._preselect(year,isData,events,out)
-            events_after_preselection=len(events)
+            ev_preselection=len(events)
             self._ET.autolog(f'{len(events)} Events after preselection',self._logger,'i')
         except Exception:
             self._ET.autolog(f'Can not preselect',self._logger,'e')
-            events_after_preselection=0
+            ev_preselection=0
             self._ET.autolog(traceback.print_exc(),self._logger,'e')
         #------- run analysis
 
         if(self._saveroot):
             filename,events=self._varstosave(threadn,self._logger,events,histAxisName,self._outfolder+'/trees/')
             self._ET.autolog(f'{len(events)} Events after saving to root (Ignore if saveRoot was off)',self._logger,'i')
-            events_after_savingtoroot=len(events)
+            ev_savingtoroot=len(events)
         else:
             #self._ET.autolog(f'Can not save root file',self._logger,'e')
-            events_after_savingtoroot=0
+            ev_savingtoroot=0
             #self._ET.autolog(traceback.print_exc(),self._logger,'e')
 
         
         try:
             out = self._analysis(self._logger,out,events,dataset,isData,histAxisName,year,xsec,sow)
-            events_going_to_analysis=len(events)
+            ev_analysis=len(events)
             self._ET.autolog(f'{len(events)} Events after full analysis to root',self._logger,'i')
         except Exception:
-            events_going_to_analysis=0
+            ev_analysis=0
             self._ET.autolog(f'Can not analyze',self._logger,'e')
             self._ET.autolog(traceback.print_exc(),self._logger,'e')
             
         #------- return accumulator
-        self._summary(self._summarylog,f'sub-job_{threadn},{events_in_sample},{events_after_preprocessing},{events_after_preselection},{events_after_savingtoroot},{events_going_to_analysis}',lastline=True)
+        self._summary(self._summarylog,f'sub-job_{threadn},{ev_sample},{ev_preprocessing},{ev_preselection},{ev_savingtoroot},{ev_analysis}',lastline=True)
         sys.stdout.close()
         sys.stderr.close()
         
@@ -203,7 +203,7 @@ class IHEPProcessor(processor.ProcessorABC):
         import pandas as pd
         summarydata=pd.read_csv(f'{self._summarylog}')
         summarydata.loc['Total']= summarydata.sum(numeric_only=True)
-        summarydata.loc['Percent (%)']= ((summarydata.loc['Total']*100)/summarydata['events_in_sample']['Total']).apply(str)+'%'
+        summarydata.loc['Percent (%)']= ((summarydata.loc['Total']*100)/summarydata['ev_sample']['Total']).apply(str)+'%'
 
         original_stdout = sys.stdout # Save a reference to the original standard output
         with open(f'{self._summarylog}', 'a') as f:

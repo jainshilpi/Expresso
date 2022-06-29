@@ -60,47 +60,28 @@ def myanalysis(logger,h,ev,dataset,isData,histAxisName,year,xsec,sow,pass_option
 
 
     flipdict = {
-            "EH_EH" : el0_E & el0_H & el1_E & el1_H,
-            "BH_EH" : el0_B & el0_H & el1_E & el1_H,
-            "EM_EH" : el0_E & el0_M & el1_E & el1_H,
-            "BM_EH" : el0_B & el0_M & el1_E & el1_H,
-            "EL_EH" : el0_E & el0_L & el1_E & el1_H,
-            "BL_EH" : el0_B & el0_L & el1_E & el1_H,
-
-            "EH_BH" : el0_E & el0_H & el1_B & el1_H,
-            "BH_BH" : el0_B & el0_H & el1_B & el1_H,
-            "EM_BH" : el0_E & el0_M & el1_B & el1_H,
-            "BM_BH" : el0_B & el0_M & el1_B & el1_H,
-            "EL_BH" : el0_E & el0_L & el1_B & el1_H,
-            "BL_BH" : el0_B & el0_L & el1_B & el1_H,
-
-            "EH_EM" : el0_E & el0_H & el1_E & el1_M,
-            "BH_EM" : el0_B & el0_H & el1_E & el1_M,
-            "EM_EM" : el0_E & el0_M & el1_E & el1_M,
-            "BM_EM" : el0_B & el0_M & el1_E & el1_M,
-            "EL_EM" : el0_E & el0_L & el1_E & el1_M,
-            "BL_EM" : el0_B & el0_L & el1_E & el1_M,
-
-            "EH_BM" : el0_E & el0_H & el1_B & el1_M,
-            "BH_BM" : el0_B & el0_H & el1_B & el1_M,
-            "EM_BM" : el0_E & el0_M & el1_B & el1_M,
-            "BM_BM" : el0_B & el0_M & el1_B & el1_M,
-            "EL_BM" : el0_E & el0_L & el1_B & el1_M,
-            "BL_BM" : el0_B & el0_L & el1_B & el1_M,
-
-            "EH_EL" : el0_E & el0_H & el1_E & el1_L,
-            "BH_EL" : el0_B & el0_H & el1_E & el1_L,
-            "EM_EL" : el0_E & el0_M & el1_E & el1_L,
-            "BM_EL" : el0_B & el0_M & el1_E & el1_L,
-            "EL_EL" : el0_E & el0_L & el1_E & el1_L,
-            "BL_EL" : el0_B & el0_L & el1_E & el1_L,
-
-            "EH_BL" : el0_E & el0_H & el1_B & el1_L,
-            "BH_BL" : el0_B & el0_H & el1_B & el1_L,
-            "EM_BL" : el0_E & el0_M & el1_B & el1_L,
-            "BM_BL" : el0_B & el0_M & el1_B & el1_L,
-            "EL_BL" : el0_E & el0_L & el1_B & el1_L,
-            "BL_BL" : el0_B & el0_L & el1_B & el1_L,
+        
+        "BL_BL" : el0_B & el0_L & el1_B & el1_L,
+        "BL_BM" : (el0_B & el0_L & el1_B & el1_M) | (el0_B & el0_M & el1_B & el1_L),
+        "BM_BM" : el0_B & el0_M & el1_B & el1_M,
+        "BL_BH" : (el0_B & el0_L & el1_B & el1_H) | (el0_B & el0_H & el1_B & el1_L),
+        "BM_BH" : (el0_B & el0_M & el1_B & el1_H) | (el0_B & el0_H & el1_B & el1_M),
+        "BH_BH" : el0_B & el0_H & el1_B & el1_H,
+        "EL_EL" : el0_E & el0_L & el1_E & el1_L,
+        "EL_EM" : (el0_E & el0_L & el1_E & el1_M) | (el0_E & el0_H & el1_B & el1_L),
+        "EM_EM" : el0_E & el0_M & el1_E & el1_M,
+        "EL_EH" : (el0_E & el0_L & el1_E & el1_H) | (el0_E & el0_H & el1_E & el1_L),
+        "EM_EH" : (el0_E & el0_M & el1_E & el1_H) | (el0_E & el0_H & el1_E & el1_M),
+        "EH_EH" : el0_E & el0_H & el1_E & el1_H,
+        "BL_EL" : (el0_B & el0_L & el1_E & el1_L) | (el0_E & el0_L & el1_B & el1_L),
+        "EL_BM" : (el0_E & el0_L & el1_B & el1_M) | (el0_B & el0_M & el1_E & el1_L),
+        "BL_EM" : (el0_B & el0_L & el1_E & el1_M) | (el0_E & el0_M & el1_B & el1_L),
+        "BM_EM" : (el0_B & el0_M & el1_E & el1_M) | (el0_E & el0_M & el1_B & el1_M),
+        "EL_BH" : (el0_E & el0_L & el1_B & el1_H) | (el0_B & el0_H & el1_E & el1_L),
+        "BL_EH" : (el0_B & el0_L & el1_E & el1_H) | (el0_E & el0_H & el1_B & el1_L),
+        "EM_BH" : (el0_E & el0_M & el1_B & el1_H) | (el0_B & el0_H & el1_E & el1_M),
+        "BM_EH" : (el0_B & el0_M & el1_E & el1_H) | (el0_E & el0_H & el1_B & el1_M),        
+        "BH_EH" : (el0_B & el0_H & el1_E & el1_H) | (el0_E & el0_H & el1_B & el1_H)
         }
 
 

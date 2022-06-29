@@ -40,7 +40,7 @@ def reset_logging():
                 logger.removeHandler(handler)
 
 class IHEPProcessor(processor.ProcessorABC):
-    def __init__(self,outfolder,dt,ET,loglevel,analysisname,varstosave,preprocess,preselect,analysis,histos,samples,saveroot):
+    def __init__(self,outfolder,dt,ET,loglevel,analysisname,varstosave,preprocess,preselect,analysis,histos,samples,saveroot,passoptions):
         histos['sumw']=hist.Hist(axes=[hist.Bin("sumw", "sumw", 10, 0, 10)],
                                  label="sumw")
         histos['cutflow']=hist.Hist(axes=[hist.Cat("selection", "selection"),
@@ -56,6 +56,7 @@ class IHEPProcessor(processor.ProcessorABC):
         self._varstosave = varstosave
         self._analysisname = analysisname
         self._saveroot = saveroot
+        self._passoptions = passoptions
         self._loglevel=loglevel
         self._dt = dt
         self._outfolder=outfolder
@@ -187,9 +188,9 @@ class IHEPProcessor(processor.ProcessorABC):
             ev_savingtoroot=0
             #self._ET.autolog(traceback.print_exc(),self._logger,'e')
 
-        
+        #print(events.fields)
         try:
-            out = self._analysis(self._logger,out,events,dataset,isData,histAxisName,year,xsec,sow)
+            out = self._analysis(self._logger,out,events,dataset,isData,histAxisName,year,xsec,sow,self._passoptions)
             ev_analysis=len(events)
             self._ET.autolog(f'{len(events)} Events after full analysis to root',self._logger,'i')
         except Exception:

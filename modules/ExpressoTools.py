@@ -22,6 +22,19 @@ libc = ctypes.cdll.LoadLibrary('libc.so.6')
 # System dependent, see e.g. /usr/include/x86_64-linux-gnu/asm/unistd_64.h
 SYS_gettid = 186
 
+def in_range_mask(in_var,lo_lim=None,hi_lim=None):
+        if (lo_lim is None) and (hi_lim is None):
+            raise Exception("Error: No cuts specified")
+        if lo_lim is not None:
+            above_min = (in_var > lo_lim)
+        else:
+            above_min = (ak.ones_like(in_var)==1)
+        if hi_lim is not None:
+            below_max = (in_var <= hi_lim)
+        else:
+            below_max = (ak.ones_like(in_var)==1)
+        return ak.fill_none((above_min & below_max),False)
+
 def autolog(message,logger,level="i"):
 
     def getThreadId():

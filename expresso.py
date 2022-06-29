@@ -13,6 +13,7 @@ parser.add_argument("--SaveLocation","-oS"   , default='./', help = 'directory t
 parser.add_argument("--ChunkSize","-cs"   , default='./', help = 'chunkSize')
 parser.add_argument("--NumberOfTasks","-Tasks"   , default='./', help = 'threads')
 parser.add_argument("--Analysis","-ana"   , default='chflip', help = 'Analysis name')
+parser.add_argument("--PassOptions","-QSkim"   , default='', help = 'A quick skim')
 parser.add_argument("--AnalysisScript","-anascr"   , default='Analysis/chflip/analysis.py', help = 'Analysis script')
 parser.add_argument("--Schema","-schema"   , default='NanoAODSchema', help = 'schema')
 parser.add_argument("--PreProcessor","-pre"   , default='pre.py', help = 'preprocessor path')
@@ -61,7 +62,7 @@ if args.PlotterScript=='No':
     
     #------------------- Initialize an IHEPAnalysis #-------------------###########
     import x_analysis as AnalysisX
-    Ana=AnalysisX.IHEPAnalysis(args.Analysis,args.SaveRoot)
+    Ana=AnalysisX.IHEPAnalysis(args.Analysis,args.SaveRoot,args.PassOptions)
     #------------------- Initialize the hists #-------------------###########
     Ana.hists=histograms
     #------------------- GetTheSamples #-------------------###########
@@ -79,7 +80,10 @@ if args.PlotterScript=='No':
     result,JobFolder,hname=Ana.run(OutputName=OutputName,xrootd=args.Xrootd,chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks),
                              mode=args.Mode, schema=args.Schema, port=int(args.Port))
     #------------------- Save the Histograms #-------------------###########
-    saveHist(result,JobFolder,hname.replace(" ", ""))
+    if args.PassOptions:
+        saveHist(result,JobFolder,hname.replace(" ", "")+'_passoptions='+args.PassOptions)
+    else:
+        saveHist(result,JobFolder,hname.replace(" ", ""))
     cprint(f'#---- pkl file with results: {JobFolder}/  ----#',"HEADER")
     #------------------- Save the Histograms #-------------------###########
 

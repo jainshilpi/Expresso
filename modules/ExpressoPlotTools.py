@@ -47,8 +47,8 @@ def dictplotratio(histodict,outputfolder,SSaveLocation):
                 except:
                         h1=get_hist_from_pkl(outputfolder+'/'+dicty1['file'])[dicty1['label']].to_hist().project(dicty1['axis'])
                         h2=get_hist_from_pkl(outputfolder+'/'+dicty2['file'])[dicty2['label']].to_hist().project(dicty2['axis'])
-                        (h2/h1).plot(ax=ax, lw=3,label=dicty1['label'],color=histo[k][2]['color'])
-                        plt.xticks(rotation=90)
+                        (h2/h1).plot(ax=ax, lw=3,label=dicty1['label'],color=histo[k][2]['color'],histtype='errorbar')
+                        plt.xticks(rotation=90,fontsize=7)
                 #(h2/h1).plot(ax=ax, lw=3,label=dicty1['label'])
                 ax.legend()
                 plt.legend(loc='best')
@@ -58,9 +58,6 @@ def dictplot2Dratio(histodict,outputfolder,SSaveLocation):
     
     for hiname in histodict.keys():
         histo=histodict[hiname]
-        fig, ax = plt.subplots(figsize=(48,20))
-        hep.style.use('CMS')
-        hep.cms.label('', data=False)
         dicty1=histo[0]
         dicty2=histo[1]
         x1=dicty1['xaxis']
@@ -70,15 +67,20 @@ def dictplot2Dratio(histodict,outputfolder,SSaveLocation):
         h1=get_hist_from_pkl(outputfolder+'/'+dicty1['file'])[dicty1['label']].project(y1,x1)
         h2=get_hist_from_pkl(outputfolder+'/'+dicty2['file'])[dicty2['label']].project(y2,x2)
         ratio = (h1.to_hist()/h2.to_hist())
+        #print(ratio.values().shape)
         err_up, err_down = ratio_uncertainty(h1.to_hist().values(), h2.to_hist().values(), 'poisson-ratio')
         labels = []
         for ra, u, d in zip(ratio.values().ravel(), err_up.ravel(), err_down.ravel()):
-                ra, u, d = f'{ra:.5f}', f'{u:.5f}', f'{d:.5f}'
+                ra, u, d = f'{ra:.6f}', f'{u:.6f}', f'{d:.6f}'
                 st = '$'+ra+'_{-'+d+'}^{+'+u+'}$'
                 labels.append(st)
-        labels = np.array(labels).reshape(5,8)
-
-        hep.hist2dplot(ratio, labels=labels, cmap='cividis',ax=ax)
+        #print(labels)
+        labels = np.array(labels).reshape(ratio.values().shape)
+        
+        fig, ax = plt.subplots(figsize=tuple([z * 20 for z in ratio.values().shape]))
+        hep.style.use('CMS')
+        hep.cms.label('', data=False)
+        hep.hist2dplot(ratio, labels=labels, cmap='plasma',ax=ax)
         #ax.tick_params(labelsize=10)
         #hist.plot2d(hist=ratio,xaxis=x1,ax=ax,clear=True)
         ax.legend()

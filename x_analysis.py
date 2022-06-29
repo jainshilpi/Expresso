@@ -15,7 +15,7 @@ import os.path
 from modules.wq import WQ
 class IHEPAnalysis:
     
-    def __init__(self,name,saveroot,loglevel=logging.INFO):
+    def __init__(self,name,saveroot,passoptions,loglevel=logging.INFO):
 
 
         self.a=0
@@ -24,6 +24,7 @@ class IHEPAnalysis:
         self.SampleList=[]
         self.AnalysisName=name
         self.saveroot=saveroot
+        self.passoptions=passoptions
         self.loglevel=loglevel
         import inspect, logging
     
@@ -114,7 +115,7 @@ class IHEPAnalysis:
         exec('Schema='+schema)
         runner = processor.Runner(executor, schema=Schema, chunksize=chunksize, maxchunks=maxchunks, skipbadfiles=False, xrootdtimeout=360)
         processor_instance=IHEPProcessor.IHEPProcessor(logfolder,dt,ET,self.loglevel,self.AnalysisName,self.varstosave,
-                                                       self.preprocess,self.preselect,self.analysis,self.hists,sample,self.saveroot)
+                                                       self.preprocess,self.preselect,self.analysis,self.hists,sample,self.saveroot,self.passoptions)
             
         result = runner({sample["histAxisName"]:sample["files"]}, sample["treeName"],processor_instance)
         JobFolder=outfolder+'/output/'+OutputName+'/'

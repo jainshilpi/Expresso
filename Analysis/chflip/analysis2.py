@@ -8,34 +8,20 @@ import modules.objects as obj
 from coffea.analysis_tools import PackedSelection
 #####################################################################################################################
 
-
-def myanalysis(logger,h,ev,dataset,isData,histAxisName,year,xsec,sow):
+def myanalysis(logger,h,ev,dataset,isData,histAxisName,year,xsec,sow,pass_options):
     ET.autolog(f'{len(ev)} Events at the start of your analysis',logger,'i')
-
     #------------------------Start your analysis below this
 
     #----------
     el=ev.ele_fo
     mu=ev.mu_fo
     jets=ev.goodJets
-    #----------
-
-    def in_range_mask(in_var,lo_lim=None,hi_lim=None):
-        if (lo_lim is None) and (hi_lim is None):
-            raise Exception("Error: No cuts specified")
-        if lo_lim is not None:
-            above_min = (in_var > lo_lim)
-        else:
-            above_min = (ak.ones_like(in_var)==1)
-        if hi_lim is not None:
-            below_max = (in_var <= hi_lim)
-        else:
-            below_max = (ak.ones_like(in_var)==1)
-        return ak.fill_none((above_min & below_max),False)
-
     el["isTightLep"] = obj.tightSelElec(el.isFO, el.mvaTTH)
     el = el[el.isPres & el.isLooseE & el.isFO & el.isTightLep & (el.tightCharge>=2)]
-    
+    #----------
+    if pass_options=='2e':
+        el=el[(ak.num(el)==2)]
+    #----------
     
     nomask= (1>0)
     isflip = (el.gen_pdgId == -el.pdgId)
@@ -60,17 +46,17 @@ def myanalysis(logger,h,ev,dataset,isData,histAxisName,year,xsec,sow):
     truthFlip_maskel1   = ak.fill_none((isflipel1 & ispromptel1),False)
     truthNoFlip_maskel1 = ak.fill_none((noflipel1 & ispromptel1),False)
     
-    el0_E =  in_range_mask(abs(el0.eta),lo_lim=1.479,hi_lim=2.5)
-    el1_E =  in_range_mask(abs(el1.eta),lo_lim=1.479,hi_lim=2.5)
-    el0_B =  in_range_mask(abs(el0.eta),lo_lim=None,hi_lim=1.479)
-    el1_B =  in_range_mask(abs(el1.eta),lo_lim=None,hi_lim=1.479)
+    el0_E =  ET.in_range_mask(abs(el0.eta),lo_lim=1.479,hi_lim=2.5)
+    el1_E =  ET.in_range_mask(abs(el1.eta),lo_lim=1.479,hi_lim=2.5)
+    el0_B =  ET.in_range_mask(abs(el0.eta),lo_lim=None,hi_lim=1.479)
+    el1_B =  ET.in_range_mask(abs(el1.eta),lo_lim=None,hi_lim=1.479)
 
-    el0_H =  in_range_mask(el0.pt,lo_lim=50.0,hi_lim=None)
-    el1_H =  in_range_mask(el1.pt,lo_lim=50.0,hi_lim=None)
-    el0_M =  in_range_mask(el0.pt,lo_lim=25.0,hi_lim=50.0)
-    el1_M =  in_range_mask(el1.pt,lo_lim=25.0,hi_lim=50.0)
-    el0_L =  in_range_mask(el0.pt,lo_lim=15.0,hi_lim=25.0)
-    el1_L =  in_range_mask(el1.pt,lo_lim=15.0,hi_lim=25.0)
+    el0_H =  ET.in_range_mask(el0.pt,lo_lim=50.0,hi_lim=None)
+    el1_H =  ET.in_range_mask(el1.pt,lo_lim=50.0,hi_lim=None)
+    el0_M =  ET.in_range_mask(el0.pt,lo_lim=25.0,hi_lim=50.0)
+    el1_M =  ET.in_range_mask(el1.pt,lo_lim=25.0,hi_lim=50.0)
+    el0_L =  ET.in_range_mask(el0.pt,lo_lim=15.0,hi_lim=25.0)
+    el1_L =  ET.in_range_mask(el1.pt,lo_lim=15.0,hi_lim=25.0)
 
 
     flipdict = {
@@ -139,7 +125,6 @@ def myanalysis(logger,h,ev,dataset,isData,histAxisName,year,xsec,sow):
         h["pteta_Noflip_bins"].fill(Flipbins=key,pt=dense_objs_flat.pt,abseta=abs(dense_objs_flat.eta),sam=histAxisName)
 
     for histname in histmasks.keys():
-        print(histname)
         if 'Nele' in histname:
             h[histname].fill(Nele=ak.num(el),sam=histAxisName)
         elif 'el0' in histname:
@@ -164,75 +149,75 @@ histograms={
     "Nele" : hist.Hist(
         "Events",
         hist.Cat("sam", "sam"),
-        hist.Bin("Nele", "Nele", [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]),
+        hist.Bin("Nele", "$N_el$", [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]),
     ),
     "pteta" : hist.Hist(
         "Events",
         hist.Cat("sam", "sam"),
-        hist.Bin("pt", "pt", [0,10,25,50,200]),
-        hist.Bin("abseta", "abseta", [0,1.479,2.5]),
+        hist.Bin("pt", "$p_T$", [0,10,25,50,200]),
+        hist.Bin("abseta", "|$\eta$|", [0,1.479,2.5]),
     ),
     "pteta_noflip" : hist.Hist(
         "Events",
         hist.Cat("sam", "sam"),
-        hist.Bin("pt", "pt", [0,10,25,50,200]),
-        hist.Bin("abseta", "abseta", [0,1.479,2.5]),
+        hist.Bin("pt", "$p_T$", [0,10,25,50,200]),
+        hist.Bin("abseta", "|$\eta$|", [0,1.479,2.5]),
     ),
     "pteta_flip" : hist.Hist(
         "Events",
         hist.Cat("sam", "sam"),
-        hist.Bin("pt", "pt", [0,10,25,50,200]),
-        hist.Bin("abseta", "abseta", [0,1.479,2.5]),
+        hist.Bin("pt", "$p_T$", [0,10,25,50,200]),
+        hist.Bin("abseta", "|$\eta$|", [0,1.479,2.5]),
     ),
     "pteta_el0" : hist.Hist(
         "Events",
         hist.Cat("sam", "sam"),
-        hist.Bin("pt", "pt", [0,10,25,50,200]),
-        hist.Bin("abseta", "abseta", [0,1.479,2.5]),
+        hist.Bin("pt", "$p_T$", [0,10,25,50,200]),
+        hist.Bin("abseta", "|$\eta$|", [0,1.479,2.5]),
     ),
     "pteta_noflip_el0" : hist.Hist(
         "Events",
         hist.Cat("sam", "sam"),
-        hist.Bin("pt", "pt", [0,10,25,50,200]),
-        hist.Bin("abseta", "abseta", [0,1.479,2.5]),
+        hist.Bin("pt", "$p_T$", [0,10,25,50,200]),
+        hist.Bin("abseta", "|$\eta$|", [0,1.479,2.5]),
     ),
     "pteta_flip_el0" : hist.Hist(
         "Events",
         hist.Cat("sam", "sam"),
-        hist.Bin("pt", "pt", [0,10,25,50,200]),
-        hist.Bin("abseta", "abseta", [0,1.479,2.5]),
+        hist.Bin("pt", "$p_T$", [0,10,25,50,200]),
+        hist.Bin("abseta", "|$\eta$|", [0,1.479,2.5]),
     ),
     "pteta_el1" : hist.Hist(
         "Events",
         hist.Cat("sam", "sam"),
-        hist.Bin("pt", "pt", [0,10,25,50,200]),
-        hist.Bin("abseta", "abseta", [0,1.479,2.5]),
+        hist.Bin("pt", "$p_T$", [0,10,25,50,200]),
+        hist.Bin("abseta", "|$\eta$|", [0,1.479,2.5]),
     ),
     "pteta_noflip_el1" : hist.Hist(
         "Events",
         hist.Cat("sam", "sam"),
-        hist.Bin("pt", "pt", [0,10,25,50,200]),
-        hist.Bin("abseta", "abseta", [0,1.479,2.5]),
+        hist.Bin("pt", "$p_T$", [0,10,25,50,200]),
+        hist.Bin("abseta", "|$\eta$|", [0,1.479,2.5]),
     ),
     "pteta_flip_el1" : hist.Hist(
         "Events",
         hist.Cat("sam", "sam"),
-        hist.Bin("pt", "pt", [0,10,25,50,200]),
-        hist.Bin("abseta", "abseta", [0,1.479,2.5]),
+        hist.Bin("pt", "$p_T$", [0,10,25,50,200]),
+        hist.Bin("abseta", "|$\eta$|", [0,1.479,2.5]),
     ),
 
     "pteta_flip_bins" : hist.Hist(
         "Events",
         hist.Cat("sam", "sam"),
         hist.Cat("Flipbins", "Flipbins"),
-        hist.Bin("pt", "pt", [0,10,25,50,200]),
-        hist.Bin("abseta", "abseta", [0,1.479,2.5]),
+        hist.Bin("pt", "$p_T$", [0,10,25,50,200]),
+        hist.Bin("abseta", "|$\eta$|", [0,1.479,2.5]),
     ),
     "pteta_Noflip_bins" : hist.Hist(
         "Events",
         hist.Cat("sam", "sam"),
         hist.Cat("Flipbins", "Flipbins"),
-        hist.Bin("pt", "pt", [0,10,25,50,200]),
-        hist.Bin("abseta", "abseta", [0,1.479,2.5]),
+        hist.Bin("pt", "$p_T$", [0,10,25,50,200]),
+        hist.Bin("abseta", "|$\eta$|", [0,1.479,2.5]),
     )
 }

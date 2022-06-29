@@ -5,6 +5,7 @@ except ImportError:
         import pickle
 #import hist
 import coffea.hist as hist
+from tabulate import tabulate
 import matplotlib.pyplot as plt
 import mplhep as hep
 from hist.intervals import ratio_uncertainty
@@ -47,19 +48,7 @@ def dictplotratio(histodict,outputfolder,SSaveLocation):
                 except:
                         h1=get_hist_from_pkl(outputfolder+'/'+dicty1['file'])[dicty1['label']].to_hist().project(dicty1['axis'])
                         h2=get_hist_from_pkl(outputfolder+'/'+dicty2['file'])[dicty2['label']].to_hist().project(dicty2['axis'])
-                        #(h2/h1).
-                        # main_ax_artists, sublot_ax_arists = h2.plot_ratio(
-                        #         h1,
-                        #         rp_num_label=dicty2['label'],
-                        #         rp_denom_label=dicty1['label'],
-                        #         rp_ylabel=r"Flip rate",
-                        #         rp_uncert_draw_type="bar",
-                        #         rp_uncertainty_type="efficiency",
-                        # )
-                        (h2/h1).plot(ax=ax, lw=3,label=dicty1['label'],color=histo[k][2]['color'])
-                        print(f'------{hiname}-------')
-                        print((h2/h1))
-                        print(f'------{hiname}-------')
+                        ###### Print ratios with erros
                         ratio = (h2/h1)
                         err_up, err_down = ratio_uncertainty(h2.values(), h1.values(), 'poisson-ratio')
                         labels = []                        
@@ -68,9 +57,19 @@ def dictplotratio(histodict,outputfolder,SSaveLocation):
                                 st = '$'+ra+'_{-'+d+'}^{+'+u+'}$'
                                 labels.append(st)
                         labels = np.array(labels)#.reshape(ratio.values().shape)
-                        print(f'------{hiname}-------')
-                        print('\n'.join([i for i in labels]))
-                        print(f'------{hiname}-------')
+                        data=[]
+                        with open(f'{SSaveLocation}/{hiname}_ratio.txt', 'w') as fi:
+                                for i in range(len((h2/h1).view())):
+                                        data.append([(h2/h1).axes[0][i],labels[i]]) 
+                                fi.write(tabulate(data, headers=["Bin", "Value"]))
+                                
+                               #fi.write(f'\"{(h2/h1).axes[0][i]}\" : {labels[i]}')
+                               #fi.write('\n')
+                        ###### Print ratios with erros
+                        (h2/h1).plot(ax=ax, lw=3,
+                                     label=dicty1['label'],
+                                     #labels=labels,
+                                     color=histo[k][2]['color'])
                         plt.xticks(rotation=90,fontsize=7)
                 #(h2/h1).plot(ax=ax, lw=3,label=dicty1['label'])
                 ax.legend()
@@ -90,6 +89,7 @@ def dictplot2Dratio(histodict,outputfolder,SSaveLocation):
         h1=get_hist_from_pkl(outputfolder+'/'+dicty1['file'])[dicty1['label']].project(y1,x1)
         h2=get_hist_from_pkl(outputfolder+'/'+dicty2['file'])[dicty2['label']].project(y2,x2)
         ratio = (h1.to_hist()/h2.to_hist())
+        #print(ratio)
         #print(ratio.values().shape)
         err_up, err_down = ratio_uncertainty(h1.to_hist().values(), h2.to_hist().values(), 'poisson-ratio')
         labels = []
@@ -99,7 +99,8 @@ def dictplot2Dratio(histodict,outputfolder,SSaveLocation):
                 labels.append(st)
         #print(labels)
         labels = np.array(labels).reshape(ratio.values().shape)
-        
+        with open(f'{SSaveLocation}/{hiname}_2Dratio.txt', 'w') as fi:
+                fi.write(f'{labels}')
         fig, ax = plt.subplots(figsize=tuple([z * 20 for z in ratio.values().shape]))
         hep.style.use('CMS')
         hep.cms.label('', data=False)
@@ -129,7 +130,6 @@ def dictplotnormal(histodict,outputfolder,SSaveLocation):
                         
                     thist=get_hist_from_pkl(outputfolder+"/"+histo[k]['file'])[k]
                     thist.scale(scale)
-                    #histo[k]['h']=get_hist_from_pkl(histo[k]['file'])[k].to_hist().project(histo[k]['axis'])
                     histo[k]['h']=thist.to_hist().project(histo[k]['axis'])
                     if(histo[k]['stack']==True):
                         stack.append(histo[k]['h'])

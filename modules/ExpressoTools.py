@@ -1,27 +1,17 @@
 import awkward as ak
 import uproot
-import coffea as coffea
-from coffea import hist
-from coffea.analysis_tools import PackedSelection
-#from coffea.lumi_tools import LumiMask
 from modules.GetValuesFromJsons import get_param
 from modules.objects import *
-# from modules.corrections import SFevaluator, GetBTagSF, ApplyJetCorrections, GetBtagEff, AttachMuonSF, AttachElectronSF, AttachPerLeptonFR, GetPUSF, ApplyRochesterCorrections, ApplyJetSystematics, AttachPSWeights, AttachPdfWeights, AttachScaleWeights, GetTriggerSF
-# from modules.selection import *
-# from modules.paths import IHEP_path
-
 import yaml
 import cloudpickle
 import gzip
 import os
 import pickle
-
 import ctypes
-libc = ctypes.cdll.LoadLibrary('libc.so.6')
-
 # System dependent, see e.g. /usr/include/x86_64-linux-gnu/asm/unistd_64.h
-SYS_gettid = 186
+libc,SYS_gettid = ctypes.cdll.LoadLibrary('libc.so.6'),186
 
+'''---------------------------------------------------------------------------'''
 def in_range_mask(in_var,lo_lim=None,hi_lim=None):
         if (lo_lim is None) and (hi_lim is None):
             raise Exception("Error: No cuts specified")
@@ -34,7 +24,7 @@ def in_range_mask(in_var,lo_lim=None,hi_lim=None):
         else:
             below_max = (ak.ones_like(in_var)==1)
         return ak.fill_none((above_min & below_max),False)
-
+'''---------------------------------------------------------------------------'''
 def autolog(message,logger,level="i"):
 
     def getThreadId():
@@ -55,8 +45,7 @@ def autolog(message,logger,level="i"):
         logger.error(message)
     else:
         logger.warning(message)
-
-    
+'''---------------------------------------------------------------------------'''
 #----------------------------------------------------------------------
 def saveroot(threadn,logger,varslist,filename='sample',outputfolder='./'):
 

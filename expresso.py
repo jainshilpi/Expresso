@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-
+print('#-----------------------------------------------------------------#')
+import pyfiglet
+print(pyfiglet.figlet_format("Expresso"))
 import os
 os.environ['OPENBLAS_NUM_THREADS'] = '1'
 
@@ -30,14 +32,14 @@ from modules.ExpressoTools import cprint,saveHist
 
 if args.PlotterScript=='No':
     
-    cprint(f'#----------------- E X P R E S S O    F R A M E W O R K-------------------#',"HEADER")
+    #cprint(f'#----------------- E X P R E S S O    F R A M E W O R K-------------------#',"HEADER")
     cprint(f'Sample will be picked from: {args.Sample}',"OKCYAN")
     cprint(f'Pre-processor will be picked from: {args.PreProcessor}',"OKCYAN")
     cprint(f'Main-analysis will be picked from: {args.AnalysisScript}','OKCYAN')
     
     cprint(f'#------------------ Performing analysis:','OKBLUE')
-    cprint(f'sample->pre-processor->pre-selector->main-analysis->save-plots','OKBLUE')
-    cprint(f'#----------------- E X P R E S S O    F R A M E W O R K-------------------#',"HEADER")
+    cprint(f'sample->pre-processor->pre-selector->save-root->main-analysis->save-plots','OKBLUE')
+    #cprint(f'#----------------- E X P R E S S O    F R A M E W O R K-------------------#',"HEADER")
     
     
     
@@ -96,3 +98,4 @@ else:
     SaveLocation=args.SaveLocation
     exec(f"from {PlotterScript} import histodict")
     exec('dictplot(histodict,args.OutputFolder,SaveLocation)')
+print('#-----------------------------------------------------------------#')

@@ -121,7 +121,9 @@ class IHEPAnalysis:
         JobFolder=outfolder+'/output/'+OutputName+'/'
         print(f'Your histograms are here:{JobFolder}')
         elapsed = time.time() - tstart
-        print(f'Elapssed Time:{elapsed}')
+        minutes = elapsed // 60 % 60
+        seconds = elapsed % 60
+        print(f'Elapssed Time: {minutes} minutes {seconds} seconds')
         return result,JobFolder,sample["histAxisName"]
                        
                          

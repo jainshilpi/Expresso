@@ -3,11 +3,14 @@ import awkward as ak
 import coffea as coffea
 from coffea import hist
 from modules.selection import *
+import modules.ExpressoTools as ET
 import modules.objects as obj
+from modules.paths import IHEP_path
 from coffea.analysis_tools import PackedSelection
 #####################################################################################################################
 
-def myanalysis(h,ev,dataset,isData,histAxisName,year,xsec,sow):
+def myanalysis(logger,h,ev,dataset,isData,histAxisName,year,xsec,sow):
+    ET.autolog(f'{len(ev)} Events at the start of your analysis',logger,'i')
 
     #------------------------Start your analysis below this
     
@@ -15,17 +18,12 @@ def myanalysis(h,ev,dataset,isData,histAxisName,year,xsec,sow):
     el=ev.ele_fo
     mu=ev.mu_fo
     jets=ev.goodJets
-    #----------
-
+    #----------    
+    
     el["isTightLep"] = obj.tightSelElec(el.isFO, el.mvaTTH)
-    
     el = el[el.isPres & el.isLooseE & el.isFO & el.isTightLep & (el.tightCharge>=2)]
-    
-    
-    # el=ak.pad_none(el, 2)
-    
-    # el0=el[:,0]
-    # el1=el[:,1]
+
+    h["Nele"].fill(Nele=ak.num(el),sam=histAxisName)
     
     isflip = (el.gen_pdgId == -el.pdgId)
     noflip = (el.gen_pdgId == el.pdgId)
@@ -52,32 +50,41 @@ def myanalysis(h,ev,dataset,isData,histAxisName,year,xsec,sow):
     isprompt = ((el0.genPartFlav==1) | (el0.genPartFlav == 15))
     truthFlip_mask   = ak.fill_none((isflip & isprompt),False)
     truthNoFlip_mask = ak.fill_none((noflip & isprompt),False)
-    dense_objs_flat = el0[truthFlip_mask]
-    h["ptabseta_flip_el0"].fill(pt=dense_objs_flat.pt,abseta=abs(dense_objs_flat.eta),sam=histAxisName)
+    
 
-    dense_objs_flat = el0[truthNoFlip_mask]
-    h["ptabseta_noflip_el0"].fill(pt=dense_objs_flat.pt,abseta=abs(dense_objs_flat.eta),sam=histAxisName)
+    histmasks={"ptabseta_flip_el0":truthFlip_mask,
+               "ptabseta_noflip_el0":truthNoFlip_mask}
 
+    for histname in histmasks.keys():
+        dense_objs_flat = el0[histmasks[histname]]
+        h[histname].fill(pt=dense_objs_flat.pt,abseta=abs(dense_objs_flat.eta),sam=histAxisName)
     
     isflip = (el1.gen_pdgId == -el1.pdgId)
     noflip = (el1.gen_pdgId == el1.pdgId)
     isprompt = ((el1.genPartFlav==1) | (el1.genPartFlav == 15))
     truthFlip_mask   = ak.fill_none((isflip & isprompt),False)
     truthNoFlip_mask = ak.fill_none((noflip & isprompt),False)
-    dense_objs_flat = el1[truthFlip_mask]
-    h["ptabseta_flip_el1"].fill(pt=dense_objs_flat.pt,abseta=abs(dense_objs_flat.eta),sam=histAxisName)
 
-    dense_objs_flat = el1[truthNoFlip_mask]
-    h["ptabseta_noflip_el1"].fill(pt=dense_objs_flat.pt,abseta=abs(dense_objs_flat.eta),sam=histAxisName)
+    histmasks={"ptabseta_flip_el1":truthFlip_mask,
+               "ptabseta_noflip_el1":truthNoFlip_mask}
+
+    for histname in histmasks.keys():
+        dense_objs_flat = el1[histmasks[histname]]
+        h[histname].fill(pt=dense_objs_flat.pt,abseta=abs(dense_objs_flat.eta),sam=histAxisName)
     
     #------------------------End your analysis here
-    
-    
+
+    ET.autolog(f'{len(ev)} Events at the end of your analysis',logger,'i')
     return h
     #######################  Define your analysis here ##########################################
 
 
 histograms={
+    "Nele" : hist.Hist(
+        "Events",
+        hist.Cat("sam", "sam"),
+        hist.Bin("Nele", "Nele", [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]),
+    ),
     "ptabseta_noflip" : hist.Hist(
         "Events",
         hist.Cat("sam", "sam"),

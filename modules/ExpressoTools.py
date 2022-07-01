@@ -1,22 +1,68 @@
 import awkward as ak
 import uproot
-import coffea as coffea
-from coffea import hist
-from coffea.analysis_tools import PackedSelection
-#from coffea.lumi_tools import LumiMask
-uproot.open.defaults["xrootd_handler"] = uproot.source.xrootd.MultithreadedXRootDSource
-import modules.Analysis as Analysis
 from modules.GetValuesFromJsons import get_param
 from modules.objects import *
-from modules.corrections import SFevaluator, GetBTagSF, ApplyJetCorrections, GetBtagEff, AttachMuonSF, AttachElectronSF, AttachPerLeptonFR, GetPUSF, ApplyRochesterCorrections, ApplyJetSystematics, AttachPSWeights, AttachPdfWeights, AttachScaleWeights, GetTriggerSF
-from modules.selection import *
-from modules.paths import IHEP_path
-
 import yaml
 import cloudpickle
 import gzip
 import os
+import pickle
+import ctypes
+# System dependent, see e.g. /usr/include/x86_64-linux-gnu/asm/unistd_64.h
+libc,SYS_gettid = ctypes.cdll.LoadLibrary('libc.so.6'),186
 
+'''---------------------------------------------------------------------------'''
+def in_range_mask(in_var,lo_lim=None,hi_lim=None):
+        if (lo_lim is None) and (hi_lim is None):
+            raise Exception("Error: No cuts specified")
+        if lo_lim is not None:
+            above_min = (in_var > lo_lim)
+        else:
+            above_min = (ak.ones_like(in_var)==1)
+        if hi_lim is not None:
+            below_max = (in_var <= hi_lim)
+        else:
+            below_max = (ak.ones_like(in_var)==1)
+        return ak.fill_none((above_min & below_max),False)
+'''---------------------------------------------------------------------------'''
+def autolog(message,logger,level="i"):
+
+    def getThreadId():
+       """Returns OS thread id - Specific to Linux"""
+       return libc.syscall(SYS_gettid)
+    "Automatically log the current function details."
+    import inspect
+    # Get the previous frame in the stack, otherwise it would
+    # be this function!!!
+    func = inspect.currentframe().f_back.f_code
+    # Dump the message + the name of this function to the log.
+    message=f'thread {getThreadId()}, {message}: {func.co_name} in {func.co_filename}:{func.co_firstlineno}'
+    if level=='i':
+        logger.info(message)
+    elif level=='d':
+        logger.debug(message)
+    elif level=='e':
+        logger.error(message)
+    else:
+        logger.warning(message)
+'''---------------------------------------------------------------------------'''
+#----------------------------------------------------------------------
+def saveroot(threadn,logger,varslist,filename='sample',outputfolder='./'):
+
+    #import logging
+    #logger = logging.getLogger(__name__)
+    #logger.error("saving root file")
+    autolog("saving root file",logger)
+
+    os.system(f'mkdir -p {outputfolder}/{filename}/')
+    outputfolder=outputfolder+'/'+filename+'/'
+    import ROOT
+    filename=outputfolder+'/'+filename+'_sub-job_'+str(threadn)+'.root'
+    for key in varslist.keys():
+        varslist[key]=ak.to_numpy(ak.fill_none(varslist[key],-9999))
+    df = ROOT.RDF.MakeNumpyDataFrame(varslist)
+    df.Snapshot("Events",filename)
+    return filename
 
 #--------------------------------------------------------------------- Sorter by conept
 def sortconept(obj):
@@ -91,4 +137,3 @@ def getInfo(events,samples):
     xsec               = samples["xsec"]
     sow                = samples["nSumOfWeights"]
     return dataset,isData,histAxisName,year,xsec,sow
-

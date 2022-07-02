@@ -56,8 +56,11 @@ if __name__=="__main__":
     hii['cutflow']=hist.Hist(axes=[hist.Cat("selection", "selection","placement"),
                                    hist.Bin("x", "x coordinate [m]", 7, 0, 7)],
                              label="Cutflow")
+    hii['cutflow_individual']=hist.Hist(axes=[hist.Cat("selection", "selection","placement"),
+                                              hist.Bin("x", "x coordinate [m]", 7, 0, 7)],
+                                        label="Cutflow_individual")
     
-    hi=cutflow(hii,events,selections,cumulative=True)
+    hi=cutflow(hii,events,selections)
     hip=hi['cutflow'].project('selection')
     import matplotlib.pyplot as plt
     fig, ax = plt.subplots(figsize=(6, 4))

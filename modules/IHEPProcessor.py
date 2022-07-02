@@ -1,4 +1,6 @@
 from coffea import processor
+from coffea.analysis_tools import PackedSelection
+from modules.ecuts import cutflow
 from coffea.nanoevents import NanoEventsFactory, NanoAODSchema
 from coffea import hist
 import threading
@@ -40,12 +42,15 @@ def reset_logging():
                 logger.removeHandler(handler)
 
 class IHEPProcessor(processor.ProcessorABC):
-    def __init__(self,outfolder,dt,ET,loglevel,analysisname,varstosave,preprocess,preselect,analysis,histos,samples,saveroot,passoptions):
+    def __init__(self,outfolder,dt,ET,loglevel,analysisname,varstosave,preprocess,preselect,analysis,histos,samples,saveroot,passoptions,extraselection):
         histos['sumw']=hist.Hist(axes=[hist.Bin("sumw", "sumw", 10, 0, 10)],
                                  label="sumw")
-        histos['cutflow']=hist.Hist(axes=[hist.Cat("selection", "selection"),
+        histos['cutflow']=hist.Hist(axes=[hist.Cat("selection", "selection","placement"),
                                           hist.Bin("x", "x coordinate [m]", 80, 0, 80)],
                                     label="Cutflow")
+        histos['cutflow_individual']=hist.Hist(axes=[hist.Cat("selection", "selection","placement"),
+                                          hist.Bin("x", "x coordinate [m]", 80, 0, 80)],
+                                    label="Cutflow_individual")
         histos['events_processed']=hist.Hist(axes=[hist.Bin("events_processed", "events_processed", 2, 0, 2)],label="events_processed")
         self._ET = ET
         self._accumulator = processor.dict_accumulator(histos)
@@ -57,6 +62,7 @@ class IHEPProcessor(processor.ProcessorABC):
         self._analysisname = analysisname
         self._saveroot = saveroot
         self._passoptions = passoptions
+        self._extraselection= extraselection
         self._loglevel=loglevel
         self._dt = dt
         self._outfolder=outfolder
@@ -170,7 +176,15 @@ class IHEPProcessor(processor.ProcessorABC):
         
         #------- preselect and store cutflow
         try:
-            events,out=self._preselect(year,isData,events,out)
+            selections = PackedSelection(dtype='uint64')
+            events,out,selections=self._preselect(year,isData,events,out,selections)
+            if self._extraselection:
+                extraselection=self._extraselection.split("=")
+                e_name=extraselection[0]
+                e_sel=extraselection[1]
+                selections.add(e_name,eval(e_sel))
+            out=cutflow(out,events,selections,cumulative=True,printit=False)
+            events=events[selections.all(*selections.names)]
             ev_preselection=len(events)
             self._ET.autolog(f'{len(events)} Events after preselection',self._logger,'i')
         except Exception:
@@ -184,8 +198,8 @@ class IHEPProcessor(processor.ProcessorABC):
             self._ET.autolog(f'{len(events)} Events after saving to root (Ignore if saveRoot was off)',self._logger,'i')
             ev_savingtoroot=len(events)
         else:
-            #self._ET.autolog(f'Can not save root file',self._logger,'e')
             ev_savingtoroot=0
+            #self._ET.autolog(f'Can not save root file',self._logger,'e')
             #self._ET.autolog(traceback.print_exc(),self._logger,'e')
 
         #print(events.fields)
@@ -206,7 +220,6 @@ class IHEPProcessor(processor.ProcessorABC):
         return out
 
     def postprocess(self, accumulator):
-
         
         #Job Summary
         for substring in ['error','stderr','warning']:
@@ -225,16 +238,26 @@ class IHEPProcessor(processor.ProcessorABC):
 
         import pandas as pd
         summarydata=pd.read_csv(f'{self._summarylog}')
-        summarydata.loc['Total']= summarydata.sum(numeric_only=True)
-        summarydata.loc['Percent (%)']= ((summarydata.loc['Total']*100)/summarydata['ev_sample']['Total']).apply(str)+'%'
-
+        summarydata.loc['Total_Events']= summarydata.sum(numeric_only=True)
+        summarydata.loc['Percent_Events']= (summarydata.loc['Total_Events']*100)/summarydata['ev_sample']['Total_Events'].round(2)
+        summarydata.loc['Percent_Events']= summarydata.loc['Percent_Events'].astype(float).round(2).apply(str)+'%'
+        
         original_stdout = sys.stdout # Save a reference to the original standard output
         with open(f'{self._summarylog}', 'a') as f:
             sys.stdout = f # Change the standard output to the file we created.
             print(summarydata.to_markdown())
+            print("###------- C U  T F L O W (Cumulative)-------###")
+            print(accumulator['cutflow'].project('selection').to_hist())
+            print("###------- C U  T F L O W (Individual)-------###")
+            print(accumulator['cutflow_individual'].project('selection').to_hist())
             sys.stdout = original_stdout
             
         print(summarydata.tail(2).to_markdown())
-            
-        #print(summarydata.loc['Total','Percent'].to_markdown())
+
+        print("###------- C U  T F L O W (Cumulative)-------###")
+        print(accumulator['cutflow'].project('selection').to_hist())
         return accumulator
+
+
+if __name__=='__main__':
+    print("Hello, this script is not meant to be run by itself.")

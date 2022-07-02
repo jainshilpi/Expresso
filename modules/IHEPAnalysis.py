@@ -32,8 +32,10 @@ class IHEPAnalysis:
     def preprocess(self,preprocessor):
         self.preprocess=preprocessor
 
-    def preselection(self,preselection):
+    def preselection(self,preselection,extraselection):
         self.preselect=preselection
+        self.extraselection=extraselection
+        
 
     def SetHists(self,histfile):
         with open(histfile, 'r') as json_file:
@@ -115,7 +117,7 @@ class IHEPAnalysis:
         exec('Schema='+schema)
         runner = processor.Runner(executor, schema=Schema, chunksize=chunksize, maxchunks=maxchunks, skipbadfiles=False, xrootdtimeout=360)
         processor_instance=IHEPProcessor.IHEPProcessor(logfolder,dt,ET,self.loglevel,self.AnalysisName,self.varstosave,
-                                                       self.preprocess,self.preselect,self.analysis,self.hists,sample,self.saveroot,self.passoptions)
+                                                       self.preprocess,self.preselect,self.analysis,self.hists,sample,self.saveroot,self.passoptions,self.extraselection)
 
         result = runner({sample["histAxisName"]:sample["files"]}, sample["treeName"],processor_instance)
         JobFolder=outfolder+'/output/'+OutputName+'/'
@@ -125,3 +127,6 @@ class IHEPAnalysis:
         seconds = elapsed % 60
         print(f'Elapssed Time: {minutes} minutes {seconds} seconds')
         return result,JobFolder,sample["histAxisName"]
+
+if __name__=='__main__':
+    print("Hello, this script is not meant to be run by itself.")

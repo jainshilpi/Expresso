@@ -1,4 +1,5 @@
-hin_dict = 'rnd_passoptions=2e.pkl.gz'
+#hin_dict = 'rnd_passoptions=2e.pkl.gz'
+hin_dict = 'rnd.pkl.gz'
 
 histodict={
     
@@ -71,5 +72,5 @@ histodict={
         'hpt_eta':[{'label':'pteta_flip','xaxis':'pt','yaxis':'abseta','file':hin_dict},
                    {'label':'pteta','xaxis':'pt','yaxis':'abseta','file':hin_dict}]
         }
-
 }
+

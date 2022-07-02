@@ -130,7 +130,10 @@ def dictplotnormal(histodict,outputfolder,SSaveLocation):
                         
                     thist=get_hist_from_pkl(outputfolder+"/"+histo[k]['file'])[k]
                     thist.scale(scale)
+                    #print(thist)
                     histo[k]['h']=thist.to_hist().project(histo[k]['axis'])
+                    #print(histo[k]['h'].project(histo[k]['axis']))
+                    #print(histo[k]['axis'])
                     if(histo[k]['stack']==True):
                         stack.append(histo[k]['h'])
                         stacklabels.append(histo[k]['label'])
@@ -143,6 +146,7 @@ def dictplotnormal(histodict,outputfolder,SSaveLocation):
                         hep.histplot(nostack,ax=ax,lw=3,stack=False,histtype='step',label=nostacklabels, yerr=True)
                 plt.legend(loc='best')
                 plt.savefig(f'{SSaveLocation}/{hiname}_normal.pdf', dpi=200)
+                #print(histo[k]['axis']+'_check')
 
 
 def dictplot(histodictall,outputfolder,SaveLocation='./'):

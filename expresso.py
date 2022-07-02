@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+####
+##  Expresso Framework is designed to perform high energy physics analysis 
+
 if __name__=='__main__':
     
     print('#-----------------------------------------------------------------#')
@@ -18,6 +21,7 @@ if __name__=='__main__':
     parser.add_argument("--NumberOfTasks","-Tasks"   , default='./', help = 'threads')
     parser.add_argument("--Analysis","-ana"   , default='chflip', help = 'Analysis name')
     parser.add_argument("--PassOptions","-QSkim"   , default='', help = 'A quick skim')
+    parser.add_argument("--ExtraSelection","-QSel"   , default='', help = 'An extra preselection')
     parser.add_argument("--AnalysisScript","-anascr"   , default='Analysis/chflip/analysis.py', help = 'Analysis script')
     parser.add_argument("--Schema","-schema"   , default='NanoAODSchema', help = 'schema')
     parser.add_argument("--PreProcessor","-pre"   , default='pre.py', help = 'preprocessor path')
@@ -48,7 +52,7 @@ if __name__=='__main__':
     PreSelection='Analysis/'+args.Analysis+'/preselection.py'
     PreSelection=PreSelection.replace(".py","").replace("/",".")
     exec(f"from {PreSelection} import preselection")
-    Ana.preselection(preselection)
+    Ana.preselection(preselection,args.ExtraSelection)
     #---------------------------
     #------------------- Initialize the analysis and hists #-------------------###########
     AnalysisPath=args.AnalysisScript.replace(".py","").replace("/",".")

@@ -42,7 +42,7 @@ def reset_logging():
                 logger.removeHandler(handler)
 
 class IHEPProcessor(processor.ProcessorABC):
-    def __init__(self,outfolder,dt,ET,loglevel,analysisname,varstosave,preprocess,preselect,analysis,histos,samples,saveroot,passoptions,extraselection):
+    def __init__(self,outfolder,dt,ET,loglevel,analysisname,varstosave,preprocess,preselect,analysis,histos,samples,saveroot,passoptions,extraselection,debug=False):
         histos['sumw']=hist.Hist(axes=[hist.Bin("sumw", "sumw", 10, 0, 10)],
                                  label="sumw")
         histos['cutflow']=hist.Hist(axes=[hist.Cat("selection", "selection","placement"),
@@ -64,6 +64,7 @@ class IHEPProcessor(processor.ProcessorABC):
         self._passoptions = passoptions
         self._extraselection= extraselection
         self._loglevel=loglevel
+        self._debug=debug
         self._dt = dt
         self._outfolder=outfolder
         self._summarylog=outfolder+"/log/summary.log"
@@ -111,8 +112,7 @@ class IHEPProcessor(processor.ProcessorABC):
         info_handler = logging.FileHandler(logpath+'/logfile_info.log',mode='w')
         warning_handler = logging.FileHandler(logpath+'/logfile_warning.log',mode='w')
         error_handler = logging.FileHandler(logpath+'/logfile_error.log',mode='w')
-        sys.stdout = open(logpath+'/logfile_stdout.log', 'w')
-        sys.stderr = open(logpath+'/logfile_stderr.log', 'w')
+        
         debug_handler.setLevel(logging.DEBUG)
         info_handler.setLevel(logging.INFO)
         warning_handler.setLevel(logging.WARNING)
@@ -133,6 +133,16 @@ class IHEPProcessor(processor.ProcessorABC):
         logger.addHandler(warning_handler)
         logger.addHandler(error_handler)
         self._logger=logger
+
+        if not self._debug:
+            sys.stdout = open(logpath+'/logfile_stdout.log', 'w')
+            sys.stderr = open(logpath+'/logfile_stderr.log', 'w')
+
+        
+        self._ET.autolog(f'#########-----------------------------------------------------########',self._logger,'qqqq')
+        self._ET.autolog(f'######### Job stamp: {str(threadn)+str(datetime.now().strftime("_t-%H_%M_%S"))}',self._logger,'qqqq')
+        self._ET.autolog(f'#########-----------------------------------------------------########',self._logger,'qqqq')
+        
         now = datetime.now()
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
         self._ET.autolog('███████ ██   ██ ██████  ██████  ███████ ███████ ███████  ██████  ',self._logger,'i')
@@ -183,7 +193,18 @@ class IHEPProcessor(processor.ProcessorABC):
                 e_name=extraselection[0]
                 e_sel=extraselection[1]
                 selections.add(e_name,eval(e_sel))
-            out=cutflow(out,events,selections,printit=True)
+
+            printit=True
+            out=cutflow(out,events,selections,printit=printit)
+            
+            if printit:
+                self._ET.autolog("###------- C U  T F L O W (Cumulative)-------###",self._logger,'qqqq')
+                self._ET.autolog(out['cutflow'].project("selection").to_hist(),self._logger,'qqqq')
+
+            if printit:
+                self._ET.autolog("###------- C U  T F L O W (Individual)-------###",self._logger,'qqqq')
+                self._ET.autolog(out['cutflow_individual'].project("selection").to_hist(),self._logger,'qqqq')
+                    
             events=events[selections.all(*selections.names)]
             ev_preselection=len(events)
             self._ET.autolog(f'{len(events)} Events after preselection',self._logger,'i')
@@ -214,8 +235,10 @@ class IHEPProcessor(processor.ProcessorABC):
             
         #------- return accumulator
         self._summary(self._summarylog,f'sub-job_{threadn},{ev_sample},{ev_preprocessing},{ev_preselection},{ev_savingtoroot},{ev_analysis}',lastline=True)
-        sys.stdout.close()
-        sys.stderr.close()
+
+        if not self._debug:
+            sys.stdout.close()
+            sys.stderr.close()
         
         return out
 

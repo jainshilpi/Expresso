@@ -40,8 +40,10 @@ def autolog(message,logger,level="i"):
         logger.debug(message)
     elif level=='e':
         logger.error(message)
-    else:
+    elif level=='w':
         logger.warning(message)
+    else:
+        print(message)
 '''---------------------------------------------------------------------------'''
 #----------------------------------------------------------------------
 def saveroot(threadn,logger,varslist,filename='sample',outputfolder='./'):

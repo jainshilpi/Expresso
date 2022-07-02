@@ -29,13 +29,11 @@ def cutflow(out,events,selections,printit=False):
             cutflowp.append(np.count_nonzero(mysel.all(*sels)))
             ne.append(np.ones(np.count_nonzero(mysel.all(*sels)))*(ss+2))        
         
-        if printit: print('Cutflow')
+        #if printit: print('Cutflow')
         for namesi,ci,ei in zip(names+mysel.names,cutflowp,ne):
             
             if k==0: out['cutflow'].fill(selection=namesi,x=ei)
             else: out['cutflow_individual'].fill(selection=namesi,x=ei)
-        if printit: print(out['cutflow'].project("selection").to_hist())
-        if printit: print(out['cutflow_individual'].project("selection").to_hist())
     return out
 
 

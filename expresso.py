@@ -29,6 +29,7 @@ if __name__=='__main__':
     parser.add_argument("--Xrootd","-xrd"   , default='root://xrootd-cms.infn.it///', help = 'xrootd redirector')
     parser.add_argument("--Mode","-mode"   , default='local', help = 'mode of running: local, wq')
     parser.add_argument("--Port","-port"   , default='8866', help = 'port of running: wq')
+    parser.add_argument("--Debug",default=False, action='store_true',help = 'if debug')
     
     args = parser.parse_args()
     from modules.ExpressoTools import cprint,saveHist
@@ -42,7 +43,7 @@ if __name__=='__main__':
     
     #------------------- Initialize an IHEPAnalysis #-------------------###########
     from modules.IHEPAnalysis import IHEPAnalysis
-    Ana=IHEPAnalysis(args.Analysis,args.SaveRoot,args.PassOptions)
+    Ana=IHEPAnalysis(args.Analysis,args.SaveRoot,args.PassOptions,args.Debug)
     
     #---------------------------
     PreProcessor=args.PreProcessor.replace(".py","").replace("/",".")

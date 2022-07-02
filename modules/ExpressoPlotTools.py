@@ -73,6 +73,7 @@ def dictplotratio(histodict,outputfolder,SSaveLocation):
                         plt.xticks(rotation=90,fontsize=7)
                 #(h2/h1).plot(ax=ax, lw=3,label=dicty1['label'])
                 ax.legend()
+                fig.tight_layout()
                 plt.legend(loc='best')
                 plt.savefig(f'{SSaveLocation}/{hiname}_ratio.pdf', dpi=200)
 
@@ -108,6 +109,7 @@ def dictplot2Dratio(histodict,outputfolder,SSaveLocation):
         #ax.tick_params(labelsize=10)
         #hist.plot2d(hist=ratio,xaxis=x1,ax=ax,clear=True)
         ax.legend()
+        fig.tight_layout()
         plt.legend(loc='best')
         plt.savefig(f'{SSaveLocation}/{hiname}_2Dratio.pdf', dpi=200)
                 
@@ -144,6 +146,11 @@ def dictplotnormal(histodict,outputfolder,SSaveLocation):
                         hep.histplot(stack,ax=ax,lw=3,stack=True,histtype='fill',label=stacklabels)
                 if len(nostack)!=0:
                         hep.histplot(nostack,ax=ax,lw=3,stack=False,histtype='step',label=nostacklabels, yerr=True)
+                ax.tick_params(axis="x")
+                if 'cutflow' in histo[k]['axis']: plt.xticks(rotation=45)
+                if 'selection' in histo[k]['axis']: plt.xticks(rotation=45)
+                ax.legend()
+                fig.tight_layout()
                 plt.legend(loc='best')
                 plt.savefig(f'{SSaveLocation}/{hiname}_normal.pdf', dpi=200)
                 #print(histo[k]['axis']+'_check')

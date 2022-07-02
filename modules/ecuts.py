@@ -5,21 +5,19 @@ from modules.objects import *
 from coffea.analysis_tools import PackedSelection
 from coffea import hist
 
-def cutflow(out,events,selections,cumulative=True,printit=False):
+def cutflow(out,events,selections,printit=False):
     #if cumulative: print(f'cumulative')
 
-    for k in [0,1]:
+    for k,iii in enumerate(range(2)):
+        mysel=selections
         sels=[]
         cutflowp=[]
         ne=[]
         cutflowp.append(len(events))
         ne.append(np.ones(len(events)))
-        names=["all"]
-        allnames=selections.names
+        names=["all_events"]
     
-        for ss,n in enumerate(selections.names):
-            
-            len(events)
+        for ss,n in enumerate(mysel.names):
         
             if k==0: ## Cumulative 
                 sels.append(n)
@@ -27,18 +25,17 @@ def cutflow(out,events,selections,cumulative=True,printit=False):
             else: 
                 sels=[n]
     
-    
-            cutflowp.append(np.count_nonzero(selections.all(*sels)))
-            ne.append(np.ones(np.count_nonzero(selections.all(*sels)))*(ss+2))        
+            
+            cutflowp.append(np.count_nonzero(mysel.all(*sels)))
+            ne.append(np.ones(np.count_nonzero(mysel.all(*sels)))*(ss+2))        
         
-            #cutflow.append(selections.all(*sels))
-            if printit: print('Cutflow')
-            for namesi,ci,ei in zip(names+selections.names,cutflowp,ne):
-        
-                if printit: print(f'{namesi}:{ci} events')
-        
-                if k==0: out['cutflow'].fill(selection=namesi,x=ei)
-                else: out['cutflow_individual'].fill(selection=namesi,x=ei)
+        if printit: print('Cutflow')
+        for namesi,ci,ei in zip(names+mysel.names,cutflowp,ne):
+            
+            if k==0: out['cutflow'].fill(selection=namesi,x=ei)
+            else: out['cutflow_individual'].fill(selection=namesi,x=ei)
+        if printit: print(out['cutflow'].project("selection").to_hist())
+        if printit: print(out['cutflow_individual'].project("selection").to_hist())
     return out
 
 
@@ -56,8 +53,6 @@ if __name__=="__main__":
     selections.add("leadingelectronpt>3",ak.pad_none(events.Electron,1).pt[:,0] > 3)
     selections.add("leadingjetpt>30",events.Jet[:,0].pt > 30)
     selections.add("leadingjetpt>40",events.Jet[:,0].pt > 40)
-
-    
     
     hii={}
     hii['cutflow']=hist.Hist(axes=[hist.Cat("selection", "selection","placement"),
@@ -68,10 +63,6 @@ if __name__=="__main__":
     hip=hi['cutflow'].project('selection')
     import matplotlib.pyplot as plt
     fig, ax = plt.subplots(figsize=(6, 4))
-    #print(hip)
-    #print(hip.identifiers("selection"))
-    #print(hi['cutflow'].project('x').identifiers("x"))
-    #print(hip.to_boost())
     print(hip.to_hist())
     hip.to_hist().plot(ax=ax)
     plt.xticks(rotation=90)

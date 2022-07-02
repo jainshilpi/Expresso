@@ -183,7 +183,7 @@ class IHEPProcessor(processor.ProcessorABC):
                 e_name=extraselection[0]
                 e_sel=extraselection[1]
                 selections.add(e_name,eval(e_sel))
-            out=cutflow(out,events,selections,cumulative=True,printit=False)
+            out=cutflow(out,events,selections,printit=True)
             events=events[selections.all(*selections.names)]
             ev_preselection=len(events)
             self._ET.autolog(f'{len(events)} Events after preselection',self._logger,'i')

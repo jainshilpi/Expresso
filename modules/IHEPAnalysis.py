@@ -13,6 +13,10 @@ import shutil
 import getpass
 import os.path
 from modules.wq import WQ
+from objprint import add_objprint,op
+from objprint import config
+config(depth=1000)
+config(indent=4)
 
 class IHEPAnalysis:
 
@@ -119,6 +123,8 @@ class IHEPAnalysis:
         runner = processor.Runner(executor, schema=Schema, chunksize=chunksize, maxchunks=maxchunks, skipbadfiles=False, xrootdtimeout=360)
         processor_instance=IHEPProcessor.IHEPProcessor(logfolder,dt,ET,self.loglevel,self.AnalysisName,self.varstosave,
                                                        self.preprocess,self.preselect,self.analysis,self.hists,sample,self.saveroot,self.passoptions,self.extraselection,self.debug)
+        if self.debug:
+            op(processor_instance)
 
         result = runner({sample["histAxisName"]:sample["files"]}, sample["treeName"],processor_instance)
         JobFolder=outfolder+'/output/'+OutputName+'/'

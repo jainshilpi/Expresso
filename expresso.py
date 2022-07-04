@@ -4,9 +4,14 @@
 ##  Expresso Framework is designed to perform high energy physics analysis 
 
 if __name__=='__main__':
-    
+    import sys
+    string_of_command = f"{' '.join(sys.argv)}"
+    print('L A U N C H I N G')
+    print('#-----------------------------------------------------------------#')
+    print(f'python {string_of_command}')
     print('#-----------------------------------------------------------------#')
     import pyfiglet
+    from pprint import pprint
     print(pyfiglet.figlet_format("Expresso"))
     import os
     os.environ['OPENBLAS_NUM_THREADS'] = '1'
@@ -15,7 +20,6 @@ if __name__=='__main__':
     import argparse
     parser = argparse.ArgumentParser(description='Expresso Framework Options')
     parser.add_argument("--Sample","-s", default='modules/json/background_samples/central_UL/UL18_DY50.json', help = 'path of samples')
-    #parser.add_argument("--OutputName","-oN"   , default='results', help = 'Name of output file')
     parser.add_argument("--OutputFolder","-oF"   , default='./', help = 'Path to the output directory')
     parser.add_argument("--ChunkSize","-cs"   , default='./', help = 'chunkSize')
     parser.add_argument("--NumberOfTasks","-Tasks"   , default='./', help = 'threads')
@@ -25,6 +29,7 @@ if __name__=='__main__':
     parser.add_argument("--AnalysisScript","-anascr"   , default='Analysis/chflip/analysis.py', help = 'Analysis script')
     parser.add_argument("--Schema","-schema"   , default='NanoAODSchema', help = 'schema')
     parser.add_argument("--PreProcessor","-pre"   , default='pre.py', help = 'preprocessor path')
+    parser.add_argument("--PreSelector","-preS"   , default='', help = 'preprocessor path')
     parser.add_argument('--SaveRoot', default=False, action='store_true',help = 'save a root tree with branches in varstosave.py')
     parser.add_argument("--Xrootd","-xrd"   , default='root://xrootd-cms.infn.it///', help = 'xrootd redirector')
     parser.add_argument("--Mode","-mode"   , default='local', help = 'mode of running: local, wq')
@@ -32,11 +37,15 @@ if __name__=='__main__':
     parser.add_argument("--Debug",default=False, action='store_true',help = 'if debug')
     
     args = parser.parse_args()
+    if args.Debug: pprint(vars(args))
+        
     from modules.ExpressoTools import cprint,saveHist
     
     #---------------------------
+    PreSelection='Analysis/'+args.Analysis+'/preselection.py'
     cprint(f'Sample will be picked from: {args.Sample}',"OKCYAN")
     cprint(f'Pre-processor will be picked from: {args.PreProcessor}',"OKCYAN")
+    cprint(f'Pre-selector will be picked from: {PreSelection}',"OKCYAN")
     cprint(f'Main-analysis will be picked from: {args.AnalysisScript}','OKCYAN')
     cprint(f'#------------------ Performing analysis:','OKBLUE')
     cprint(f'sample->pre-processor->pre-selector->save-root->main-analysis->save-plots','OKBLUE')
@@ -50,7 +59,7 @@ if __name__=='__main__':
     exec(f'from {PreProcessor} import preprocess')
     Ana.preprocess(preprocess)
     #---------------------------
-    PreSelection='Analysis/'+args.Analysis+'/preselection.py'
+    #PreSelection='Analysis/'+args.Analysis+'/preselection.py'
     PreSelection=PreSelection.replace(".py","").replace("/",".")
     exec(f"from {PreSelection} import preselection")
     Ana.preselection(preselection,args.ExtraSelection)
@@ -62,7 +71,6 @@ if __name__=='__main__':
     Ana.SetAnalysis(myanalysis,args.OutputFolder)
     #---------------------------
     OutputName=(args.AnalysisScript).split('/')[2].replace(".py","")
-    print(OutputName)
     #---------------------------
     #------------------- GetTheSamples #-------------------###########
     Ana.SampleList=[args.Sample]
@@ -70,9 +78,11 @@ if __name__=='__main__':
     Ana.SetVarsToSave(args.Analysis)
     #---------------------------
     #------------------- RunYourAnalysis #-------------------###########
-    
+    if args.Debug: pprint(vars(Ana))
+
     result,JobFolder,hname=Ana.run(OutputName=OutputName,xrootd=args.Xrootd,chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks),
                                    mode=args.Mode, schema=args.Schema, port=int(args.Port))
+    if args.Debug: pprint(vars(Ana))
     #------------------- Save the Histograms #-------------------###########
     if args.PassOptions:
         saveHist(result,JobFolder,hname.replace(" ", "")+'_passoptions='+args.PassOptions)

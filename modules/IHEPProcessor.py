@@ -19,6 +19,7 @@ import glob
 import awkward as ak
 import numpy as np
 import logging
+from objprint import add_objprint
 def reset_logging():
     manager = logging.root.manager
     manager.disabled = logging.NOTSET
@@ -41,6 +42,7 @@ def reset_logging():
                     handler.release()
                 logger.removeHandler(handler)
 
+@add_objprint
 class IHEPProcessor(processor.ProcessorABC):
     def __init__(self,outfolder,dt,ET,loglevel,analysisname,varstosave,preprocess,preselect,analysis,histos,samples,saveroot,passoptions,extraselection,debug=False):
         histos['sumw']=hist.Hist(axes=[hist.Bin("sumw", "sumw", 10, 0, 10)],
@@ -137,11 +139,15 @@ class IHEPProcessor(processor.ProcessorABC):
         if not self._debug:
             sys.stdout = open(logpath+'/logfile_stdout.log', 'w')
             sys.stderr = open(logpath+'/logfile_stderr.log', 'w')
-
         
         self._ET.autolog(f'#########-----------------------------------------------------########',self._logger,'qqqq')
         self._ET.autolog(f'######### Job stamp: {str(threadn)+str(datetime.now().strftime("_t-%H_%M_%S"))}',self._logger,'qqqq')
         self._ET.autolog(f'#########-----------------------------------------------------########',self._logger,'qqqq')
+
+        if self._debug:
+            print(events.Electron.fields)
+            layout = ak.operations.convert.to_layout(events, allow_record=True, allow_other=True).keys()
+            print(layout)
         
         now = datetime.now()
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
@@ -256,8 +262,12 @@ class IHEPProcessor(processor.ProcessorABC):
                     if os.stat(f).st_size != 0:
                         print(f)
                         print(f'{jobname} has some {substring}, check logfile_{substring} file!')
+
+
+        print("###------------------------------###")                
         print('Find your summary log here:')
         print(f'{self._summarylog}')
+        print("###------------------------------###")                
 
         import pandas as pd
         summarydata=pd.read_csv(f'{self._summarylog}')
@@ -275,7 +285,7 @@ class IHEPProcessor(processor.ProcessorABC):
             print(accumulator['cutflow_individual'].project('selection').to_hist())
             sys.stdout = original_stdout
             
-        print(summarydata.tail(2).to_markdown())
+        print(summarydata.drop('sub-job_threadn',axis=1).tail(2).to_markdown())
 
         print("###------- C U  T F L O W (Cumulative)-------###")
         print(accumulator['cutflow'].project('selection').to_hist())

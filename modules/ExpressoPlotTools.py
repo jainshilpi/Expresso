@@ -36,16 +36,17 @@ def dictplotratio(histodict,outputfolder,SSaveLocation):
                 #print(dicty1)
                 #print(dicty2)
                 
-                try:
-                        h1=get_hist_from_pkl(outputfolder+'/'+dicty1['file'])[dicty1['label']].project(dicty1['axis'])
-                        h2=get_hist_from_pkl(outputfolder+'/'+dicty2['file'])[dicty2['label']].project(dicty2['axis'])
-                        hist.plotratio(
-                                num=h2,
-                                denom=h1,
-                                clear=False,
-                                error_opts={'color': histo[k][2]['color'], 'marker': '.'},
-                                unc='num',ax=ax,label=dicty1['label'])
-                except:
+                # try:
+                #         h1=get_hist_from_pkl(outputfolder+'/'+dicty1['file'])[dicty1['label']].project(dicty1['axis'])
+                #         h2=get_hist_from_pkl(outputfolder+'/'+dicty2['file'])[dicty2['label']].project(dicty2['axis'])
+                #         hist.plotratio(
+                #                 num=h2,
+                #                 denom=h1,
+                #                 clear=False,
+                #                 error_opts={'color': histo[k][2]['color'], 'marker': '.'},
+                #                 unc='num',ax=ax,label=dicty1['label'])
+                #except:
+                if 1>0:
                         h1=get_hist_from_pkl(outputfolder+'/'+dicty1['file'])[dicty1['label']].to_hist().project(dicty1['axis'])
                         h2=get_hist_from_pkl(outputfolder+'/'+dicty2['file'])[dicty2['label']].to_hist().project(dicty2['axis'])
                         ###### Print ratios with erros
@@ -66,7 +67,7 @@ def dictplotratio(histodict,outputfolder,SSaveLocation):
                                #fi.write(f'\"{(h2/h1).axes[0][i]}\" : {labels[i]}')
                                #fi.write('\n')
                         ###### Print ratios with erros
-                        (h2/h1).plot(ax=ax, lw=3,
+                        (h2/h1).plot(ax=ax, lw=3,ls=':',
                                      label=dicty1['label'],
                                      #labels=labels,
                                      color=histo[k][2]['color'])
@@ -102,7 +103,7 @@ def dictplot2Dratio(histodict,outputfolder,SSaveLocation):
         labels = np.array(labels).reshape(ratio.values().shape)
         with open(f'{SSaveLocation}/{hiname}_2Dratio.txt', 'w') as fi:
                 fi.write(f'{labels}')
-        fig, ax = plt.subplots(figsize=tuple([z * 20 for z in ratio.values().shape]))
+        fig, ax = plt.subplots(figsize=tuple([z * 10 for z in ratio.values().shape]))
         hep.style.use('CMS')
         hep.cms.label('', data=False)
         hep.hist2dplot(ratio, labels=labels, cmap='plasma',ax=ax)

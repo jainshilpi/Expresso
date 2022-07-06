@@ -27,9 +27,10 @@ class hcoll:
                 fullhist[axis]=arrr
 
             if ini==0:
-                weights =  (self.xsec/self.sow)*np.ones_like(fullhist[axis])
+                #weights =  (self.xsec/self.sow)*np.ones_like(fullhist[axis])
                     
-        self.h[name].fill(weight=weights,**cat,**fullhist,**self.conf)
+        #self.h[name].fill(weight=weights,**cat,**fullhist,**self.conf)
+        self.h[name].fill(**cat,**fullhist,**self.conf)
     def get(self):
         return self.h
     

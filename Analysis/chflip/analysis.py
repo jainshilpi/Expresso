@@ -11,12 +11,13 @@ from coffea.analysis_tools import PackedSelection
 #####################################################################################################################
 
 class hcoll:
-    def __init__(self,h,isData,xsec,sow,**conf):
+    def __init__(self,h,isData,xsec,sow,doweight=False,**conf):
         self.h=h
         self.conf=conf
         self.isData=isData
         self.xsec=xsec
         self.sow=sow
+        self.doweight=doweight
     def add(self,name,mask,obj,cat={},flatten=False,**axes):
         fullhist={}
         for ini,axis in enumerate(axes.keys()):
@@ -26,16 +27,19 @@ class hcoll:
             else:
                 fullhist[axis]=arrr
 
-            if ini==0:
-                #weights =  (self.xsec/self.sow)*np.ones_like(fullhist[axis])
+        
+            if ini==0 and self.doweight:
+                weights =  (self.xsec/self.sow)*np.ones_like(fullhist[axis])
                     
-        #self.h[name].fill(weight=weights,**cat,**fullhist,**self.conf)
-        self.h[name].fill(**cat,**fullhist,**self.conf)
+        if self.doweight:
+            self.h[name].fill(weight=weights,**cat,**fullhist,**self.conf)
+        else:
+            self.h[name].fill(**cat,**fullhist,**self.conf)
     def get(self):
         return self.h
     
-def myanalysis(logger,h,ev,dataset,isData,histAxisName,year,xsec,sow,pass_options):
-    hists=hcoll(h,isData,xsec,sow,sam=histAxisName)
+def myanalysis(logger,h,ev,dataset,isData,histAxisName,year,xsec,sow,pass_options,doweight=False):
+    hists=hcoll(h,isData,xsec,sow,doweight=doweight,sam=histAxisName)
     ET.autolog(f'{len(ev)} Events at the start of your analysis',logger,'i')
     #------------------------Start your analysis below this
 

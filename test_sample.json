@@ -1,0 +1,18 @@
+{
+  "xsec": 6025.2,
+  "year": "2016APV",
+  "treeName": "Events",
+  "histAxisName": "rnd",
+  "options": "",
+  "WCnames": [],
+  "nEvents": 329174,
+  "nGenEvents": 771729,
+  "nSumOfWeights": 13111665281.55,
+  "isData": false,
+  "path": "/scratch/testsamples/",
+  "files": [
+    "/scratch/testsamples/tree_62.root",
+    "/scratch/testsamples/tree_6.root",
+    "/scratch/testsamples/tree_40.root"
+  ]
+}

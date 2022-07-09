@@ -1,0 +1,46 @@
+year: 2016
+files: {DY: rnd.pkl.gz}
+    
+normal_hsumw:
+   1:
+    sumw: {'axis': 'sumw','file': DY,'stack': False,'scale': 1}
+    args: {color: black, label: sumw}
+    
+normal_hcutflow:
+   1:
+    cutflow: {'axis': 'selection','file': DY,'stack': False,'scale': 1}
+    args: {color: black, label: cutflow}
+
+ratio_flip_pt:
+  1:
+    el0_flip: {'axis': 'pt','file': DY,'stack': False,'scale': 1}
+    el0: {'axis': 'pt','file': DY,'stack': False,'scale': 1}
+    args: {color: red, label: el0}
+  2:
+    el1_flip: {'axis': 'pt','file': DY,'stack': False,'scale': 1}
+    el1: {'axis': 'pt','file': DY,'stack': False,'scale': 1}
+    args: {color: green, label: el1}
+  3:
+    allel_flip: {'axis': 'pt','file': DY,'stack': False,'scale': 1}
+    allel: {'axis': 'pt','file': DY,'stack': False,'scale': 1}
+    args: {color: blue, label: allel}
+
+ratio_flip_abseta:
+  1:
+    el0_flip: {'axis': 'abseta','file': DY,'stack': False,'scale': 1}
+    el0: {'axis': 'abseta','file': DY,'stack': False,'scale': 1}
+    args: {color: red, label: el0}
+  2:
+    el1_flip: {'axis': 'abseta','file': DY,'stack': False,'scale': 1}
+    el1: {'axis': 'abseta','file': DY,'stack': False,'scale': 1}
+    args: {color: green, label: el1}
+  3:
+    allel_flip: {'axis': 'abseta','file': DY,'stack': False,'scale': 1}
+    allel: {'axis': 'abseta','file': DY,'stack': False,'scale': 1}
+    args: {color: blue, label: allel}
+
+2Dratio_flip_pteta:
+  1:
+    allel_flip: {'xaxis': 'pt','yaxis': 'abseta', 'file': DY,'stack': False,'scale': 1}
+    allel: {'xaxis': 'pt','yaxis': 'abseta', 'file': DY,'stack': False,'scale': 1}
+    args: {color: plasma, label: el0, xrotation: 45}

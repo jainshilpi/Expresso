@@ -8,37 +8,37 @@ import numpy.ma as ma
 
 class hcoll:
 
-    def __init__(self, h, isData, xsec, sow, doweight=False, **conf):
+    def __init__(self, h, isData, xsec, sow, **conf):
         self.h = h
         self.conf = conf
         self.isData = isData
         self.xsec = xsec
         self.sow = sow
-        self.doweight = doweight
 
-    def fill(self, name, mask, obj, cat={}, flatten=False, **axes):
+    def fill(self, name, weights, mask, obj, cat={}, flatten=False, **axes):
         fullhist = {}
+        #print('----------########---')
         for ini, axis in enumerate(axes.keys()):
             arrr = eval(f"obj.{axes[axis]}[mask]")
             if flatten:
-                fullhist[axis] = ak.flatten(arrr)
+                if ini==0:
+                    fullhist[axis],weights = ak.flatten(ak.zip(arrr,weights))
+                    weights=weights[ak.flatten(mask)]
+                else:
+                    fullhist[axis] = ak.flatten(arrr)
             else:
+                if ini==0:
+                    weights=weights[mask]
                 fullhist[axis] = arrr
-            if ini == 0 and self.doweight:
-                weights = self.xsec / self.sow * np.ones_like(fullhist[axis])
-
-        if self.doweight:
-            (self.h[name].fill)(weight=weights, **cat, **fullhist, **self.conf)
-        else:
-            (self.h[name].fill)(**cat, **fullhist, **self.conf)
+        self.h[name].fill(weight=weights, **cat, **fullhist, **self.conf)
 
     def get(self):
         return self.h
 
 
-def myanalysis(logger, h, ev, dataset, isData, histAxisName, year, xsec, sow, pass_options, doweight=False):
+def myanalysis(logger, h, ev, dataset, isData, histAxisName, year, xsec, sow, pass_options):
     
-    hists = hcoll(h, isData, xsec, sow, doweight=doweight, sam=histAxisName)
+    hists = hcoll(h, isData, xsec, sow, process=histAxisName)
     ET.autolog(f"{len(ev)} Events at the start of your analysis", logger, 'i')
     # Start your analysis
     #-------------------------------------------------------------------------------------------------------
@@ -58,8 +58,8 @@ def myanalysis(logger, h, ev, dataset, isData, histAxisName, year, xsec, sow, pa
     #-------------------------------------------------------------------------------------------------------
     # For MC
     if not isData:
-        genw = ak.ones_like(ev.event)
-        ev.weight_norm = xsec / sow * genw
+        genw = ev["genWeight"]
+        ev["weight_norm"] = (xsec / sow) * genw
     #-------------------------------------------------------------------------------------------------------
     # Masks
     ev[('el', 'isflip')] = ev.el.gen_pdgId == -ev.el.pdgId
@@ -85,7 +85,7 @@ def myanalysis(logger, h, ev, dataset, isData, histAxisName, year, xsec, sow, pa
     el1_M = ET.in_range_mask((ev_ee.el1.pt), lo_lim=25.0, hi_lim=50.0)
     el0_L = ET.in_range_mask((ev_ee.el0.pt), lo_lim=15.0, hi_lim=25.0)
     el1_L = ET.in_range_mask((ev_ee.el1.pt), lo_lim=15.0, hi_lim=25.0)
-
+    
     flipdict = {
         'BL_BL':el0_B & el0_L & el1_B & el1_L, 
         'BL_BM':el0_B & el0_L & el1_B & el1_M | el0_B & el0_M & el1_B & el1_L, 
@@ -109,19 +109,30 @@ def myanalysis(logger, h, ev, dataset, isData, histAxisName, year, xsec, sow, pa
         'BM_EH':el0_B & el0_M & el1_E & el1_H | el0_E & el0_H & el1_B & el1_M, 
         'BH_EH':el0_B & el0_H & el1_E & el1_H | el0_E & el0_H & el1_B & el1_H
     }
-    #-------------------------------------------------------------------------------------------------------
-    # Fill histograms
-    hists.fill('Nele', (ev.one == 1), ev, Nele='Nele')
-    hists.fill('allel', (ev.el.truthFlip | ev.el.truthNoFlip), (ev.el), flatten=True, pt='pt', abseta='abseta')
-    hists.fill('allel_flip', (ev.el.truthFlip), (ev.el), flatten=True, pt='pt', abseta='abseta')
-    hists.fill('el0', (ev_ee.el0.truthFlip | ev_ee.el0.truthNoFlip), (ev_ee.el0), pt='pt', abseta='abseta')
-    hists.fill('el0_flip', (ev_ee.el0.truthFlip), (ev_ee.el0), pt='pt', abseta='abseta')
-    hists.fill('el1', (ev_ee.el1.truthFlip | ev_ee.el1.truthNoFlip), (ev_ee.el1), pt='pt', abseta='abseta')
-    hists.fill('el1_flip', (ev_ee.el1.truthFlip), (ev_ee.el1), pt='pt', abseta='abseta')
 
     for key in flipdict.keys():
-        hists.fill('pteta_flip_bins', (ev_ee.el.truthFlip & flipdict[key]), (ev_ee.el), cat={'Flipbins': key}, flatten=True, pt='pt', abseta='abseta')
-        hists.fill('pteta_Noflip_bins', (ev_ee.el.truthNoFlip & flipdict[key]), (ev_ee.el), cat={'Flipbins': key}, flatten=True, pt='pt', abseta='abseta')
+        ev_ee[key]=flipdict[key]
+    #-------------------------------------------------------------------------------------------------------
+    # Fill histograms
+    hists.fill('Nele',ev.weight_norm, (ev.one == 1), ev, Nele='Nele')
+
+    hists.fill('el0',ev_ee.weight_norm, (ev_ee.el0.truthFlip | ev_ee.el0.truthNoFlip), (ev_ee.el0), pt='pt', abseta='abseta')
+    hists.fill('el0_flip',ev_ee.weight_norm, (ev_ee.el0.truthFlip), (ev_ee.el0), pt='pt', abseta='abseta')
+
+    hists.fill('el1',ev_ee.weight_norm, (ev_ee.el1.truthFlip | ev_ee.el1.truthNoFlip), (ev_ee.el1), pt='pt', abseta='abseta')
+    hists.fill('el1_flip',ev_ee.weight_norm, (ev_ee.el1.truthFlip), (ev_ee.el1), pt='pt', abseta='abseta')
+
+    hists.fill('allel',ev_ee.weight_norm, (ev_ee.el0.truthFlip | ev_ee.el0.truthNoFlip), (ev_ee.el0), pt='pt', abseta='abseta')
+    hists.fill('allel_flip',ev_ee.weight_norm, (ev_ee.el0.truthFlip), (ev_ee.el0), pt='pt', abseta='abseta')
+
+    hists.fill('allel',ev_ee.weight_norm, (ev_ee.el1.truthFlip | ev_ee.el1.truthNoFlip), (ev_ee.el1), pt='pt', abseta='abseta')
+    hists.fill('allel_flip',ev_ee.weight_norm, (ev_ee.el1.truthFlip), (ev_ee.el1), pt='pt', abseta='abseta')
+
+    for key in flipdict.keys():
+        hists.fill('pteta_flip_bins',ev_ee.weight_norm, (ev_ee[key]), (ev_ee), cat={'Flipbins': key}, event="one")
+        hists.fill('pteta_Noflip_bins',ev_ee.weight_norm, (ev_ee[key]), (ev_ee), cat={'Flipbins': key}, event="one")
+        hists.fill('pteta_flip_bins',ev_ee.weight_norm, (ev_ee[key]), (ev_ee), cat={'Flipbins': key}, event="one")
+        hists.fill('pteta_Noflip_bins',ev_ee.weight_norm, (ev_ee[key]), (ev_ee), cat={'Flipbins': key}, event="one")
     #-------------------------------------------------------------------------------------------------------
     #-------------------------------------------------------------------------------------------------------
     #End your analysis
@@ -131,50 +142,13 @@ def myanalysis(logger, h, ev, dataset, isData, histAxisName, year, xsec, sow, pa
 
 
 histograms = {
-    'Nele':hist.Hist('Events',
-                     hist.Cat('sam', 'sam'),
-                     hist.Bin('Nele', '$N_el$', [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5])),
-    
-    'allel':hist.Hist('Events',
-                      hist.Cat('sam', 'sam'),
-                      hist.Bin('pt', '$p_T$', [0, 10, 25, 50, 200]),
-                      hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
-    
-    'el0':hist.Hist('Events',
-                    hist.Cat('sam', 'sam'),
-                    hist.Bin('pt', '$p_T$', [0, 10, 25, 50, 200]),
-                    hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
-    
-    'el1':hist.Hist('Events',
-                    hist.Cat('sam', 'sam'),
-                    hist.Bin('pt', '$p_T$', [0, 10, 25, 50, 200]),
-                    hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
-    
-    'allel_flip':hist.Hist('Events',
-                           hist.Cat('sam', 'sam'),
-                           hist.Bin('pt', '$p_T$', [0, 10, 25, 50, 200]),
-                           hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
-    
-    'el0_flip':hist.Hist('Events',
-                         hist.Cat('sam', 'sam'),
-                         hist.Bin('pt', '$p_T$', [0, 10, 25, 50, 200]),
-                         hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
-    
-    'el1_flip':hist.Hist('Events',
-                         hist.Cat('sam', 'sam'),
-                         hist.Bin('pt', '$p_T$', [0, 10, 25, 50, 200]),
-                         hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
-    
-    'pteta_flip_bins':hist.Hist('Events',
-                                hist.Cat('sam', 'sam'),
-                                hist.Cat('Flipbins', 'Flipbins', 'placement'),
-                                hist.Bin('pt', '$p_T$', [0, 10, 25, 50, 200]),
-                                hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
-    
-    
-    'pteta_Noflip_bins':hist.Hist('Events',
-                                  hist.Cat('sam', 'sam'),
-                                  hist.Cat('Flipbins', 'Flipbins', 'placement'),
-                                  hist.Bin('pt', '$p_T$', [0, 10, 25, 50, 200]),
-                                  hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5]))
+    'Nele':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Nele', '$N_el$', [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5])),
+    'allel':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('pt', '$p_T$', [10, 25, 50, 200]),hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),    
+    'el0':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('pt', '$p_T$', [10, 25, 50, 200]),hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
+    'el1':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('pt', '$p_T$', [10, 25, 50, 200]),hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
+    'allel_flip':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('pt', '$p_T$', [10, 25, 50, 200]),hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
+    'el0_flip':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('pt', '$p_T$', [10, 25, 50, 200]),hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
+    'el1_flip':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('pt', '$p_T$', [10, 25, 50, 200]),hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
+    'pteta_flip_bins':hist.Hist('Events',hist.Cat('process', 'process'),hist.Cat('Flipbins', 'Flipbins', 'placement'),hist.Bin('event', 'event', [0,1])),
+    'pteta_Noflip_bins':hist.Hist('Events',hist.Cat('process', 'process'),hist.Cat('Flipbins', 'Flipbins', 'placement'),hist.Bin('event', 'event',[0,1]))
 }

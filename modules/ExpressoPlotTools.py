@@ -106,11 +106,8 @@ def alldictplot(histodictall,outputfolder,SSaveLocation='./',plotsetting='module
                                 ratio = (hi[0].values()/hi[1].values())
                                 err_up, err_down = ratio_uncertainty(hi[0].values(), hi[1].values(), 'efficiency')
                                 print(ratio)
-                                #print(err_up)
-                                #print(err_down)
-                                print(ratio_uncertainty(hi[0].values(), hi[1].values(), 'efficiency'))
+                                print(ratio_uncertainty(hi[0].values(), hi[1].values(), 'poisson-ratio'))
                                 print(clopper_pearson_interval(hi[0].values(), hi[1].values()))
-                                print(poisson_interval(hi[0].values(), hi[1].values()))
                                 labels = []
                                 for ra, u, d in zip(ratio.ravel(), err_up.ravel(), err_down.ravel()):
                                         ra, u, d = f'{ra:.6f}', f'{u:.6f}', f'{d:.6f}'

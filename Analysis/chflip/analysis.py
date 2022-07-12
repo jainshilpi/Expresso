@@ -8,12 +8,13 @@ import numpy.ma as ma
 
 class hcoll:
 
-    def __init__(self, h, isData, xsec, sow, **conf):
+    def __init__(self, h, isData, xsec, sow, doweight, **conf):
         self.h = h
         self.conf = conf
         self.isData = isData
         self.xsec = xsec
         self.sow = sow
+        self.doweight=doweight
 
     def fill(self, name, weights, mask, obj, cat={}, flatten=False, **axes):
         fullhist = {}
@@ -30,15 +31,18 @@ class hcoll:
                 if ini==0:
                     weights=weights[mask]
                 fullhist[axis] = arrr
-        self.h[name].fill(weight=weights, **cat, **fullhist, **self.conf)
+        if self.doweight:
+            self.h[name].fill(weight=weights, **cat, **fullhist, **self.conf)
+        else:
+            self.h[name].fill(**cat, **fullhist, **self.conf)
 
     def get(self):
         return self.h
 
 
-def myanalysis(logger, h, ev, dataset, isData, histAxisName, year, xsec, sow, pass_options):
+def myanalysis(logger, h, ev, dataset, isData, histAxisName, year, xsec, sow, pass_options, doweight=False):
     
-    hists = hcoll(h, isData, xsec, sow, process=histAxisName)
+    hists = hcoll(h, isData, xsec, sow, doweight, process=histAxisName)
     ET.autolog(f"{len(ev)} Events at the start of your analysis", logger, 'i')
     # Start your analysis
     #-------------------------------------------------------------------------------------------------------

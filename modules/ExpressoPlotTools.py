@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 plt.rcParams['figure.dpi'] = 200
 plt.rcParams['savefig.dpi'] = 200
 import mplhep as hep
-from hist.intervals import ratio_uncertainty
+from hist.intervals import ratio_uncertainty, clopper_pearson_interval, poisson_interval
 import numpy as np
 def get_hist_from_pkl(path_to_pkl,allow_empty=True):
         h = pickle.load( gzip.open(path_to_pkl) )
@@ -56,6 +56,8 @@ def alldictplot(histodictall,outputfolder,SSaveLocation='./',plotsetting='module
                         nostackcolors=[]
                         stacklabels=[]
                         stackcolors=[]
+                if 'ratio' in allkey and '2D' not in allkey:
+                        fig, ax = plt.subplots()
                         
                 for hiname in histodict.keys():
                         histo=histodict[hiname]
@@ -94,13 +96,21 @@ def alldictplot(histodictall,outputfolder,SSaveLocation='./',plotsetting='module
                     
                         if 'ratio' in allkey:
                                 hi=[]
+                                hic=[]
                                 #print(histo.keys())
                                 for i,k in enumerate(histo.keys()):
                                         #if k == 'args': continue
                                         hi.append(histo[k]['h'].to_hist())
+                                        hic.append(histo[k]['h'])
                                 #ratio = (hi[0].view()/hi[1].view())
                                 ratio = (hi[0].values()/hi[1].values())
-                                err_up, err_down = ratio_uncertainty(hi[0].values(), hi[1].values(), 'poisson-ratio')
+                                err_up, err_down = ratio_uncertainty(hi[0].values(), hi[1].values(), 'efficiency')
+                                print(ratio)
+                                #print(err_up)
+                                #print(err_down)
+                                print(ratio_uncertainty(hi[0].values(), hi[1].values(), 'efficiency'))
+                                print(clopper_pearson_interval(hi[0].values(), hi[1].values()))
+                                print(poisson_interval(hi[0].values(), hi[1].values()))
                                 labels = []
                                 for ra, u, d in zip(ratio.ravel(), err_up.ravel(), err_down.ravel()):
                                         ra, u, d = f'{ra:.6f}', f'{u:.6f}', f'{d:.6f}'
@@ -129,10 +139,17 @@ def alldictplot(histodictall,outputfolder,SSaveLocation='./',plotsetting='module
                                         xbins=[(hi[0]).axes[0][i][0] for i in range(len((hi[0]).view()))]
                                         xbins.append((hi[0]).axes[0][len((hi[0]).view())-1][1])
                                         hep.hist2dplot(ratio, xbins=xbins,ybins=ybins,labels=labels, cmap=args['color'])
+                                        #hist.plotratio(hi[0], xbins=xbins,ybins=ybins,labels=labels, cmap=args['color'])
                                 else:
                                         bins=[(hi[0]).axes[0][i][0] for i in range(len((hi[0]).view()))]
                                         bins.append((hi[0]).axes[0][len((hi[0]).view())-1][1])
-                                        hep.histplot(ratio, bins=bins, color=args['color'], label=args['label'])
+                                        #hep.histplot(ratio, bins=bins, color=args['color'], label=args['label'])
+                                        color=f"tab:{args['color']}"
+                                        hist.plotratio(hic[0],hic[1],ax=ax,
+                                                       error_opts= {'linestyle': 'none','marker': '.'
+                                                                    , 'markersize': 10.,'color': color,  'elinewidth': 1},
+                                                       unc='clopper-pearson',
+                                                       clear=False)
 
                 if 'xrotation' in args.keys(): plt.xticks(rotation=args['xrotation'])
 

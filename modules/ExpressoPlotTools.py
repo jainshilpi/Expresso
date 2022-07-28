@@ -26,6 +26,18 @@ def dictprint(di):
         for key, value in di.items():
                 print(key, ' : ', value)
 
+def geterrratio(hi,typeunc='p'):
+        ratio = (hi[0].values()/hi[1].values())
+        if typeunc=='p':
+                err_down, err_up  = ratio_uncertainty(hi[0].values(), hi[1].values(), 'efficiency')
+        else:
+                err_down, err_up = clopper_pearson_interval(hi[0].values(), hi[1].values())
+        labels=[]
+        for ra, u, d in zip(ratio.ravel(), err_up.ravel(), err_down.ravel()):
+                                        ra, u, d = f'{ra:.6f}', f'{u:.6f}', f'{d:.6f}'
+                                        st = '$'+ra+'_{-'+d+'}^{+'+u+'}$'
+                                        labels.append(st)
+        return ratio,labels
 def alldictplot(histodictall,outputfolder,SSaveLocation='./',plotsetting='modules/plotsettings.yaml'):
         path = Path(plotsetting)
         with open(path) as stream:
@@ -103,16 +115,12 @@ def alldictplot(histodictall,outputfolder,SSaveLocation='./',plotsetting='module
                                         hi.append(histo[k]['h'].to_hist())
                                         hic.append(histo[k]['h'])
                                 #ratio = (hi[0].view()/hi[1].view())
-                                ratio = (hi[0].values()/hi[1].values())
-                                err_up, err_down = ratio_uncertainty(hi[0].values(), hi[1].values(), 'efficiency')
-                                print(ratio)
-                                print(ratio_uncertainty(hi[0].values(), hi[1].values(), 'poisson-ratio'))
-                                print(clopper_pearson_interval(hi[0].values(), hi[1].values()))
-                                labels = []
-                                for ra, u, d in zip(ratio.ravel(), err_up.ravel(), err_down.ravel()):
-                                        ra, u, d = f'{ra:.6f}', f'{u:.6f}', f'{d:.6f}'
-                                        st = '$'+ra+'_{-'+d+'}^{+'+u+'}$'
-                                        labels.append(st)
+                                ratio,labels=geterrratio(hi,typeunc='p')
+                                print('------eff---------')
+                                print(labels)
+                                ratio,labels=geterrratio(hi)
+                                print('------CP---------')
+                                print(labels)
                                 if '2D' in allkey:
                                         fig, ax = plt.subplots(figsize=tuple([z * 10 for z in ratio.shape]))
                                         labels = np.array(labels).reshape(ratio.shape)

@@ -40,7 +40,7 @@ class hcoll:
         return self.h
 
 
-def myanalysis(logger, h, ev, dataset, isData, histAxisName, year, xsec, sow, pass_options, doweight=False):
+def myanalysis(logger, h, ev, dataset, isData, histAxisName, year, xsec, sow, pass_options, doweight=True):
     
     hists = hcoll(h, isData, xsec, sow, doweight, process=histAxisName)
     ET.autolog(f"{len(ev)} Events at the start of your analysis", logger, 'i')

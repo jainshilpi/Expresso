@@ -13,3 +13,4 @@ condor/test.log
 condor/condor_output/*out
 condor/condor_output/*err
 /notebooks/.ipy*
+Output/*

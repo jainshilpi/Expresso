@@ -9,10 +9,6 @@
   "nGenEvents": 771729,
   "nSumOfWeights": 13111665281.55,
   "isData": false,
-  "path": "/scratch/testsamples/",
-  "files": [
-    "/scratch/testsamples/tree_62.root",
-    "/scratch/testsamples/tree_6.root",
-    "/scratch/testsamples/tree_40.root"
-  ]
+  "path": "modules/testsample/",
+  "files": ["modules/testsample/tree_6.root"]
 }

@@ -1,4 +1,6 @@
 from coffea import processor
+from coffea.analysis_tools import PackedSelection
+from modules.ecuts import cutflow
 from coffea.nanoevents import NanoEventsFactory, NanoAODSchema
 from coffea import hist
 import threading
@@ -17,6 +19,7 @@ import glob
 import awkward as ak
 import numpy as np
 import logging
+from objprint import add_objprint
 def reset_logging():
     manager = logging.root.manager
     manager.disabled = logging.NOTSET
@@ -39,13 +42,17 @@ def reset_logging():
                     handler.release()
                 logger.removeHandler(handler)
 
+@add_objprint
 class IHEPProcessor(processor.ProcessorABC):
-    def __init__(self,outfolder,dt,ET,loglevel,analysisname,varstosave,preprocess,preselect,analysis,histos,samples,saveroot,passoptions):
+    def __init__(self,outfolder,dt,ET,loglevel,analysisname,varstosave,preprocess,preselect,analysis,histos,samples,saveroot,passoptions,extraselection,debug=False):
         histos['sumw']=hist.Hist(axes=[hist.Bin("sumw", "sumw", 10, 0, 10)],
                                  label="sumw")
-        histos['cutflow']=hist.Hist(axes=[hist.Cat("selection", "selection"),
+        histos['cutflow']=hist.Hist(axes=[hist.Cat("selection", "selection","placement"),
                                           hist.Bin("x", "x coordinate [m]", 80, 0, 80)],
                                     label="Cutflow")
+        histos['cutflow_individual']=hist.Hist(axes=[hist.Cat("selection", "selection","placement"),
+                                          hist.Bin("x", "x coordinate [m]", 80, 0, 80)],
+                                    label="Cutflow_individual")
         histos['events_processed']=hist.Hist(axes=[hist.Bin("events_processed", "events_processed", 2, 0, 2)],label="events_processed")
         self._ET = ET
         self._accumulator = processor.dict_accumulator(histos)
@@ -57,7 +64,9 @@ class IHEPProcessor(processor.ProcessorABC):
         self._analysisname = analysisname
         self._saveroot = saveroot
         self._passoptions = passoptions
+        self._extraselection= extraselection
         self._loglevel=loglevel
+        self._debug=debug
         self._dt = dt
         self._outfolder=outfolder
         self._summarylog=outfolder+"/log/summary.log"
@@ -105,8 +114,7 @@ class IHEPProcessor(processor.ProcessorABC):
         info_handler = logging.FileHandler(logpath+'/logfile_info.log',mode='w')
         warning_handler = logging.FileHandler(logpath+'/logfile_warning.log',mode='w')
         error_handler = logging.FileHandler(logpath+'/logfile_error.log',mode='w')
-        sys.stdout = open(logpath+'/logfile_stdout.log', 'w')
-        sys.stderr = open(logpath+'/logfile_stderr.log', 'w')
+        
         debug_handler.setLevel(logging.DEBUG)
         info_handler.setLevel(logging.INFO)
         warning_handler.setLevel(logging.WARNING)
@@ -127,6 +135,20 @@ class IHEPProcessor(processor.ProcessorABC):
         logger.addHandler(warning_handler)
         logger.addHandler(error_handler)
         self._logger=logger
+
+        if not self._debug:
+            sys.stdout = open(logpath+'/logfile_stdout.log', 'w')
+            sys.stderr = open(logpath+'/logfile_stderr.log', 'w')
+        
+        self._ET.autolog(f'#########-----------------------------------------------------########',self._logger,'qqqq')
+        self._ET.autolog(f'######### Job stamp: {str(threadn)+str(datetime.now().strftime("_t-%H_%M_%S"))}',self._logger,'qqqq')
+        self._ET.autolog(f'#########-----------------------------------------------------########',self._logger,'qqqq')
+
+        if self._debug:
+            print(events.Electron.fields)
+            layout = ak.operations.convert.to_layout(events, allow_record=True, allow_other=True).keys()
+            print(layout)
+        
         now = datetime.now()
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
         self._ET.autolog('███████ ██   ██ ██████  ██████  ███████ ███████ ███████  ██████  ',self._logger,'i')
@@ -170,7 +192,26 @@ class IHEPProcessor(processor.ProcessorABC):
         
         #------- preselect and store cutflow
         try:
-            events,out=self._preselect(year,isData,events,out)
+            selections = PackedSelection(dtype='uint64')
+            events,out,selections=self._preselect(year,isData,events,out,selections)
+            if self._extraselection:
+                extraselection=self._extraselection.split("=")
+                e_name=extraselection[0]
+                e_sel=extraselection[1]
+                selections.add(e_name,eval(e_sel))
+
+            printit=True
+            out=cutflow(out,events,selections,printit=printit)
+            
+            if printit:
+                self._ET.autolog("###------- C U  T F L O W (Cumulative)-------###",self._logger,'qqqq')
+                self._ET.autolog(out['cutflow'].project("selection").to_hist(),self._logger,'qqqq')
+
+            if printit:
+                self._ET.autolog("###------- C U  T F L O W (Individual)-------###",self._logger,'qqqq')
+                self._ET.autolog(out['cutflow_individual'].project("selection").to_hist(),self._logger,'qqqq')
+                    
+            events=events[selections.all(*selections.names)]
             ev_preselection=len(events)
             self._ET.autolog(f'{len(events)} Events after preselection',self._logger,'i')
         except Exception:
@@ -184,8 +225,8 @@ class IHEPProcessor(processor.ProcessorABC):
             self._ET.autolog(f'{len(events)} Events after saving to root (Ignore if saveRoot was off)',self._logger,'i')
             ev_savingtoroot=len(events)
         else:
-            #self._ET.autolog(f'Can not save root file',self._logger,'e')
             ev_savingtoroot=0
+            #self._ET.autolog(f'Can not save root file',self._logger,'e')
             #self._ET.autolog(traceback.print_exc(),self._logger,'e')
 
         #print(events.fields)
@@ -200,13 +241,14 @@ class IHEPProcessor(processor.ProcessorABC):
             
         #------- return accumulator
         self._summary(self._summarylog,f'sub-job_{threadn},{ev_sample},{ev_preprocessing},{ev_preselection},{ev_savingtoroot},{ev_analysis}',lastline=True)
-        sys.stdout.close()
-        sys.stderr.close()
+
+        if not self._debug:
+            sys.stdout.close()
+            sys.stderr.close()
         
         return out
 
     def postprocess(self, accumulator):
-
         
         #Job Summary
         for substring in ['error','stderr','warning']:
@@ -220,21 +262,35 @@ class IHEPProcessor(processor.ProcessorABC):
                     if os.stat(f).st_size != 0:
                         print(f)
                         print(f'{jobname} has some {substring}, check logfile_{substring} file!')
+
+
+        print("###------------------------------###")                
         print('Find your summary log here:')
         print(f'{self._summarylog}')
+        print("###------------------------------###")                
 
         import pandas as pd
         summarydata=pd.read_csv(f'{self._summarylog}')
-        summarydata.loc['Total']= summarydata.sum(numeric_only=True)
-        summarydata.loc['Percent (%)']= ((summarydata.loc['Total']*100)/summarydata['ev_sample']['Total']).apply(str)+'%'
-
+        summarydata.loc['Total_Events']= summarydata.sum(numeric_only=True)
+        summarydata.loc['Percent_Events']= (summarydata.loc['Total_Events']*100)/summarydata['ev_sample']['Total_Events'].round(2)
+        summarydata.loc['Percent_Events']= summarydata.loc['Percent_Events'].astype(float).round(2).apply(str)+'%'
+        
         original_stdout = sys.stdout # Save a reference to the original standard output
         with open(f'{self._summarylog}', 'a') as f:
             sys.stdout = f # Change the standard output to the file we created.
             print(summarydata.to_markdown())
+            print("###------- C U  T F L O W (Cumulative)-------###")
+            print(accumulator['cutflow'].project('selection').to_hist())
+            print("###------- C U  T F L O W (Individual)-------###")
+            print(accumulator['cutflow_individual'].project('selection').to_hist())
             sys.stdout = original_stdout
             
-        print(summarydata.tail(2).to_markdown())
-            
-        #print(summarydata.loc['Total','Percent'].to_markdown())
+        print(summarydata.drop('sub-job_threadn',axis=1).tail(2).to_markdown())
+
+        print("###------- C U  T F L O W (Cumulative)-------###")
+        print(accumulator['cutflow'].project('selection').to_hist())
         return accumulator
+
+
+if __name__=='__main__':
+    print("Hello, this script is not meant to be run by itself.")

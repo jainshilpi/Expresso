@@ -1,1 +1,30 @@
-site_name: My Docs
+site_name: Expresso documentation
+
+theme: readthedocs
+
+nav:
+    - Expresso: index.md
+    
+theme:
+  name: material
+  logo: https://cms-docdb.cern.ch/cgi-bin/PublicDocDB/RetrieveFile?docid=3045&filename=CMSlogo_color_nolabel_1024_May2014.png&version=3
+  font:
+    code: Roboto Mono
+  palette:
+    scheme: slate
+    primary: indigo
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - md_in_html
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format

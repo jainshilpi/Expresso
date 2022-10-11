@@ -1,3 +1,7 @@
+## buildwebsite
+cd mkdocs
+./build.sh
+cd ..
 ## Test before push
 #Env
 conda activate py37_coffea_hep

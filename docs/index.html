@@ -216,8 +216,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#work-in-progress" class="md-nav__link">
-    Work in progress!
+  <a href="#step-1-user-issues-one-or-more-commands-for-different-processes" class="md-nav__link">
+    Step 1: User issues one or more commands for different processes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-user-makes-plots" class="md-nav__link">
+    Step 2: User makes plots
   </a>
   
 </li>
@@ -257,8 +264,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#work-in-progress" class="md-nav__link">
-    Work in progress!
+  <a href="#step-1-user-issues-one-or-more-commands-for-different-processes" class="md-nav__link">
+    Step 1: User issues one or more commands for different processes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-user-makes-plots" class="md-nav__link">
+    Step 2: User makes plots
   </a>
   
 </li>
@@ -278,7 +292,28 @@
 
 
 <h1 id="welcome-to-expresso-documentation">Welcome to Expresso documentation</h1>
-<h2 id="work-in-progress">Work in progress!</h2>
+<p>Expresso is based on <a href="https://coffeateam.github.io/coffea/">coffea</a>, wrapped with functionalities to share analysis methods between different analysis teams, proper logging support and ability to save the status of the analysis at various stages like preselection, preprocessing etc.</p>
+<h4 id="step-1-user-issues-one-or-more-commands-for-different-processes">Step 1: User issues one or more commands for different processes</h4>
+<p>example:
+<div class="highlight"><pre><span></span><code>./expresso.py --Sample DYsample.json --Analysis &#39;testAnalysis&#39; --NumberOfTasks 2
+./expresso.py --Sample TTsample.json --Analysis &#39;testAnalysis&#39; --NumberOfTasks 2
+</code></pre></div></p>
+<pre class="mermaid"><code>graph LR
+  A(Sample files) --&gt; C(expresso.py)
+  B(Analysis files) --&gt; C(expresso.py)
+  C --&gt; |Multiprocessing| D(pre processor)
+  D --&gt; E(pre selector)
+  E --&gt; F(save root file)
+  E --&gt; G(main analysis)
+  G --&gt; H(output)</code></pre>
+<h4 id="step-2-user-makes-plots">Step 2: User makes plots</h4>
+<p>example:
+<div class="highlight"><pre><span></span><code>./plot+.py --PlotterScript Analysis/testAnalysis/plot.yaml --HistoFolder ./Output/Analysis/testAnalysis/output/analysis/
+</code></pre></div>
+<pre class="mermaid"><code>graph LR
+  H(output) --&gt; I(plot+.py)
+  I --&gt; J(make plots)
+</code></pre></p>
 
               
             </article>

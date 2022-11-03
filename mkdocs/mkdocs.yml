@@ -2,9 +2,9 @@ site_name: Expresso documentation
 
 theme: readthedocs
 
-nav:
-    - Expresso: index.md
-    - Higgs2TTG: H2TTG.md
+#nav:
+#    - Expresso: index.md
+#    - Higgs2TTG: H2TTG.md
     
 theme:
   name: material

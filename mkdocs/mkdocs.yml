@@ -4,6 +4,7 @@ theme: readthedocs
 
 nav:
     - Expresso: index.md
+    - Higgs2TTG: H2TTG.md
     
 theme:
   name: material

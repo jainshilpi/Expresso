@@ -1,18 +1,207 @@
 year: 2016
-files: {Higgs2tt: Higgs2TauTau.pkl.gz, 
-        DYJ2LL50: DYJTLL50.pkl.gz, 
-        DYJ2LL10t50: DYJTLL10T50.pkl.gz,
-        WJ2LN1J: WJTLNu1J.pkl.gz,
-        ZG2LL: ZGTLL.pkl.gz}
+files: {Higgs2tt: H2TTT_passoptions=Xsecweight.pkl.gz,
+        Higgs2ttg: H2TTTG_passoptions=Xsecweight.pkl.gz,
+        DYJ2LL50: DYJTLL50_passoptions=Xsecweight.pkl.gz, 
+        DYJ2LL10t50: DYJTLL10T50_passoptions=Xsecweight.pkl.gz,
+        WJ2LN1J: WJTLNu1J_passoptions=Xsecweight.pkl.gz
+}
+#files: {
+#        Higgs2tt: H2TTT.pkl.gz,
+#        Higgs2ttg: H2TTTG.pkl.gz,
+#        DYJ2LL50: DYJTLL50.pkl.gz, 
+#        DYJ2LL10t50: DYJTLL10T50.pkl.gz,
+#        WJ2LN1J: WJTLNu1J.pkl.gz
+#        }
 
-normal_pt:
+normal_electron_pt:
   1:
     ElectronPt: {'axis': 'ElectronPt','file': Higgs2tt ,'stack': False,'scale': 1}
-    args: {color: red, label: ElectronPt}
-  #2:
-  #  ElectronPt: {'axis': 'pt','file': DYJ2LL50,'stack': True,'scale': 1}
-  #  args: {color: green, label: ElectronPt}
-  #3:
-  #  ElectronPt: {'axis': 'pt','file': DYJ2LL10t50,'stack': False,'scale': 1}
-  #  args: {color: blue, label: allel}
+    args: {color: red, label: Higgs2tt}
+  2:
+    ElectronPt: {'axis': 'ElectronPt','file': Higgs2ttg,'stack': False,'scale': 1}
+    args: {color: green, label: Higgs2ttg}
+  3:
+    ElectronPt: {'axis': 'ElectronPt','file': DYJ2LL50,'stack': False,'scale': 1}
+    args: {color: blue, label: DYJ2LL50}
+  4:
+    ElectronPt: {'axis': 'ElectronPt','file': DYJ2LL10t50,'stack': False,'scale': 1}
+    args: {color: black, label: DYJ2LL10t50}
+  5:
+    ElectronPt: {'axis': 'ElectronPt','file': WJ2LN1J,'stack': False,'scale': 1}
+    args: {color: brown, label: WJ2LN1J}
+normal_muon_pt:
+  1:
+    MuonPt: {'axis': 'MuonPt','file': Higgs2tt ,'stack': False,'scale': 1}
+    args: {color: red, label: Higgs2tt}
+  2:
+    MuonPt: {'axis': 'MuonPt','file': Higgs2ttg,'stack': False,'scale': 1}
+    args: {color: green, label: Higgs2ttg}
+  3:
+    MuonPt: {'axis': 'MuonPt','file': DYJ2LL50,'stack': False,'scale': 1}
+    args: {color: blue, label: DYJ2LL50}
+  4:
+    MuonPt: {'axis': 'MuonPt','file': DYJ2LL10t50,'stack': False,'scale': 1}
+    args: {color: black, label: DYJ2LL10t50}
+  5:
+    MuonPt: {'axis': 'MuonPt','file': WJ2LN1J,'stack': False,'scale': 1}
+    args: {color: brown, label: WJ2LN1J}
+
+normal_TauPt_eh:
+  1:
+    TauPt_eh: {'axis': 'TauPt_eh','file': Higgs2tt ,'stack': False,'scale': 1}
+    args: {color: red, label: Higgs2tt}
+  2:
+    TauPt_eh: {'axis': 'TauPt_eh','file': Higgs2ttg,'stack': False,'scale': 1}
+    args: {color: green, label: Higgs2ttg}
+  3:
+    TauPt_eh: {'axis': 'TauPt_eh','file': DYJ2LL50,'stack': False,'scale': 1}
+    args: {color: blue, label: DYJ2LL50}
+  4:
+    TauPt_eh: {'axis': 'TauPt_eh','file': DYJ2LL10t50,'stack': False,'scale': 1}
+    args: {color: black, label: DYJ2LL10t50}
+  5:
+    TauPt_eh: {'axis': 'TauPt_eh','file': WJ2LN1J,'stack': False,'scale': 1}
+    args: {color: brown, label: WJ2LN1J}
+
+normal_TauPt_uh:
+  1:
+    TauPt_uh: {'axis': 'TauPt_uh','file': Higgs2tt ,'stack': False,'scale': 1}
+    args: {color: red, label: Higgs2tt}
+  2:
+    TauPt_uh: {'axis': 'TauPt_uh','file': Higgs2ttg,'stack': False,'scale': 1}
+    args: {color: green, label: Higgs2ttg}
+  3:
+    TauPt_uh: {'axis': 'TauPt_uh','file': DYJ2LL50,'stack': False,'scale': 1}
+    args: {color: blue, label: DYJ2LL50}
+  4:
+    TauPt_uh: {'axis': 'TauPt_uh','file': DYJ2LL10t50,'stack': False,'scale': 1}
+    args: {color: black, label: DYJ2LL10t50}
+  5:
+    TauPt_uh: {'axis': 'TauPt_uh','file': WJ2LN1J,'stack': False,'scale': 1}
+    args: {color: brown, label: WJ2LN1J}
+
+normal_invarmass_eh:
+  1:
+    invarmass_eh: {'axis': 'invarmass_eh','file': Higgs2tt ,'stack': False,'scale': 1}
+    args: {color: red, label: Higgs2tt}
+  2:
+    invarmass_eh: {'axis': 'invarmass_eh','file': Higgs2ttg,'stack': False,'scale': 1}
+    args: {color: green, label: Higgs2ttg}
+  3:
+    invarmass_eh: {'axis': 'invarmass_eh','file': DYJ2LL50,'stack': False,'scale': 1}
+    args: {color: blue, label: DYJ2LL50}
+  4:
+    invarmass_eh: {'axis': 'invarmass_eh','file': DYJ2LL10t50,'stack': False,'scale': 1}
+    args: {color: black, label: DYJ2LL10t50}
+  5:
+    invarmass_eh: {'axis': 'invarmass_eh','file': WJ2LN1J,'stack': False,'scale': 1}
+    args: {color: brown, label: WJ2LN1J}
+
+normal_invarmass_uh:
+  1:
+    invarmass_uh: {'axis': 'invarmass_uh','file': Higgs2tt ,'stack': False,'scale': 1}
+    args: {color: red, label: Higgs2tt}
+  2:
+    invarmass_uh: {'axis': 'invarmass_uh','file': Higgs2ttg,'stack': False,'scale': 1}
+    args: {color: green, label: Higgs2ttg}
+  3:
+    invarmass_uh: {'axis': 'invarmass_uh','file': DYJ2LL50,'stack': False,'scale': 1}
+    args: {color: blue, label: DYJ2LL50}
+  4:
+    invarmass_uh: {'axis': 'invarmass_uh','file': DYJ2LL10t50,'stack': False,'scale': 1}
+    args: {color: black, label: DYJ2LL10t50}
+  5:
+    invarmass_uh: {'axis': 'invarmass_uh','file': WJ2LN1J,'stack': False,'scale': 1}
+    args: {color: brown, label: WJ2LN1J}
+
+normal_sumW:
+  1:
+    sumw: {'axis': 'sumw','file': Higgs2tt ,'stack': False,'scale': 1}
+    args: {color: red, label: Higgs2tt}
+  2:
+    sumw: {'axis': 'sumw','file': Higgs2ttg,'stack': False,'scale': 1}
+    args: {color: green, label: Higgs2ttg}
+  3:
+    sumw: {'axis': 'sumw','file': DYJ2LL50,'stack': False,'scale': 1}
+    args: {color: blue, label: DYJ2LL50}
+  4:
+    sumw: {'axis': 'sumw','file': DYJ2LL10t50,'stack': False,'scale': 1}
+    args: {color: black, label: DYJ2LL10t50}
+  5:
+    sumw: {'axis': 'sumw','file': WJ2LN1J,'stack': False,'scale': 1}
+    args: {color: brown, label: WJ2LN1J}
+
+normal_Photonpt_eh:
+  1:
+    PhotonPt_eh: {'axis': 'PhotonPt_eh','file': Higgs2tt ,'stack': False,'scale': 1}
+    args: {color: red, label: Higgs2tt}
+  2:
+    PhotonPt_eh: {'axis': 'PhotonPt_eh','file': Higgs2ttg,'stack': False,'scale': 1}
+    args: {color: green, label: Higgs2ttg}
+  3:
+    PhotonPt_eh: {'axis': 'PhotonPt_eh','file': DYJ2LL50,'stack': False,'scale': 1}
+    args: {color: blue, label: DYJ2LL50}
+  4:
+    PhotonPt_eh: {'axis': 'PhotonPt_eh','file': DYJ2LL10t50,'stack': False,'scale': 1}
+    args: {color: black, label: DYJ2LL10t50}
+  5:
+    PhotonPt_eh: {'axis': 'PhotonPt_eh','file': WJ2LN1J,'stack': False,'scale': 1}
+    args: {color: brown, label: WJ2LN1J}
+
+normal_Photonpt_uh:
+  1:
+    PhotonPt_uh: {'axis': 'PhotonPt_uh','file': Higgs2tt ,'stack': False,'scale': 1}
+    args: {color: red, label: Higgs2tt}
+  2:
+    PhotonPt_uh: {'axis': 'PhotonPt_uh','file': Higgs2ttg,'stack': False,'scale': 1}
+    args: {color: green, label: Higgs2ttg}
+  3:
+    PhotonPt_uh: {'axis': 'PhotonPt_uh','file': DYJ2LL50,'stack': False,'scale': 1}
+    args: {color: blue, label: DYJ2LL50}
+  4:
+    PhotonPt_uh: {'axis': 'PhotonPt_uh','file': DYJ2LL10t50,'stack': False,'scale': 1}
+    args: {color: black, label: DYJ2LL10t50}
+  5:
+    PhotonPt_uh: {'axis': 'PhotonPt_uh','file': WJ2LN1J,'stack': False,'scale': 1}
+    args: {color: brown, label: WJ2LN1J}
+
+normal_MET:
+  1:
+    MET: {'axis': 'MET','file': Higgs2tt ,'stack': False,'scale': 1}
+    args: {color: red, label: Higgs2tt}
+  2:
+    MET: {'axis': 'MET','file': Higgs2ttg,'stack': False,'scale': 1}
+    args: {color: green, label: Higgs2ttg}
+  3:
+    MET: {'axis': 'MET','file': DYJ2LL50,'stack': False,'scale': 1}
+    args: {color: blue, label: DYJ2LL50}
+  4:
+    MET: {'axis': 'MET','file': DYJ2LL10t50,'stack': False,'scale': 1}
+    args: {color: black, label: DYJ2LL10t50}
+  5:
+    MET: {'axis': 'MET','file': WJ2LN1J,'stack': False,'scale': 1}
+    args: {color: brown, label: WJ2LN1J}
+
+
+
+
+################################################################################################
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+    
+
+
+
+
 

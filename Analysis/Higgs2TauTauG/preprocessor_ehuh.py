@@ -52,9 +52,17 @@ def preprocess(sample,events,AttachSF=True):
     events["lhobject"]=ev_tau+ev_lepton
     events["lhgobject"]=ev_tau+ev_lepton+ev_photon
 
-    events["dr"]=ev_lepton.delta_r(ev_tau)
+    events["drlg1"]=ev_lepton.delta_r(ev_photon)
+    events["drlt"]=ev_lepton.delta_r(ev_tau)
+    events["drgt"]=ev_photon.delta_r(ev_tau)
+
+    events["dphilt"]=ev_lepton.delta_phi(ev_tau)
+    events["dphigt"]=ev_photon.delta_phi(ev_tau)
+    events["dphilg"]=ev_lepton.delta_phi(ev_photon)
+
     events["chargeeh"]=ev_lepton.charge*ev_tau.charge
     events["invarmass"]=events.lhobject.mass
+    events["NJets"]=ak.num(events.Jet)
     #events["Mteh"]=np.sqrt(2*ev_lepton.pt*ev_tau.pt*(1-np.cos(ev_lepton.delta_phi(ev_tau))))
     # Compute pair invariant masses, for all flavors all signes
 

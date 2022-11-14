@@ -9,7 +9,7 @@ def preselection(year,isData,events,out,selections):
         lumi_mask = LumiMask(golden_json_path(year))(events.run,events.luminosityBlock)
         selections.add("is_good_lumi",lumi_mask)
     #selections.add("eh or muh or hh channel", (events.XX)
-    selections.add("delta R between electron and tau should larger than 0.4", events.dr > 0.4)
+    selections.add("delta R between electron and tau should larger than 0.4", events.drlt > 0.4)
     selections.add("charge shoule be oppsite for electron and tau", events.chargeeh == -1)
     selections.add("Invarmass for e-tau should less than 60GeV", events.invarmass < 60)
     #selections.add("Mt should less than 30GeV", events.Mteh < 30)

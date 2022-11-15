@@ -56,12 +56,17 @@ def saveroot(threadn,logger,varslist,filename='sample',outputfolder='./'):
     os.system(f'mkdir -p {outputfolder}/{filename}/')
     outputfolder=outputfolder+'/'+filename+'/'
     import ROOT
-    filename=outputfolder+'/'+filename+'_sub-job_'+str(threadn)+'.root'
+    filename=outputfolder+'/'+filename+'_sub-job_'+str(threadn)
     for key in varslist.keys():
         varslist[key]=ak.to_numpy(ak.fill_none(varslist[key],-9999))
     df = ROOT.RDF.MakeNumpyDataFrame(varslist)
-    if os.path.exists(filename): filename=filename.replace(".root","_1.root")
-    df.Snapshot("Events",filename)
+    import glob
+    countsame=0
+    for f_name in os.listdir(outputfolder):
+            if f_name.startswith(filename) and f_name.endswith('.root'):
+                    countsame=countsame+1
+    filename=filename+"_"+str(countsame)
+    df.Snapshot("Events",filename+'.root')
     return filename
 
 #--------------------------------------------------------------------- Sorter by conept

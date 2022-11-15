@@ -16,4 +16,4 @@ with open(path) as stream:
     data = yaml.safe_load(stream)
 
 
-alldictplot(data,args.HistoFolder,args.HistoFolder+'/plots/',plotsetting='modules/plotsettings.yaml')
+alldictplot(data,args.HistoFolder,args.SaveLocation+'/plots/',plotsetting='modules/plotsettings.yaml')

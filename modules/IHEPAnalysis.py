@@ -78,6 +78,7 @@ class IHEPAnalysis:
         dt=datetime.now().strftime("ExpressoJob.d-%d.%m.%Y-t-%H.%M.%S")
         outfolder=self.outfolder+'/Analysis/'+self.AnalysisName
         logfolder=outfolder+'/logs/'+OutputName+'/'+dt+'/'
+        treefolder=outfolder
 
         import uproot
         uproot.open.defaults["xrootd_handler"] = uproot.source.xrootd.MultithreadedXRootDSource
@@ -121,7 +122,7 @@ class IHEPAnalysis:
         Schema=NanoAODSchema
         exec('Schema='+schema)
         runner = processor.Runner(executor, schema=Schema, chunksize=chunksize, maxchunks=maxchunks, skipbadfiles=False, xrootdtimeout=360)
-        processor_instance=IHEPProcessor.IHEPProcessor(logfolder,dt,ET,self.loglevel,self.AnalysisName,self.varstosave,
+        processor_instance=IHEPProcessor.IHEPProcessor(logfolder,treefolder,dt,ET,self.loglevel,self.AnalysisName,self.varstosave,
                                                        self.preprocess,self.preselect,self.analysis,self.hists,sample,self.saveroot,self.passoptions,self.extraselection,self.debug)
         if self.debug:
             op(processor_instance)

@@ -44,7 +44,7 @@ def reset_logging():
 
 @add_objprint
 class IHEPProcessor(processor.ProcessorABC):
-    def __init__(self,outfolder,dt,ET,loglevel,analysisname,varstosave,preprocess,preselect,analysis,histos,samples,saveroot,passoptions,extraselection,debug=False):
+    def __init__(self,outfolder,treefolder,dt,ET,loglevel,analysisname,varstosave,preprocess,preselect,analysis,histos,samples,saveroot,passoptions,extraselection,debug=False):
         histos['sumw']=hist.Hist(axes=[hist.Bin("sumw", "sumw", 10, 0, 10)],
                                  label="sumw")
         histos['cutflow']=hist.Hist(axes=[hist.Cat("selection", "selection","placement"),
@@ -69,6 +69,7 @@ class IHEPProcessor(processor.ProcessorABC):
         self._debug=debug
         self._dt = dt
         self._outfolder=outfolder
+        self._treefolder=treefolder
         self._summarylog=outfolder+"/log/summary.log"
         if not os.path.isdir(outfolder+"/log"): os.makedirs(outfolder+"/log")
         try:
@@ -221,7 +222,7 @@ class IHEPProcessor(processor.ProcessorABC):
         #------- run analysis
 
         if(self._saveroot and len(events)>0):
-            filename,events=self._varstosave(threadn,self._logger,events,histAxisName,self._outfolder+'/trees/')
+            filename,events=self._varstosave(threadn,self._logger,events,histAxisName,self._treefolder+'/trees/')
             self._ET.autolog(f'{len(events)} Events after saving to root (Ignore if saveRoot was off)',self._logger,'i')
             ev_savingtoroot=len(events)
         else:

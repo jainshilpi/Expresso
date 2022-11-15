@@ -220,7 +220,7 @@ class IHEPProcessor(processor.ProcessorABC):
             self._ET.autolog(traceback.print_exc(),self._logger,'e')
         #------- run analysis
 
-        if(self._saveroot):
+        if(self._saveroot and len(events)>0):
             filename,events=self._varstosave(threadn,self._logger,events,histAxisName,self._outfolder+'/trees/')
             self._ET.autolog(f'{len(events)} Events after saving to root (Ignore if saveRoot was off)',self._logger,'i')
             ev_savingtoroot=len(events)

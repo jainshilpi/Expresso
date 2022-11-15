@@ -60,7 +60,7 @@ def saveroot(threadn,logger,varslist,filename='sample',outputfolder='./'):
     for key in varslist.keys():
         varslist[key]=ak.to_numpy(ak.fill_none(varslist[key],-9999))
     df = ROOT.RDF.MakeNumpyDataFrame(varslist)
-    if os.path.exists(filename): filename=filemame.replace(".root","_1.root")
+    if os.path.exists(filename): filename=filename.replace(".root","_1.root")
     df.Snapshot("Events",filename)
     return filename
 

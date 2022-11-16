@@ -56,16 +56,15 @@ def saveroot(threadn,logger,varslist,filename='sample',outputfolder='./'):
     os.system(f'mkdir -p {outputfolder}/{filename}/')
     outputfolder=outputfolder+'/'+filename+'/'
     import ROOT
-    filename=outputfolder+'/'+filename+'_sub-job_'+str(threadn)
     for key in varslist.keys():
         varslist[key]=ak.to_numpy(ak.fill_none(varslist[key],-9999))
     df = ROOT.RDF.MakeNumpyDataFrame(varslist)
     import glob
     countsame=0
     for f_name in os.listdir(outputfolder):
-            if f_name.startswith(filename) and f_name.endswith('.root'):
+            if f_name.startswith(filename+'_sub-job_'+str(threadn)) and f_name.endswith('.root'):
                     countsame=countsame+1
-    filename=filename+"_"+str(countsame)
+    filename=outputfolder+'/'+filename+'_sub-job_'+str(threadn)+"_"+str(countsame)
     df.Snapshot("Events",filename+'.root')
     return filename
 

@@ -143,6 +143,7 @@ class IHEPAnalysis:
         #for sample in self.samples:
         kk=[]
         for isa in self.samples:
+            print(f'############ Running analysis for :{isa["histAxisName"]} ############')
             elapsed,kki=self.runasample(tstart,isa,OutputName,
                                              xrootd,chunksize,maxchunks,
                                              mode,schema,port)

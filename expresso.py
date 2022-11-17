@@ -91,13 +91,13 @@ if __name__=='__main__':
     sampledata = my_file.read()
     print(f'reading:')
     print(f'{sampledata}')
-    Ana.SampleList=sampledata.split("\n")[:-1]
+    SampleList=sampledata.split("\n")
+    Ana.SampleList = [i for i in SampleList if i]
     Ana.GetSamples()
     Ana.SetVarsToSave(args.Analysis)
     #---------------------------
     #------------------- RunYourAnalysis #-------------------###########
     if args.Debug: pprint(vars(Ana))
-
     runresults=Ana.run(OutputName=OutputName,xrootd=args.Xrootd,chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks),
                                    mode=args.Mode, schema=args.Schema, port=int(args.Port))
     if args.Debug: pprint(vars(Ana))

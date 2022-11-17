@@ -25,17 +25,17 @@
   Example Usage:
     1) and 2)
     MC:
-    >> python createJSON.py [path] --prefix "root:/REDIRECTOR/" --sampleName "ttllnunu0, ttllnunu1" --xsec topcoffea/cfg/xsec.cfg --xsecName TTTo2L2Nu  --year 2018
+    >> python createJSON.py [path] --prefix "root:/REDIRECTOR/" --sampleName "ttllnunu0, ttllnunu1" --xsec modules/xsec_list.cfg --xsecName TTTo2L2Nu  --year 2018
     Data:
     >> python createJSON.py [path] --prefix "root:/REDIRECTOR/" --sampleName MuonEG_2018 --year 2018
 
     3)
     MC:
-    >> python createJSON.py [DAS_dataset] --DAS --sampleName TTTo2L2Nu --xsec topcoffea/cfg/xsec.cfg --prefix root://your.favorite.redirector/
+    >> python createJSON.py [DAS_dataset] --DAS --sampleName TTTo2L2Nu --xsec modules/xsec_list.cfg --prefix root://your.favorite.redirector/
     Data:
     >> python createJSON.py [DAS_dataset] --DAS --sampleName DoubleMuon_2017 --year 2017
 
-  Note: the "--xsecName TTTo2L2Nu" argument is only needed if sampleName does not exist in topcoffea/cfg/xsec.cfg
+  Note: the "--xsecName TTTo2L2Nu" argument is only needed if sampleName does not exist in modules/xsec_list.cfg
 
 
 '''

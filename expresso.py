@@ -19,7 +19,7 @@ if __name__=='__main__':
     
     import argparse
     parser = argparse.ArgumentParser(description='Expresso Framework Options')
-    parser.add_argument("--Sample","-s", default='modules/json/background_samples/central_UL/UL18_DY50.json', help = 'path of samples')
+    parser.add_argument("--Samples","-s", default='modules/json/background_samples/central_UL/UL18.txt', help = 'path of samples')
     parser.add_argument("--OutputFolder","-oF"   , default='./Output', help = 'Path to the output directory')
     parser.add_argument("--ChunkSize","-cs"   , default='30000', help = 'chunkSize')
     parser.add_argument("--NumberOfTasks","-Tasks"   , default='./', help = 'threads')
@@ -57,7 +57,7 @@ if __name__=='__main__':
     else:
         AnalysisScript=args.AnalysisScript
         
-    cprint(f'Sample will be picked from: {args.Sample}',"OKCYAN")
+    cprint(f'Samples will be picked from: {args.Samples}',"OKCYAN")
     cprint(f'Pre-processor will be picked from: {PreProcessor}',"OKCYAN")
     cprint(f'Pre-selector will be picked from: {PreSelection}',"OKCYAN")
     cprint(f'Main-analysis will be picked from: {AnalysisScript}','OKCYAN')
@@ -87,22 +87,28 @@ if __name__=='__main__':
     OutputName=(AnalysisScript).split('/')[2].replace(".py","")
     #---------------------------
     #------------------- GetTheSamples #-------------------###########
-    Ana.SampleList=[args.Sample]
+    my_file = open(str(args.Samples), "r")
+    sampledata = my_file.read()
+    print(f'reading:')
+    print(f'{sampledata}')
+    Ana.SampleList=sampledata.split("\n")[:-1]
     Ana.GetSamples()
     Ana.SetVarsToSave(args.Analysis)
     #---------------------------
     #------------------- RunYourAnalysis #-------------------###########
     if args.Debug: pprint(vars(Ana))
 
-    result,JobFolder,hname=Ana.run(OutputName=OutputName,xrootd=args.Xrootd,chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks),
+    runresults=Ana.run(OutputName=OutputName,xrootd=args.Xrootd,chunksize=int(args.ChunkSize),maxchunks=int(args.NumberOfTasks),
                                    mode=args.Mode, schema=args.Schema, port=int(args.Port))
     if args.Debug: pprint(vars(Ana))
-    #------------------- Save the Histograms #-------------------###########
-    if args.PassOptions:
-        saveHist(result,JobFolder,hname.replace(" ", "")+'_passoptions='+args.PassOptions)
-    else:
-        saveHist(result,JobFolder,hname.replace(" ", ""))
-    cprint(f'#---- pkl file with results: {JobFolder}/  ----#',"HEADER")
+
+    for result,JobFolder,hname in runresults: 
+        #------------------- Save the Histograms #-------------------###########
+        if args.PassOptions:
+            saveHist(result,JobFolder,hname.replace(" ", "")+'_passoptions='+args.PassOptions)
+        else:
+            saveHist(result,JobFolder,hname.replace(" ", ""))
+    cprint(f'#---- pkl files with results: {JobFolder}/  ----#',"HEADER")
     cprint(f'#---- Make plots: ----#',"OKBLUE")
     cprint(f'#---- python plot+.py --PlotterScript *plot.py --HistoFolder ./* --SaveLocation ./*    ----#',"OKCYAN")
     #------------------- Save the Histograms #-------------------###########

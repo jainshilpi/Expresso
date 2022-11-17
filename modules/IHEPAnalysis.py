@@ -17,6 +17,7 @@ from objprint import add_objprint,op
 from objprint import config
 config(depth=1000)
 config(indent=4)
+import time
 
 class IHEPAnalysis:
 
@@ -68,28 +69,26 @@ class IHEPAnalysis:
         self.outfolder=outfolder
         #return self.logger
 
-    def run(self,OutputName,xrootd="root://cmsxrootd.fnal.gov//",chunksize=100,maxchunks=1,mode='local',schema='NanoAODSchema',port=8865):
-        import time
-        tstart = time.time()
 
-        #for sample in self.samples:
-        sample=self.samples[0]
+    def runasample(self,tstart,sample,OutputName,xrootd,chunksize,maxchunks,mode,schema,port):
+
+        
         sample["files"]=[xrootd + file for file in sample["files"]]
         dt=datetime.now().strftime("ExpressoJob.d-%d.%m.%Y-t-%H.%M.%S")
         outfolder=self.outfolder+'/Analysis/'+self.AnalysisName
         logfolder=outfolder+'/logs/'+OutputName+'/'+dt+'/'
         treefolder=outfolder
-
+        
         import uproot
         uproot.open.defaults["xrootd_handler"] = uproot.source.xrootd.MultithreadedXRootDSource
-
+        
         if mode=='wq' or mode=='condor' or mode=='sq':
             mastername='{}-wq-coffea'.format(os.environ['USER'])
             print(mastername)
             ar={'master_name':mastername,
                 'port':port,
                 'wrapper':'/afs/ihep.ac.cn/users/k/kapoor/wrap.sh'
-            }
+                }
             MyWQ=WQ(ar).getwq()
             print(MyWQ)
             executor = processor.work_queue_executor(**MyWQ)
@@ -114,19 +113,20 @@ class IHEPAnalysis:
             executor = processor.DaskExecutor(**config)
 
         if mode=='local':
-
+            
             ar={'workers':20}
             executor = processor.futures_executor(**ar)
-
-
+            
+            
         Schema=NanoAODSchema
         exec('Schema='+schema)
         runner = processor.Runner(executor, schema=Schema, chunksize=chunksize, maxchunks=maxchunks, skipbadfiles=False, xrootdtimeout=360)
         processor_instance=IHEPProcessor.IHEPProcessor(logfolder,treefolder,dt,ET,self.loglevel,self.AnalysisName,self.varstosave,
-                                                       self.preprocess,self.preselect,self.analysis,self.hists,sample,self.saveroot,self.passoptions,self.extraselection,self.debug)
+                                                       self.preprocess,self.preselect,self.analysis,
+                                                       self.hists,sample,self.saveroot,self.passoptions,self.extraselection,self.debug)
         if self.debug:
             op(processor_instance)
-
+                
         result = runner({sample["histAxisName"]:sample["files"]}, sample["treeName"],processor_instance)
         JobFolder=outfolder+'/output/'+OutputName+'/'
         print(f'Your histograms are here:{JobFolder}')
@@ -134,7 +134,20 @@ class IHEPAnalysis:
         minutes = elapsed // 60 % 60
         seconds = elapsed % 60
         print(f'Elapssed Time: {minutes} minutes {seconds} seconds')
-        return result,JobFolder,sample["histAxisName"]
+        return elapsed,[result,JobFolder,sample["histAxisName"]]
+        
+    def run(self,OutputName,xrootd="root://cmsxrootd.fnal.gov//",chunksize=100,maxchunks=1,mode='local',schema='NanoAODSchema',port=8865):
+        import time
+        tstart = time.time()
+
+        #for sample in self.samples:
+        kk=[]
+        for isa in self.samples:
+            elapsed,kki=self.runasample(tstart,isa,OutputName,
+                                             xrootd,chunksize,maxchunks,
+                                             mode,schema,port)
+            kk.append(kki)
+        return kk
 
 if __name__=='__main__':
     print("Hello, this script is not meant to be run by itself.")

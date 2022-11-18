@@ -68,6 +68,8 @@ def alldictplot(histodictall,outputfolder,SSaveLocation='./',plotsetting='module
                         nostackcolors=[]
                         stacklabels=[]
                         stackcolors=[]
+                        stackscales=[]
+                        nostackscales=[]
                 if 'ratio' in allkey and '2D' not in allkey:
                         fig, ax = plt.subplots()
                         
@@ -83,14 +85,11 @@ def alldictplot(histodictall,outputfolder,SSaveLocation='./',plotsetting='module
                                 
                         for k in histo.keys():
                                 print(f'{k}')
-                                scale=1.0
-                                if 'scale' in histo[k].keys():
-                                        scale=histo[k]['scale']
                                 thist=get_hist_from_pkl(outputfolder+"/"+files[histo[k]['file']])[k]
                                 if '2Dratio' in allkey:
                                         histo[k]['h']=thist.project(histo[k]['xaxis'],histo[k]['yaxis'])
                                 else:
-                                        histo[k]['h']=thist.project(histo[k]['axis'])
+                                        histo[k]['h']=(thist).project(histo[k]['axis'])
                                         
         
         
@@ -101,10 +100,12 @@ def alldictplot(histodictall,outputfolder,SSaveLocation='./',plotsetting='module
                                                 stack.append(histo[k]['h'])
                                                 stacklabels.append(args['label'])
                                                 stackcolors.append(args['color'])
+                                                stackscales.append(histo[k]['scale'])
                                         if(histo[k]['stack']==False):
                                                 nostack.append(histo[k]['h'])
                                                 nostacklabels.append(args['label'])
                                                 nostackcolors.append(args['color'])
+                                                nostackscales.append(histo[k]['scale'])
                     
                         if 'ratio' in allkey:
                                 hi=[]
@@ -160,9 +161,9 @@ def alldictplot(histodictall,outputfolder,SSaveLocation='./',plotsetting='module
 
                 if 'normal' in allkey:
                         if len(stack)!=0:
-                                        hep.histplot([st.to_hist() for st in stack],lw=1,stack=True,histtype='fill',label=stacklabels, color=stackcolors)
+                                        hep.histplot([st.to_hist()*scaleit for st,scaleit in zip(stack,stackscales)],lw=1,stack=True,histtype='fill',label=stacklabels, color=stackcolors)
                         if len(nostack)!=0:
-                                        hep.histplot([nst.to_hist() for nst in nostack],lw=1,stack=False,histtype='step',label=nostacklabels,
+                                        hep.histplot([nst.to_hist()*scaleit for nst,scaleit in zip(nostack,nostackscales)],lw=1,stack=False,histtype='step',label=nostacklabels,
                                                      color=nostackcolors)
 
                 #if 'normal' in allkey or '2D' in allkey:

@@ -1,0 +1,11 @@
+2016:
+    ######## format samplename: filename,color,stack(nostack),scale
+    Higgs2tt: H2TTT_passoptions=Xsecweight.pkl.gz,red,stack,1
+    Higgs2ttg: H2TTTG_passoptions=Xsecweight.pkl.gz,green,stack,1
+    DYJ2LL50: DYJTLL50_passoptions=Xsecweight.pkl.gz,blue,stack,1
+    DYJ2LL10t50: DYJTLL10T50_passoptions=Xsecweight.pkl.gz,yellow,stack,1
+plots:
+    ######## format plottype_ref: axisname
+    normal_pt: Electron_pt
+    normal_eta: Electron_eta
+    

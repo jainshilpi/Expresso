@@ -1,3 +1,2 @@
 modules/test_sample.json
 modules/test_sample.json
-modules/test_sample.json

@@ -27,7 +27,8 @@ try:
 
     
     alldictplot(data,args.HistoFolder,args.SaveLocation+'/plots/',plotsetting='modules/plotsettings.yaml')
-except:
+except Exception as e:
+    print(e)
     print("#######################################")
     print("ERROR! Is the plotter script in the analysis folder?")
     print("ERROR! Or maybe you are supplying incorret format??")

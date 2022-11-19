@@ -29,8 +29,7 @@ Write a plot file, example Analysis/ZG/allplots.yaml allplots.yaml
 Then
 
 ```
-python modules/dump_plotyaml.py Analysis/ZG/allplots.yaml > Analysis/ZG/plots.yaml
-python plot+.py --PlotterScript Analysis/ZG/plots.yaml --HistoFolder Output/Analysis/ZG/output/analysis/ --SaveLocation Output/Analysis/ZG/output/
+python plot+.py --PlotterScript Analysis/ZG/allplots.yaml --HistoFolder Output/Analysis/ZG/output/analysis/ --SaveLocation Output/Analysis/ZG/output/
 ```
 
 In the above --HistoFolder is where you can find all the histograms, the Analyze step with print this on screen

@@ -5,14 +5,14 @@ if [[ "$system" == *"WSL2"* ]]; then
    echo "In wsl2"
    conda activate py37_coffea_hep
 elif [[ "$system" == *"lxslc"* ]]; then
-   conda activate expresso
+    echo "In lxslc"
+    conda activate expresso
 elif [[ "$system" == *"lxplus"* ]]; then
+    echo "In lxplus"
     conda activate expresso
 else
     echo "Are you in supported node?"
-fi
-   
-      
+fi      
 
 chmod +x plot+.py
 chmod +x expresso.py

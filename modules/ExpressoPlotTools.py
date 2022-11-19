@@ -173,3 +173,34 @@ def alldictplot(histodictall,outputfolder,SSaveLocation='./',plotsetting='module
                 plt.close()
 
                 
+
+def makeplots_fromdict(plotyaml,HistoFolder,SaveLocation,plotsetting):
+
+        ##################################3
+        plotyaml['year']=list(Config.keys())[0]
+        plotyaml['files']={}
+
+        for sample in Config[plotyaml['year']].keys():
+                plotyaml['files'][str(sample)]=Config[plotyaml['year']][sample].split(",")[0]
+
+        for plot in Config['plots'].keys():
+                plotyaml[plot]={}
+
+                for i,sample in enumerate(Config[plotyaml['year']].keys()):
+                        plotyaml[plot][str(i+1)]={}
+                        stack=False
+                        
+                if (Config[plotyaml['year']][sample].split(",")[2]=='stack'): stack=True
+                        
+                color=Config[plotyaml['year']][sample].split(",")[1]
+
+                scale=int(Config[plotyaml['year']][sample].split(",")[3])
+
+                plotyaml[plot][str(i+1)][Config['plots'][plot]]={'axis':Config['plots'][plot],
+                                                         'file': sample,'stack': stack,'scale':scale}
+                plotyaml[plot][str(i+1)]['args']={'color':color,'label':sample}
+
+        print('------- Making plots ----------')
+        import argparse
+        import yaml
+        from pathlib import Path

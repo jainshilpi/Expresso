@@ -22,7 +22,7 @@ if __name__=='__main__':
     
     import argparse
     parser = argparse.ArgumentParser(description='Expresso Framework Options')
-    parser.add_argument("--Samples","-s", default='modules/json/background_samples/central_UL/UL18.txt', help = 'path of samples')
+    parser.add_argument("--Samples","-s", default='', help = 'path of samples')
     parser.add_argument("--OutputFolder","-oF"   , default='./Output', help = 'Path to the output directory')
     parser.add_argument("--ChunkSize","-cs"   , default='30000', help = 'chunkSize')
     parser.add_argument("--NumberOfTasks","-Tasks"   , default='2', help = 'threads')
@@ -44,9 +44,14 @@ if __name__=='__main__':
         
     from modules.ExpressoTools import cprint,saveHist
 
+    
     anasplit=args.Analysis.split('/')
     if anasplit[0]=='Analysis':
         args.Analysis=anasplit[1]
+        if not args.Samples:
+            args.Samples="Analysis/"+anasplit[1]+"/samples.txt"
+    else:
+        args.Samples=args.Analysis+"/samples.txt"    
     
     
     #---------------------------

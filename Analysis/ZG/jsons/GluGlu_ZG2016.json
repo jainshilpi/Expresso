@@ -1,0 +1,16 @@
+{
+  "xsec": 29.38,
+  "year": "2016",
+  "treeName": "Events",
+  "histAxisName": "GluGluToZGToLLG",
+  "options": "",
+  "WCnames": [],
+  "nEvents": 65000,
+  "nGenEvents": 65000,
+  "nSumOfWeights": 1891932.736000001,
+  "isData": false,
+  "path": "/eos/cms/store/group/phys_egamma/sample_miniaod/GluGluHToZG_ZToLL_M-125_TuneCP5_13TeV-powheg-pythia8/",
+  "files": [
+    "/eos/cms/store/group/phys_egamma/sample_miniaod/GluGluHToZG_ZToLL_M-125_TuneCP5_13TeV-powheg-pythia8/FF1A0E0D-369B-FD43-87A0-5E058074F250.root"
+  ]
+}

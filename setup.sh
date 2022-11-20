@@ -9,7 +9,8 @@ elif [[ "$system" == *"lxslc"* ]]; then
     conda activate expresso
 elif [[ "$system" == *"lxplus"* ]]; then
     echo "In lxplus"
-    conda activate expresso
+    source /cvmfs/sft.cern.ch/lcg/views/dev4cuda/latest/x86_64-centos7-gcc8-opt/setup.sh
+    pip install objprint
 else
     echo "Are you in supported node?"
 fi      

@@ -38,7 +38,8 @@ To make more comprehensive plots (multiple backgrounds, signal, data), write a p
 Then
 
 ```
-python plot+.py --PlotterScript Analysis/ZG/allplots.yaml --HistoFolder Output/Analysis/ZG/output/analysis/ --SaveLocation Output/Analysis/ZG/output/
+python plot+.py --PlotterScript Analysis/testAnalysis/allplots.yaml --HistoFolder Output/Analysis/testAnalysis/output/analysis/ --SaveLocation Output/Analysis/testAnalysis/output/analy\
+sis/
 ```
 
 In the above `--HistoFolder` is where you can find all the histograms, the Analyze step will print this on screen

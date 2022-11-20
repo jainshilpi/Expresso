@@ -1,3 +1,7 @@
+# Setup
+
+`. setup.sh`
+
 # Example analysis and how to run
 
 Every analysis (small or large) has to be divided into three steps: (the first two of which need to be done only once)

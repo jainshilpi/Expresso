@@ -1,6 +1,6 @@
 2016:
     ######## format samplename: filename,color,stack(nostack),scale
-    test: rnd.pkl.gz,red,nostack,1
+    test: test.pkl.gz,red,nostack,1
 plots:
     ######## format plottype_ref: axisname
     normal_sumw: sumw

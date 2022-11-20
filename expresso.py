@@ -18,11 +18,12 @@ if __name__=='__main__':
         print(" E X P R E S S O")
     import os
     os.environ['OPENBLAS_NUM_THREADS'] = '1'
-    
+    import yaml
     
     import argparse
     parser = argparse.ArgumentParser(description='Expresso Framework Options')
     parser.add_argument("--Samples","-s", default='', help = 'path of samples')
+    parser.add_argument("--QuickPlots","-qp", default='', help = 'some quick plots')
     parser.add_argument("--OutputFolder","-oF"   , default='./Output', help = 'Path to the output directory')
     parser.add_argument("--ChunkSize","-cs"   , default='30000', help = 'chunkSize')
     parser.add_argument("--NumberOfTasks","-Tasks"   , default='2', help = 'threads')
@@ -116,9 +117,39 @@ if __name__=='__main__':
         #------------------- Save the Histograms #-------------------###########
         if args.PassOptions:
             saveHist(result,JobFolder,hname.replace(" ", "")+'_passoptions='+args.PassOptions)
+            histfilename=hname.replace(" ", "")+'_passoptions='+args.PassOptions+".pkl.gz"
         else:
             saveHist(result,JobFolder,hname.replace(" ", ""))
+            histfilename=hname.replace(" ", "")+".pkl.gz"
     cprint(f'#---- pkl files with results: {JobFolder}/  ----#',"HEADER")
     cprint(f'#---- Make plots: ----#',"OKBLUE")
     cprint(f'#---- python plot+.py --PlotterScript *plot.py --HistoFolder ./* --SaveLocation ./*    ----#',"OKCYAN")
+    cprint(f'#---- Analysis done! ----#',"OKBLUE")
     #------------------- Save the Histograms #-------------------###########
+    
+    if args.QuickPlots:
+        try:
+            cprint(f'########## Quick Plotting turned on #############',"HEADER")
+            Plots=args.QuickPlots.split(',')
+            Plotnames=["normal_"+p for p in Plots]
+            plotdict={}
+            plotdict['plots']={}
+            for i,pl in enumerate(Plots):
+                plotdict['plots'][str(Plotnames[i])]=str(pl)
+                plotdict['2016']={'filename':histfilename+',red,nostack,1'}
+
+            Histolist='Analysis/'+args.Analysis+'/temp.yaml'
+            Histofolder=JobFolder
+            Savefolder=args.OutputFolder+'/Analysis/'+args.Analysis+'/output/analysis/'+hname+'/'
+            with open(Histolist, 'w') as f:
+                yaml.dump(plotdict, f, default_flow_style=False)
+
+            print(f'Histograms picked from {Histofolder}')
+            cprint(f'QuickPlot option should only be used for quick single sample plotting!',"OKCYAN")
+            cprint(f'For detailed plotting with multiple samples, run the analysis jobs and then use plot+.py by passing yaml like this:',"OKCYAN")
+            print(yaml.dump(plotdict, default_flow_style=False))
+            cprint(f'########## Making some quick plots #############',"HEADER")
+            os.system('python plot+.py --PlotterScript '+Histolist+' --HistoFolder '+Histofolder+'/ --SaveLocation '+Savefolder)
+        except Exception as e:
+            cprint(f'########## Quick Plotting did not work! #############',"HEADER")
+            print(e)

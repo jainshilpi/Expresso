@@ -48,11 +48,8 @@ if __name__=='__main__':
     anasplit=args.Analysis.split('/')
     if anasplit[0]=='Analysis':
         args.Analysis=anasplit[1]
-        if not args.Samples:
-            args.Samples="Analysis/"+anasplit[1]+"/samples.txt"
-    else:
-        args.Samples=args.Analysis+"/samples.txt"    
-    
+    if not args.Samples:
+        args.Samples="Analysis/"+args.Analysis+"/samples.txt"    
     
     #---------------------------
     if not args.PreSelector:

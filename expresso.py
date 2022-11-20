@@ -25,7 +25,7 @@ if __name__=='__main__':
     parser.add_argument("--Samples","-s", default='modules/json/background_samples/central_UL/UL18.txt', help = 'path of samples')
     parser.add_argument("--OutputFolder","-oF"   , default='./Output', help = 'Path to the output directory')
     parser.add_argument("--ChunkSize","-cs"   , default='30000', help = 'chunkSize')
-    parser.add_argument("--NumberOfTasks","-Tasks"   , default='./', help = 'threads')
+    parser.add_argument("--NumberOfTasks","-Tasks"   , default='2', help = 'threads')
     parser.add_argument("--Analysis","-ana"   , default='chflip', help = 'Analysis name')
     parser.add_argument("--PassOptions","-QSkim"   , default='', help = 'A quick skim')
     parser.add_argument("--ExtraSelection","-QSel"   , default='', help = 'An extra preselection')

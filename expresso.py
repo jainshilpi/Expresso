@@ -12,11 +12,11 @@ if __name__=='__main__':
     print('#-----------------------------------------------------------------#')
     try:
         import pyfiglet
-        from pprint import pprint
         print(pyfiglet.figlet_format("Expresso"))
     except:
         print(" E X P R E S S O")
     import os
+    from pprint import pprint
     os.environ['OPENBLAS_NUM_THREADS'] = '1'
     import yaml
     

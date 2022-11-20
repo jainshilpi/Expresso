@@ -6,7 +6,8 @@ def preprocess(sample,events,AttachSF=False):
     import awkward as ak
     import numpy as np
     ###################################
-    dataset,isData,histAxisName,year,xsec,sow=ET.getInfo(events,sample)
+    dataset,isData,histAxisName,year,xsec,sow, nEvents=ET.getInfo(events,sample)
+    events['nEvents']=nEvents
     ################################### Start writing your preprocessor below -> for creating new branches on top of the ones already present in the NanoAOD
     ## some variables are auto available picked up from the sample json
     ## The isData variable is true or false depending on if you are operating on data or mc

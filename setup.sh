@@ -11,6 +11,7 @@ elif [[ "$system" == *"lxplus"* ]]; then
     echo "In lxplus"
     source /cvmfs/sft.cern.ch/lcg/views/dev4cuda/latest/x86_64-centos7-gcc8-opt/setup.sh
     pip install objprint
+    pip install pprintpp
 else
     echo "Are you in supported node?"
 fi      

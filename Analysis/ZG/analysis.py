@@ -37,7 +37,8 @@ def myanalysis(logger, h, ev, dataset, isData, histAxisName, year, xsec, sow, pa
             ev["weight_norm"] = (xsec / sow) * genw
             #ev["weight_norm"] =1
          else:
-            ev["weight_norm"]=1
+            
+            ev["weight_norm"]=1/ev['nEvents']
 
             
     ev_2taus=ev[ak.num(ev.GenTaus)==2]

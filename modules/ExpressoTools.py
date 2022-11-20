@@ -46,7 +46,10 @@ def autolog(message,logger,level="i"):
         print(message)
 '''---------------------------------------------------------------------------'''
 #----------------------------------------------------------------------
+
 def saveroot(threadn,logger,varslist,filename='sample',outputfolder='./'):
+    import ROOT
+    import glob
 
     #import logging
     #logger = logging.getLogger(__name__)
@@ -55,11 +58,9 @@ def saveroot(threadn,logger,varslist,filename='sample',outputfolder='./'):
 
     os.system(f'mkdir -p {outputfolder}/{filename}/')
     outputfolder=outputfolder+'/'+filename+'/'
-    import ROOT
     for key in varslist.keys():
         varslist[key]=ak.to_numpy(ak.fill_none(varslist[key],-9999))
     df = ROOT.RDF.MakeNumpyDataFrame(varslist)
-    import glob
     countsame=0
     for f_name in os.listdir(outputfolder):
             if f_name.startswith(filename+'_sub-job_'+str(threadn)) and f_name.endswith('.root'):

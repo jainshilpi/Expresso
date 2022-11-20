@@ -10,9 +10,12 @@ if __name__=='__main__':
     print('#-----------------------------------------------------------------#')
     print(f'python {string_of_command}')
     print('#-----------------------------------------------------------------#')
-    import pyfiglet
-    from pprint import pprint
-    print(pyfiglet.figlet_format("Expresso"))
+    try:
+        import pyfiglet
+        from pprint import pprint
+        print(pyfiglet.figlet_format("Expresso"))
+    except:
+        print(" E X P R E S S O")
     import os
     os.environ['OPENBLAS_NUM_THREADS'] = '1'
     
@@ -40,6 +43,11 @@ if __name__=='__main__':
     if args.Debug: pprint(vars(args))
         
     from modules.ExpressoTools import cprint,saveHist
+
+    anasplit=args.Analysis.split('/')
+    if anasplit[0]=='Analysis':
+        args.Analysis=anasplit[1]
+    
     
     #---------------------------
     if not args.PreSelector:

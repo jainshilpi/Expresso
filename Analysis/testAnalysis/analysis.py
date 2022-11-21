@@ -5,43 +5,23 @@ import modules.ExpressoTools as ET
 import modules.objects as obj
 from coffea.analysis_tools import PackedSelection
 import numpy.ma as ma
+from modules.hcoll import binning
 
-class hcoll:
-
-    def __init__(self, h, isData, xsec, sow, doweight, **conf):
-        self.h = h
-        self.conf = conf
-        self.isData = isData
-        self.xsec = xsec
-        self.sow = sow
-        self.doweight=doweight
-
-    def fill(self, name, weights, mask, obj, cat={}, flatten=False, **axes):
-        fullhist = {}
-        #print('----------########---')
-        for ini, axis in enumerate(axes.keys()):
-            arrr = eval(f"obj.{axes[axis]}[mask]")
-            if flatten:
-                if ini==0:
-                    fullhist[axis],weights = ak.flatten(ak.zip(arrr,weights))
-                    weights=weights[ak.flatten(mask)]
-                else:
-                    fullhist[axis] = ak.flatten(arrr)
-            else:
-                if ini==0:
-                    weights=weights[mask]
-                fullhist[axis] = arrr
-        if self.doweight:
-            self.h[name].fill(weight=weights, **cat, **fullhist, **self.conf)
-        else:
-            self.h[name].fill(**cat, **fullhist, **self.conf)
-
-    def get(self):
-        return self.h
+histograms = {
+    'Nele':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Nele', '$N_el$', [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5])),
+    'allel':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('pt', '$p_T$', [10, 25, 50, 200]),hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),    
+    'el0':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('pt', '$p_T$', [10, 25, 50, 200]),hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
+    'el1':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('pt', '$p_T$', [10, 25, 50, 200]),hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
+    'allel_flip':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('pt', '$p_T$', [10, 25, 50, 200]),hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
+    'el0_flip':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('pt', '$p_T$', [10, 25, 50, 200]),hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
+    'el1_flip':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('pt', '$p_T$', [10, 25, 50, 200]),hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
+    'pteta_flip_bins':hist.Hist('Events',hist.Cat('process', 'process'),hist.Cat('Flipbins', 'Flipbins', 'placement'),hist.Bin('event', 'event', [0,1])),
+    'pteta_Noflip_bins':hist.Hist('Events',hist.Cat('process', 'process'),hist.Cat('Flipbins', 'Flipbins', 'placement'),hist.Bin('event', 'event',[0,1]))
+}
 
 
 def myanalysis(logger, h, ev, dataset, isData, histAxisName, year, xsec, sow, pass_options, doweight=True):
-    
+    from modules.hcoll import hcoll,binning
     hists = hcoll(h, isData, xsec, sow, doweight, process=histAxisName)
     ET.autolog(f"{len(ev)} Events at the start of your analysis", logger, 'i')
     # Start your analysis
@@ -145,14 +125,3 @@ def myanalysis(logger, h, ev, dataset, isData, histAxisName, year, xsec, sow, pa
     return hists.get()
 
 
-histograms = {
-    'Nele':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Nele', '$N_el$', [-0.5, 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5])),
-    'allel':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('pt', '$p_T$', [10, 25, 50, 200]),hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),    
-    'el0':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('pt', '$p_T$', [10, 25, 50, 200]),hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
-    'el1':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('pt', '$p_T$', [10, 25, 50, 200]),hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
-    'allel_flip':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('pt', '$p_T$', [10, 25, 50, 200]),hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
-    'el0_flip':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('pt', '$p_T$', [10, 25, 50, 200]),hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
-    'el1_flip':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('pt', '$p_T$', [10, 25, 50, 200]),hist.Bin('abseta', '|$\\eta$|', [0, 1.479, 2.5])),
-    'pteta_flip_bins':hist.Hist('Events',hist.Cat('process', 'process'),hist.Cat('Flipbins', 'Flipbins', 'placement'),hist.Bin('event', 'event', [0,1])),
-    'pteta_Noflip_bins':hist.Hist('Events',hist.Cat('process', 'process'),hist.Cat('Flipbins', 'Flipbins', 'placement'),hist.Bin('event', 'event',[0,1]))
-}

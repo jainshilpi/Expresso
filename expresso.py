@@ -24,6 +24,7 @@ if __name__=='__main__':
     parser = argparse.ArgumentParser(description='Expresso Framework Options')
     parser.add_argument("--Samples","-s", default='', help = 'path of samples')
     parser.add_argument("--QuickPlots","-qp", default='', help = 'some quick plots')
+    parser.add_argument("--FullPlots","-fp", default='', help = 'full plots')
     parser.add_argument("--OutputFolder","-oF"   , default='./Output', help = 'Path to the output directory')
     parser.add_argument("--ChunkSize","-cs"   , default='30000', help = 'chunkSize')
     parser.add_argument("--NumberOfTasks","-Tasks"   , default='2', help = 'threads')
@@ -152,4 +153,18 @@ if __name__=='__main__':
             os.system('python plot+.py --PlotterScript '+Histolist+' --HistoFolder '+Histofolder+'/ --SaveLocation '+Savefolder)
         except Exception as e:
             cprint(f'########## Quick Plotting did not work! #############',"HEADER")
+            print(e)
+
+    if args.FullPlots:
+        try:
+            cprint(f'########## Full Plotting turned on #############',"HEADER")
+            
+            Histolist=args.FullPlots
+            Histofolder=JobFolder
+            Savefolder=args.OutputFolder+'/Analysis/'+args.Analysis+'/output/analysis/'
+
+            print(f'Histograms picked from {Histofolder}')
+            os.system('python plot+.py --PlotterScript '+Histolist+' --HistoFolder '+Histofolder+'/ --SaveLocation '+Savefolder)
+        except Exception as e:
+            cprint(f'########## Full Plotting did not work! #############',"HEADER")
             print(e)

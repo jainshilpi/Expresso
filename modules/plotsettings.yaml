@@ -1,3 +1,3 @@
 hepstyle: CMS
-PrivateLabel: wip # Only used for CMS Style
+PrivateLabel: Internal # Only used for CMS Style
 withdata: false

@@ -19,6 +19,7 @@ import glob
 import awkward as ak
 import numpy as np
 import logging
+import modules.ExpressoTools as ET
 from objprint import add_objprint
 def reset_logging():
     manager = logging.root.manager
@@ -177,14 +178,19 @@ class IHEPProcessor(processor.ProcessorABC):
         except Exception:
             self._ET.autolog(f'Can not create accumulator of histograms',self._logger,'e')
             self._ET.autolog(traceback.print_exc(),self._logger,'e')
-        
-        
+
+        ######################################
+        pars={}
+        ######################################
+        pars['dataset'],pars['isData'],pars['histAxisName'],pars['year'],pars['xsec'],pars['sow']=ET.getInfo(events,self._samples)
+        pars['analysispoint']=self._analysispoint
+        pars['passoptions']=self._passoptions
         #------- preprocess (mostly create objects and special event variables)
         ev_sample=len(events)
         out['events_processed'].fill(events_processed=np.ones(len(events)))
         out['sumw'].fill(sumw=np.ones(len(events)))
         try:
-            events,dataset,isData,histAxisName,year,xsec,sow=self._preprocess(self._samples,events)
+            events=self._preprocess(pars,events)
             ev_preprocessing=len(events)
             self._ET.autolog(f'{len(events)} Events after preprocessing',self._logger,'i')
         except Exception:
@@ -195,7 +201,7 @@ class IHEPProcessor(processor.ProcessorABC):
         #------- preselect and store cutflow
         try:
             selections = PackedSelection(dtype='uint64')
-            events,out,selections=self._preselect(year,isData,events,out,selections,self._analysispoint)
+            events,selections=self._preselect(pars,events,selections)
             if self._extraselection:
                 extraselection=self._extraselection.split("=")
                 e_name=extraselection[0]
@@ -222,8 +228,8 @@ class IHEPProcessor(processor.ProcessorABC):
             self._ET.autolog(traceback.print_exc(),self._logger,'e')
         #------- run analysis
 
-        if(self._saveroot and len(events)>0):
-            filename,events=self._varstosave(threadn,self._logger,events,histAxisName,self._treefolder+'/trees/')
+        if(self._saveroot and ev_preselection>0):
+            filename,events=self._varstosave(pars,threadn,self._logger,events,self._treefolder+'/trees/')
             self._ET.autolog(f'{len(events)} Events after saving to root (Ignore if saveRoot was off)',self._logger,'i')
             ev_savingtoroot=len(events)
         else:
@@ -233,9 +239,9 @@ class IHEPProcessor(processor.ProcessorABC):
 
         #print(events.fields)
         try:
-            ev_analysis=len(events)
+            ev_analysis=ev_preselection
             events['nAnalysisEvents']=ev_analysis
-            out = self._analysis(self._logger,out,events,dataset,isData,histAxisName,year,xsec,sow,self._passoptions)
+            out = self._analysis(pars,self._logger,out,events)
             self._ET.autolog(f'{len(events)} Events after full analysis to root',self._logger,'i')
         except Exception:
             ev_analysis=0

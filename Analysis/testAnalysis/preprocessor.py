@@ -1,4 +1,4 @@
-def preprocess(sample,ev,AttachSF=True):
+def preprocess(pars,ev,AttachSF=True):
     
     import awkward as ak    
     import modules.ExpressoTools as ET
@@ -13,7 +13,7 @@ def preprocess(sample,ev,AttachSF=True):
     
 
     ###################################
-    dataset,isData,histAxisName,year,xsec,sow=ET.getInfo(ev,sample)
+    dataset,isData,histAxisName,year,xsec,sow=pars['dataset'],pars['isData'],pars['histAxisName'],pars['year'],pars['xsec'],pars['sow']
     ###################################
     #--------------------------------------------------------------------- Electrons
     ev["ele_loose"],ev["ele_fo"]=base_electrons(ev.Electron,year,AttachSF,isData)
@@ -29,4 +29,4 @@ def preprocess(sample,ev,AttachSF=True):
     llpairs = ak.combinations(ev["lep_loose"], 2, fields=["l0","l1"])
     ev["minMllAFAS"] = ak.min( (llpairs.l0+llpairs.l1).mass, axis=-1)
 
-    return ev,dataset,isData,histAxisName,year,xsec,sow
+    return ev

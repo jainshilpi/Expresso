@@ -1,28 +1,22 @@
-from asyncio import events
 def preprocess(pars,events,AttachSF=True):
+    ###################################
     import awkward as ak    
     import modules.ExpressoTools as ET
-    from modules.corrections import SFevaluator, GetBTagSF, ApplyJetCorrections, GetBtagEff, AttachMuonSF, AttachElectronSF, AttachPerLeptonFR, GetPUSF, ApplyRochesterCorrections, ApplyJetSystematics, AttachPSWeights, AttachPdfWeights, AttachScaleWeights, GetTriggerSF
-    #from modules.selection import *
-    #from modules.objects import *
-    from modules.base_objects.base_electrons import base_electrons
-    from modules.base_objects.base_muons import base_muons
-    from modules.base_objects.base_leptons import base_leptons
-    from modules.base_objects.base_jets import base_jets
-    from modules.base_objects.base_met import base_met
+    dataset,isData,histAxisName,year,xsec,sow=pars['dataset'],pars['isData'],pars['histAxisName'],pars['year'],pars['xsec'],pars['sow']
+    ###################################
+
+    ###########################################################-------------------------------------------------------------------------------
+    #### Start below ######################
+    
+    
     import numpy as np
     import modules.cut as cut
     
-
-    ###################################
-    dataset,isData,histAxisName,year,xsec,sow=pars['dataset'],pars['isData'],pars['histAxisName'],pars['year'],pars['xsec'],pars['sow']
-    ###################################
     isphoton=(events.GenPart.pdgId==22)
     events["genphotons"]=events.GenPart[isphoton]
     events["halfproperphotons"]=(events["genphotons"][abs(events.GenPart[events["genphotons"].genPartIdxMother].pdgId)==15])
     events["properphotons"]=events["halfproperphotons"][events.halfproperphotons.status==1]
     events["photonswithcut"]=events.properphotons[events.properphotons.pt>5]
-
 
     events["Tau","istight"]=(cut.ispresTau(events.Tau.pt, events.Tau.eta, events.Tau.dxy, events.Tau.dz, events.Tau.idDeepTau2017v2p1VSjet, 30) & cut.istightTau(events.Tau.idDeepTau2017v2p1VSjet))
     events["Tau","ismed"]=cut.ispresTau(events.Tau.pt, events.Tau.eta, events.Tau.dxy, events.Tau.dz, events.Tau.idDeepTau2017v2p1VSjet, 30) & cut.ismedTau(events.Tau.idDeepTau2017v2p1VSjet)
@@ -39,8 +33,6 @@ def preprocess(pars,events,AttachSF=True):
     events["Photon","istight"]=cut.istightPhoton(events.Photon.pt, events.Photon.eta, events.Photon.cutBased, 5)
     events["Photon","ismed"]=cut.ismedPhoton(events.Photon.pt, events.Photon.eta, events.Photon.cutBased, 5)
     events["Photon","isloose"]=cut.isloosePhoton(events.Photon.pt, events.Photon.eta, events.Photon.cutBased, 5)
-
-    events["l"]=ak.with_name(ak.concatenate([events.Electron, events.Muon], axis=1), 'PtEtaPhiMCandidate')
     ######################################
     #events=events[(ak.num(events.Tau)>=1) & (ak.num(events.Photon)>=1) & ak.num(events.l)>=1]
     ######################################
@@ -55,6 +47,14 @@ def preprocess(pars,events,AttachSF=True):
     #events["chargelt"]=events.l[:,0].charge*events.Tau.charge
     #events["invarmass"]=events.ltobject.mass
     events["NJets"]=ak.num(events.Jet)
+
+    
+    events["Electron"]=ET.sortpt(events.Electron)
+    events["Muon"]=ET.sortpt(events.Muon)
+    events["Tau"]=ET.sortpt(events.Tau)
+    events["Photon"]=ET.sortpt(events.Photon)
+    events["l"]=ak.with_name(ak.concatenate([events.Electron, events.Muon], axis=1), 'PtEtaPhiMCandidate')
+    events["l"]=ET.sortpt(events.l)
     
     return events
 

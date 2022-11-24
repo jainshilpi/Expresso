@@ -11,8 +11,9 @@ def preselection(pars,events,selections):
         lumi_mask = LumiMask(golden_json_path(year))(events.run,events.luminosityBlock)
         selections.add("is_good_lumi",lumi_mask)
 
-    selections.add("atleast 1tau,1lep,1pho",(ak.num(events.Tau)>=1) & (ak.num(events.Photon)>=1) & ak.num(events.l)>=1)
+    selections.add("atleast 1tau,1lep,1pho (out of the box)",(ak.num(events.Tau)>=1) & (ak.num(events.Photon)>=1) & ak.num(events.l)>=1)
 
+    
     if 'tight_tau' in analysispoint:
         selections.add("tight tau", ak.num(events.Tau[events.Tau.istight])== 1)
     if 'med_tau' in analysispoint:
@@ -27,11 +28,11 @@ def preselection(pars,events,selections):
     if 'loose_l' in analysispoint:
         selections.add("loose l", ak.num(events.l[events.l.isloose])== 1)
     
-    if 'tight_photon' in analysispoint:
+    if 'tight_pho' in analysispoint:
         selections.add("tight photon", ak.num(events.Photon[events.Photon.istight])== 1)
-    if 'med_photon' in analysispoint:
+    if 'med_pho' in analysispoint:
         selections.add("med photon", ak.num(events.Photon[events.Photon.ismed])== 1)
-    if 'loose_photon' in analysispoint:
+    if 'loose_pho' in analysispoint:
         selections.add("loose photon", ak.num(events.Photon[events.Photon.isloose])== 1)
 
     if histAxisName=="H2TTTG":

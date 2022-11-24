@@ -74,6 +74,9 @@ def sortconept(obj):
     obj[ak.argsort(obj.conept, axis=-1,ascending=False)]
     return obj
 #---------------------------------------------------------------------
+def sortpt(obj):
+    obj[ak.argsort(obj.pt, axis=-1,ascending=False)]
+    return obj
 
 
 def cprint(text,c):

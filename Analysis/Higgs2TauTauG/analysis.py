@@ -84,57 +84,76 @@ def myanalysis(pars,logger, h, ev, doweight=True):
     #-------------------------------------------------------------------------------------------------------
     #Special masks
     #-------------------------------------------------------------------------------------------------------
-    if 'tight_photon' in analysis_point:
-        ev["mytau"]=ev.Tau[ev.Tau.istight]
-        ev["myphoton"]=ev.Photon[ev.Photon.istight]
-    # Fill histograms 
+    if 'tight_tau' in analysis_point: ev["mytau"]=ev.Tau[ev.Tau["istight"]][:,0]
+    if 'tight_pho' in analysis_point: ev["myphoton"]=ev.Photon[ev.Photon["istight"]][:,0]
+    if 'tight_l' in analysis_point: ev["mylep"]=ev.l[ev.l["istight"]][:,0]
+
+    if 'loose_tau' in analysis_point: ev["mytau"]=ev.Tau[ev.Tau["isloose"]][:,0]
+    if 'loose_pho' in analysis_point: ev["myphoton"]=ev.Photon[ev.Photon["isloose"]][:,0]
+    if 'loose_l' in analysis_point: ev["mylep"]=ev.l[ev.l["isloose"]][:,0]
+
+    if 'med_tau' in analysis_point: ev["mytau"]=ev.Tau[ev.Tau["ismed"]][:,0]
+    if 'med_pho' in analysis_point: ev["myphoton"]=ev.Photon[ev.Photon["ismed"]][:,0]
+    if 'med_l' in analysis_point: ev["mylep"]=ev.l[ev.l["ismed"]][:,0]
+    # Fill histograms
+
+    ev["drlg"]=ev.myphoton.delta_r(ev.mylep)
+    ev["ltobject"]= ev.mytau + ev.mylep
+    ev["ltgobject"]=ev.mytau + ev.mylep + ev.myphoton
+    ev["drlt"]=ev.mylep.delta_r(ev.mytau)
+    ev["drgt"]=ev.myphoton.delta_r(ev.mytau)
+    ev["dphilt"]=ev.mylep.delta_phi(ev.mytau)
+    ev["dphigt"]=ev.myphoton.delta_phi(ev.mytau)
+    ev["dphilg"]=ev.mylep.delta_phi(ev.myphoton)
+    ev["chargelt"]=ev.mylep.charge*ev.mytau.charge
+    ev["invarmass"]=ev.ltobject.mass
     
-    hists.fill('ElectronPt',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==11), ev.l[:,0], ElectronPt='pt')
-    hists.fill('Electroneta',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==11), ev.l[:,0], Electroneta='eta')
-    hists.fill('Electronphi',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==11), ev.l[:,0], Electronphi='phi')
+    hists.fill('ElectronPt',ev.weight_norm, (abs(ev.mylep.pdgId) ==11), ev.mylep, ElectronPt='pt')
+    hists.fill('Electroneta',ev.weight_norm, (abs(ev.mylep.pdgId) ==11), ev.mylep, Electroneta='eta')
+    hists.fill('Electronphi',ev.weight_norm, (abs(ev.mylep.pdgId) ==11), ev.mylep, Electronphi='phi')
 
-    hists.fill('MuonPt',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==13), ev.l[:,0], MuonPt='pt')
-    hists.fill('Muoneta',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==13), ev.l[:,0], Muoneta='eta')
-    hists.fill('Muonphi',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==13), ev.l[:,0], Muonphi='phi')
+    hists.fill('MuonPt',ev.weight_norm, (abs(ev.mylep.pdgId) ==13), ev.mylep, MuonPt='pt')
+    hists.fill('Muoneta',ev.weight_norm, (abs(ev.mylep.pdgId) ==13), ev.mylep, Muoneta='eta')
+    hists.fill('Muonphi',ev.weight_norm, (abs(ev.mylep.pdgId) ==13), ev.mylep, Muonphi='phi')
 
-    hists.fill('TauPt_eh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==11), ev.mytau[:,0], TauPt_eh='pt')
-    hists.fill('Taueta_eh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==11), ev.mytau[:,0], Taueta_eh='eta')
-    hists.fill('Tauphi_eh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==11), ev.mytau[:,0], Tauphi_eh='phi')
+    hists.fill('TauPt_eh',ev.weight_norm, (abs(ev.mylep.pdgId) ==11), ev.mytau, TauPt_eh='pt')
+    hists.fill('Taueta_eh',ev.weight_norm, (abs(ev.mylep.pdgId) ==11), ev.mytau, Taueta_eh='eta')
+    hists.fill('Tauphi_eh',ev.weight_norm, (abs(ev.mylep.pdgId) ==11), ev.mytau, Tauphi_eh='phi')
 
-    hists.fill('TauPt_uh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==13), ev.mytau[:,0], TauPt_uh='pt')
-    hists.fill('Taueta_uh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==13), ev.mytau[:,0], Taueta_uh='eta')
-    hists.fill('Tauphi_uh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==13), ev.mytau[:,0], Tauphi_uh='phi')
+    hists.fill('TauPt_uh',ev.weight_norm, (abs(ev.mylep.pdgId) ==13), ev.mytau, TauPt_uh='pt')
+    hists.fill('Taueta_uh',ev.weight_norm, (abs(ev.mylep.pdgId) ==13), ev.mytau, Taueta_uh='eta')
+    hists.fill('Tauphi_uh',ev.weight_norm, (abs(ev.mylep.pdgId) ==13), ev.mytau, Tauphi_uh='phi')
 
-    hists.fill('PhotonPt_eh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==11), ev.myphoton[:,0], PhotonPt_eh='pt')
-    hists.fill('Photoneta_eh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==11), ev.myphoton[:,0], Photoneta_eh='eta')
-    hists.fill('Photonphi_eh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==11), ev.myphoton[:,0], Photonphi_eh='phi')
+    hists.fill('PhotonPt_eh',ev.weight_norm, (abs(ev.mylep.pdgId) ==11), ev.myphoton, PhotonPt_eh='pt')
+    hists.fill('Photoneta_eh',ev.weight_norm, (abs(ev.mylep.pdgId) ==11), ev.myphoton, Photoneta_eh='eta')
+    hists.fill('Photonphi_eh',ev.weight_norm, (abs(ev.mylep.pdgId) ==11), ev.myphoton, Photonphi_eh='phi')
 
-    hists.fill('PhotonPt_uh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==13), ev.myphoton[:,0], PhotonPt_uh='pt')
-    hists.fill('Photoneta_uh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==13), ev.myphoton[:,0], Photoneta_uh='eta')
-    hists.fill('Photonphi_uh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==13), ev.myphoton[:,0], Photonphi_uh='phi')
+    hists.fill('PhotonPt_uh',ev.weight_norm, (abs(ev.mylep.pdgId) ==13), ev.myphoton, PhotonPt_uh='pt')
+    hists.fill('Photoneta_uh',ev.weight_norm, (abs(ev.mylep.pdgId) ==13), ev.myphoton, Photoneta_uh='eta')
+    hists.fill('Photonphi_uh',ev.weight_norm, (abs(ev.mylep.pdgId) ==13), ev.myphoton, Photonphi_uh='phi')
 
-    #hists.fill('drlt_eh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==11), ev, drlt_eh='drlt')
-    #hists.fill('drlt_uh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==13), ev, drlt_uh='drlt')
+    hists.fill('drlt_eh',ev.weight_norm, (abs(ev.mylep.pdgId) ==11), ev, drlt_eh='drlt')
+    hists.fill('drlt_uh',ev.weight_norm, (abs(ev.mylep.pdgId) ==13), ev, drlt_uh='drlt')
 
-    # hists.fill('drgt_eh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==11), ev, drgt_eh='drgt')
-    # hists.fill('drgt_uh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==13), ev, drgt_uh='drgt')
+    hists.fill('drgt_eh',ev.weight_norm, (abs(ev.mylep.pdgId) ==11), ev, drgt_eh='drgt')
+    hists.fill('drgt_uh',ev.weight_norm, (abs(ev.mylep.pdgId) ==13), ev, drgt_uh='drgt')
 
-    # hists.fill('drlg_eh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==11), ev, drlg_eh='drlg1')
-    # hists.fill('drlg_uh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==13), ev, drlg_uh='drlg1')
+    hists.fill('drlg_eh',ev.weight_norm, (abs(ev.mylep.pdgId) ==11), ev, drlg_eh='drlg')
+    hists.fill('drlg_uh',ev.weight_norm, (abs(ev.mylep.pdgId) ==13), ev, drlg_uh='drlg')
 
-    # hists.fill('dphilg_eh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==11), ev, dphilg_eh='dphilg')
-    # hists.fill('dphilg_uh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==13), ev, dphilg_uh='dphilg')
+    hists.fill('dphilg_eh',ev.weight_norm, (abs(ev.mylep.pdgId) ==11), ev, dphilg_eh='dphilg')
+    hists.fill('dphilg_uh',ev.weight_norm, (abs(ev.mylep.pdgId) ==13), ev, dphilg_uh='dphilg')
 
-    # hists.fill('dphilt_eh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==11), ev, dphilt_eh='dphilt')
-    # hists.fill('dphilt_uh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==13), ev, dphilt_uh='dphilt')
+    hists.fill('dphilt_eh',ev.weight_norm, (abs(ev.mylep.pdgId) ==11), ev, dphilt_eh='dphilt')
+    hists.fill('dphilt_uh',ev.weight_norm, (abs(ev.mylep.pdgId) ==13), ev, dphilt_uh='dphilt')
 
-    # hists.fill('dphigt_eh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==11), ev, dphigt_eh='dphigt')
-    # hists.fill('dphigt_uh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==13), ev, dphigt_uh='dphigt')
+    hists.fill('dphigt_eh',ev.weight_norm, (abs(ev.mylep.pdgId) ==11), ev, dphigt_eh='dphigt')
+    hists.fill('dphigt_uh',ev.weight_norm, (abs(ev.mylep.pdgId) ==13), ev, dphigt_uh='dphigt')
 
 
-    # hists.fill('invarmass_eh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==11), ev, invarmass_eh='invarmass')
-    # hists.fill('invarmass_uh',ev.weight_norm, (abs(ev.l[:,0].pdgId) ==13), ev, invarmass_uh='invarmass')
-    hists.fill('MET',ev.weight_norm, ((abs(ev.l[:,0].pdgId) ==13)|(abs(ev.l[:,0].pdgId) ==11)),ev.MET, MET='pt')
+    hists.fill('invarmass_eh',ev.weight_norm, (abs(ev.mylep.pdgId) ==11), ev, invarmass_eh='invarmass')
+    hists.fill('invarmass_uh',ev.weight_norm, (abs(ev.mylep.pdgId) ==13), ev, invarmass_uh='invarmass')
+    hists.fill('MET',ev.weight_norm, ((abs(ev.mylep.pdgId) ==13)|(abs(ev.mylep.pdgId) ==11)),ev.MET, MET='pt')
     #-------------------------------------------------------------------------------------------------------
     #-------------------------------------------------------------------------------------------------------
     #End your analysis

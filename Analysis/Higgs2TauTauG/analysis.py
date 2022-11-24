@@ -63,7 +63,9 @@ for sel_j in sel:
 }
 
 
-def myanalysis(logger, h, ev, dataset, isData, histAxisName, year, xsec, sow, pass_options, doweight=True):
+def myanalysis(pars,logger, h, ev, doweight=True):
+    dataset,isData,histAxisName,year=pars['dataset'],pars['isData'],pars['histAxisName'],pars['year']
+    xsec,sow,pass_options=pars['xsec'],pars['sow'],pars['passoptions']
     from modules.hcoll import hcoll,binning
     hists = hcoll(h, isData, xsec, sow, doweight, process=histAxisName)
     ET.autolog(f"{len(ev)} Events at the start of your analysis", logger, 'i')
@@ -86,10 +88,6 @@ def myanalysis(logger, h, ev, dataset, isData, histAxisName, year, xsec, sow, pa
         else:
             XXXXXXX
 
-
-    
-    ev_tight=ev[ev.tight]
-    ev_tight.invarmass
     #-------------------------------------------------------------------------------------------------------
     # Masks
     #-------------------------------------------------------------------------------------------------------

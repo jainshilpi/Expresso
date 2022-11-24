@@ -24,43 +24,38 @@ def preprocess(pars,events,AttachSF=True):
     events["photonswithcut"]=events.properphotons[events.properphotons.pt>5]
 
 
-    
-    events=events[(ak.num(events.Tau)==1) & (ak.num(events.Photon)==1) & ak.num(events.l)==1]
+    events["Tau","istight"]=(cut.ispresTau(events.Tau.pt, events.Tau.eta, events.Tau.dxy, events.Tau.dz, events.Tau.idDeepTau2017v2p1VSjet, 30) & cut.istightTau(events.Tau.idDeepTau2017v2p1VSjet))
+    events["Tau","ismed"]=cut.ispresTau(events.Tau.pt, events.Tau.eta, events.Tau.dxy, events.Tau.dz, events.Tau.idDeepTau2017v2p1VSjet, 30) & cut.ismedTau(events.Tau.idDeepTau2017v2p1VSjet)
+    events["Tau","isloose"]=cut.ispresTau(events.Tau.pt, events.Tau.eta, events.Tau.dxy, events.Tau.dz, events.Tau.idDeepTau2017v2p1VSjet, 30) & cut.islooseTau(events.Tau.idDeepTau2017v2p1VSjet)
 
-    
+    events["Electron","istight"]=cut.istightElectron(events.Electron.pt, events.Electron.eta, events.Electron.cutBased, 24)
+    events["Electron","ismed"]=cut.ismedElectron(events.Electron.pt, events.Electron.eta, events.Electron.cutBased, 24)
+    events["Electron","isloose"]=cut.islooseElectron(events.Electron.pt, events.Electron.eta, events.Electron.cutBased, 24)
 
+    events["Muon","istight"]=cut.istightMuon(events.Muon.pt, events.Muon.eta, events.Muon.tightId, 20)
+    events["Muon","ismed"]=cut.ismedMuon(events.Muon.pt, events.Muon.eta, events.Muon.mediumId, 20)
+    events["Muon","isloose"]=cut.islooseMuon(events.Muon.pt, events.Muon.eta, events.Muon.looseId, 20)
 
-    events.Tau['istight']=cut.isPresTau(events.Tau.pt, events.Tau.eta, events.Tau.dxy, events.Tau.dz, events.Tau.idDeepTau2017v2p1VSjet, 30) & cut.isTightTau(events.Tau.idDeepTau2017v2p1VSjet)
-    events.Tau['ismed']=cut.isPresTau(events.Tau.pt, events.Tau.eta, events.Tau.dxy, events.Tau.dz, events.Tau.idDeepTau2017v2p1VSjet, 30) & cut.isMidTau(events.Tau.idDeepTau2017v2p1VSjet)
-    events.Tau['isloose']=cut.isPresTau(events.Tau.pt, events.Tau.eta, events.Tau.dxy, events.Tau.dz, events.Tau.idDeepTau2017v2p1VSjet, 30) & cut.islooseTau(events.Tau.idDeepTau2017v2p1VSjet)
-
-    events.Electron["istight"]=cut.istightElectron(events.Electron.pt, events.Electron.eta, events.Electron.cutBased, 24)
-    events.Electron["ismed"]=cut.ismedElectron(events.Electron.pt, events.Electron.eta, events.Electron.cutBased, 24)
-    events.Electron["isloose"]=cut.islooseElectron(events.Electron.pt, events.Electron.eta, events.Electron.cutBased, 24)
-
-    events.Muon["istight"]=cut.istightMuon(events.Muon.pt, events.Muon.eta, events.Muon.tightId, 20)
-    events.Muon["ismed"]=cut.ismedMuon(events.Muon.pt, events.Muon.eta, events.Muon.mediumId, 20)
-    events.Muon["isloose"]=cut.islooseMuon(events.Muon.pt, events.Muon.eta, events.Muon.looseId, 20)
-
-    events.Photon["istight"]=cut.istightPhoton(events.Photon.pt, events.Photon.eta, events.Photon.cutBased, 5)
-    events.Photon["ismed"]=cut.ismedPhoton(events.Photon.pt, events.Photon.eta, events.Photon.cutBased, 5)
-    events.Photon["isloose"]=cut.isloosePhoton(events.Photon.pt, events.Photon.eta, events.Photon.cutBased, 5)
+    events["Photon","istight"]=cut.istightPhoton(events.Photon.pt, events.Photon.eta, events.Photon.cutBased, 5)
+    events["Photon","ismed"]=cut.ismedPhoton(events.Photon.pt, events.Photon.eta, events.Photon.cutBased, 5)
+    events["Photon","isloose"]=cut.isloosePhoton(events.Photon.pt, events.Photon.eta, events.Photon.cutBased, 5)
 
     events["l"]=ak.with_name(ak.concatenate([events.Electron, events.Muon], axis=1), 'PtEtaPhiMCandidate')
-
-    events["drlg"]=events.Photon.delta_r(events.l[:,0])
-    events["ltobject"]= events.Tau + events.l[:,0]
-    events["ltgobject"]=events.Tau + events.l[:,0] + events.Photon
-    events["drlt"]=events.l[:,0].delta_r(events.Tau)
-    events["drgt"]=events.Photon.delta_r(events.Tau)
-    events["dphilt"]=events.l[:,0].delta_phi(events.Tau)
-    events["dphigt"]=events.Photon.delta_phi(events.Tau)
-    events["dphilg"]=events.l[:,0].delta_phi(events.Photon)
-    events["chargelt"]=events.l[:,0].charge*events.Tau.charge
-    events["invarmass"]=events.ltobject.mass
+    ######################################
+    #events=events[(ak.num(events.Tau)>=1) & (ak.num(events.Photon)>=1) & ak.num(events.l)>=1]
+    ######################################
+    #events["drlg"]=events.Photon.delta_r(events.l[:,0])
+    #events["ltobject"]= events.Tau + events.l[:,0]
+    #events["ltgobject"]=events.Tau + events.l[:,0] + events.Photon
+    #events["drlt"]=events.l[:,0].delta_r(events.Tau)
+    #events["drgt"]=events.Photon.delta_r(events.Tau)
+    #events["dphilt"]=events.l[:,0].delta_phi(events.Tau)
+    #events["dphigt"]=events.Photon.delta_phi(events.Tau)
+    #events["dphilg"]=events.l[:,0].delta_phi(events.Photon)
+    #events["chargelt"]=events.l[:,0].charge*events.Tau.charge
+    #events["invarmass"]=events.ltobject.mass
     events["NJets"]=ak.num(events.Jet)
-
-
+    
     return events
 
    

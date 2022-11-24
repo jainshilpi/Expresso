@@ -1,8 +1,8 @@
 import modules.cut_configure as cut
-def isPresTau(pt, eta, dxy, dz, idDeepTau2017v2p1VSjet, minpt=20.0):
+def ispresTau(pt, eta, dxy, dz, idDeepTau2017v2p1VSjet, minpt=20.0):
     return  (pt>minpt)&(abs(eta)< cut.eta_tau_cut )&(abs(dxy)<cut.dxy_tau_cut)&(abs(dz)<cut.dz_tau_cut) & (idDeepTau2017v2p1VSjet>>1 & 1 ==1)
 
-def isTightTau(idDeepTau2017v2p1VSjet):
+def istightTau(idDeepTau2017v2p1VSjet):
     return (idDeepTau2017v2p1VSjet>>2 & 1 ==1)
 
 def ismedTau(idDeepTau2017v2p1VSjet):

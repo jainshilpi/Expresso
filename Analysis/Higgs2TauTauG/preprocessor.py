@@ -2,7 +2,6 @@ from asyncio import events
 
 
 def preprocess(sample,events,AttachSF=True):
-    
     import awkward as ak    
     import modules.ExpressoTools as ET
     from modules.corrections import SFevaluator, GetBTagSF, ApplyJetCorrections, GetBtagEff, AttachMuonSF, AttachElectronSF, AttachPerLeptonFR, GetPUSF, ApplyRochesterCorrections, ApplyJetSystematics, AttachPSWeights, AttachPdfWeights, AttachScaleWeights, GetTriggerSF
@@ -13,61 +12,66 @@ def preprocess(sample,events,AttachSF=True):
     from modules.base_objects.base_leptons import base_leptons
     from modules.base_objects.base_jets import base_jets
     from modules.base_objects.base_met import base_met
+    import numpy as np
+    import modules.cut_configure as cut
     
 
     ###################################
-    dataset,isData,histAxisName,year,xsec,sow=ET.getInfo(events,sample)
+    dataset,isData,histAxisName,year,xsec,sow, nEvents=ET.getInfo(events,sample)
     ###################################
-    isphoton=(ev.GenPart.pdgId==22)
-    ev["genphotons"]=ev.GenPart[isphoton]
-    ev["halfproperphotons"]=(ev["genphotons"][abs(ev.GenPart[ev["genphotons"].genPartIdxMother].pdgId)==15])
-    ev["properphotons"]=ev["halfproperphotons"][ev.halfproperphotons.status==1]
-    ev["photonswithcut"]=ev.properphotons[ev.properphotons.pt>5]
-    ev["tauid"]=ev.Tau.idDecayModeNewDMs==True
-    ev["mediumelectron"]=ev.Electron.cutBased >=3 & 
-    ev["mediummuon"]=ev.Muon.mediumId==True
+    isphoton=(events.GenPart.pdgId==22)
+    events["genphotons"]=events.GenPart[isphoton]
+    events["halfproperphotons"]=(events["genphotons"][abs(events.GenPart[events["genphotons"].genPartIdxMother].pdgId)==15])
+    events["properphotons"]=events["halfproperphotons"][events.halfproperphotons.status==1]
+    events["photonswithcut"]=events.properphotons[events.properphotons.pt>5]
+    events["ttgevents"]=(ak.num(events.photonswithcut)==1)
 
-    ev["mytau"]=ev.Tau[ev.tauid]
-    ev["mymuon"]=ev.Muon[ev.mediummuon]
-    ev["myelectron"]=ev.Electron[ev.mediumelectron]
+    events["l"]=ak.with_name(ak.concatenate([events.Electron, events.Muon], axis=1), 'PtEtaPhiMCandidate')
+    events=events[(ak.num(events.Tau)==1) & (ak.num(events.Photon)==1) & ak.num(events.l)==1]
+    events["drlg"]=events.Photon.delta_r(events.l[:,0])
 
-    ev["iseh"]=(ak.num(ev.myelectron)==1) & (ak.num(ev.mytau)==1) & (ak.num(ev.mymuon)==0) & (ak.num(ev.photonswithcut)==1)
-    ev["isuh"]=(ak.num(ev.myelectron)==0) & (ak.num(ev.mytau)==1) & (ak.num(ev.mymuon)==1) & (ak.num(ev.photonswithcut)==1)
-    ev["ishh"]=(ak.num(ev.myelectron)==0) & (ak.num(ev.mytau)==2) & (ak.num(ev.mymuon)==0) & (ak.num(ev.photonswithcut)==1)
+    def isPresTau(pt, eta, dxy, dz, idDeepTau2017v2p1VSjet, minpt=20.0):
+        return  (pt>minpt)&(abs(eta)< cut.eta_tau_cut )&(abs(dxy)<cut.dxy_tau_cut)&(abs(dz)<cut.dz_tau_cut) & (idDeepTau2017v2p1VSjet>>1 & 1 ==1)
 
-    eveh=ev[ev.iseh]
-    evuh=ev[ev.isuh]
-    evhh=ev[ev.ishh]
+    def isTightTau(idDeepTau2017v2p1VSjet):
+        return (idDeepTau2017v2p1VSjet>>2 & 1 ==1)
 
-    taupairs = ak.combinations(ev.mytau, 2, fields=["tau0","tau1"])
-
+    events["mytau"]=events.Tau[isPresTau(events.Tau.pt, events.Tau.eta, events.Tau.dxy, events.Tau.dz, events.Tau.idDeepTau2017v2p1VSjet, 30) & isTightTau(events.Tau.idDeepTau2017v2p1VSjet)]
+    events["myelectron"]=events.Electron[(events.Electron.cutBased >=3) & (events.Electron.pt > 24) & (abs(events.Electron.eta)<2.1)]
+    events["myphoton"]=events.Photon[(events.Photon.cutBased >=2) & (events.Photon.pt > 5) & (abs(events.Photon.eta)<2.5)]
+    events["mymuon"]=events.Muon[(events.Muon.mediumId==True) & (events.Muon.pt > 20) & (abs(events.Muon.eta)<2.1)]
+    events["lightlepton"]=ak.with_name(ak.concatenate([events.myelectron, events.mymuon], axis=1), 'PtEtaPhiMCandidate')
+    if histAxisName=="H2TTTG":
+        events=events[(events.ttgevents==1)]
+    elif histAxisName=="H2TTT":
+        events=events[(events.ttgevents==0)]
+    else:
+        events=events
     
+    events=events[ak.num(events.lightlepton)==1]
+    events["drlg"]=events.myphoton.delta_r(events.lightlepton[:,0])
+    events.myphoton=events.myphoton[events.drlg > 0.4]
+    events=events[(ak.num(events.mytau)==1) & (ak.num(events.myphoton)==1)]
 
-    eveh["dreh"]=eveh.mytau.delta_r(eveh.myelectron)
-    evuh["druh"]=evuh.mytau.delta_r(evuh.mymuon)
-    evhh["drhh"]=taupairs.tau0.delta_r(taupairs.tau1)
+    ev_tau=events.mytau[:,0]
+    ev_lepton=events.lightlepton[:,0]
+    ev_photon=events.myphoton[:,0]
 
+    events['nEvents']= nEvents
+    events["lhobject"]=ev_tau+ev_lepton
+    events["lhgobject"]=ev_tau+ev_lepton+ev_photon
 
-    chargeeh=eveh.mytau.charge*eveh.myelectron.charge
-    chargeuh=evuh.mytau.charge*evuh.mymuon.charge
-    chargehh=taupairs.tau0.charge*taupairs.tau1.charge
+    events["drlg1"]=ev_lepton.delta_r(ev_photon)
+    events["drlt"]=ev_lepton.delta_r(ev_tau)
+    events["drgt"]=ev_photon.delta_r(ev_tau)
 
-    eveh["invmass"]=eveh.mytau+eveh.myelectron
-    ehinvarmass=eveh.invmass.mass
-    evuh["invmass"]=evuh.mytau+evuh.mymuon
-    uhinvarmass=evuh.invmass.mass
-    evhh["invmass"]=taupairs.tau0+taupairs.tau1
-    hhinvarmass=evhh.invmass.mass
+    events["dphilt"]=ev_lepton.delta_phi(ev_tau)
+    events["dphigt"]=ev_photon.delta_phi(ev_tau)
+    events["dphilg"]=ev_lepton.delta_phi(ev_photon)
 
-    eveh["iseh1"]=(ak.flatten(chargeeh < 0)) & (ak.flatten(eveh.dreh > 0.4)) & (ak.flatten(abs(ehinvarmass-90)>15))
-    evuh["isuh1"]=(ak.flatten(chargeuh < 0)) & (ak.flatten(evuh.druh > 0.4)) & (ak.flatten(abs(uhinvarmass-90)>15))
-    evhh["ishh1"]=(ak.flatten(chargehh < 0)) & (ak.flatten(evhh.drhh > 0.4)) & (ak.flatten(abs(hhinvarmass-90)>15))
-
-    eveh1=eveh[eveh.iseh1]
-    evuh1=evuh[evuh.isuh1]
-    evhh1=evhh[evhh.ishh1]
-
-
+    events["chargeeh"]=ev_lepton.charge*ev_tau.charge
+    events["invarmass"]=events.lhobject.mass
+    events["NJets"]=ak.num(events.Jet)
     # Compute pair invariant masses, for all flavors all signes
 
     return events,dataset,isData,histAxisName,year,xsec,sow

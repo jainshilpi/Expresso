@@ -6,43 +6,65 @@ import modules.objects as obj
 from coffea.analysis_tools import PackedSelection
 import numpy.ma as ma
 import numpy as np
+from modules.hcoll import binning
+sel=["loose","medium","tight"]
 
-class hcoll:
+histograms = {
 
-    def __init__(self, h, isData, xsec, sow, doweight, **conf):
-        self.h = h
-        self.conf = conf
-        self.isData = isData
-        self.xsec = xsec
-        self.sow = sow
-        self.doweight=doweight
+} 
+for sel_j in sel:
+    histograms['ElectronPt'+sel_j]=hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('ElectronPt'+sel_j, '$E$P_t(GeV)', binning(20,100,10)))
 
-    def fill(self, name, weights, mask, obj, cat={}, flatten=False, **axes):
-        fullhist = {}
-        #print('----------########---')
-        for ini, axis in enumerate(axes.keys()):
-            arrr = eval(f"obj.{axes[axis]}[mask]")
-            if flatten:
-                if ini==0:
-                    fullhist[axis],weights = ak.flatten(ak.zip(arrr,weights))
-                    weights=weights[ak.flatten(mask)]
-                else:
-                    fullhist[axis] = ak.flatten(arrr)
-            else:
-                if ini==0:
-                    weights=weights[mask]
-                fullhist[axis] = arrr
-        if self.doweight:
-            self.h[name].fill(weight=weights, **cat, **fullhist, **self.conf)
-        else:
-            self.h[name].fill(**cat, **fullhist, **self.conf)
+    'ElectronPt':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('ElectronPt', '$E$P_t(GeV)', binning(20,100,10))),
+    'MuonPt':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('MuonPt', '$Mu$P_t(GeV)', binning(20,100,10))),
+    'TauPt_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('TauPt_eh', '$Tau$P_teh(GeV)', binning(30,100,10))),
+    'TauPt_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('TauPt_uh', '$Tau$P_tuh(GeV)', binning(30,100,10))),
 
-    def get(self):
-        return self.h
+    'Electroneta':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Electroneta', '$Electroneta$', binning(-4,4,0.1))),
+    'Muoneta':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Muoneta', '$Muoneta$', binning(-4,4,0.1))),
+    'Taueta_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Taueta_eh', '$Taueta_eh$', binning(-4,4,0.1))),
+    'Taueta_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Taueta_uh', '$Taueta_uh$', binning(-4,4,0.1))),
+
+    'Electronphi':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Electronphi', '$Electronphi$', binning(-4,4,0.1))),
+    'Muonphi':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Muonphi', '$Muonphi$', binning(-4,4,0.1))),
+    'Tauphi_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Tauphi_eh', '$Tauphi_eh$', binning(-4,4,0.1))),
+    'Tauphi_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Tauphi_uh', '$Tauphi_uh$', binning(-4,4,0.1))),
+
+    'drlt_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('drlt_eh', '$drlt_eh$', binning(0,10,0.1))),
+    'drlt_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('drlt_uh', '$drlt_uh$', binning(0,10,0.1))),
+
+    'drgt_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('drgt_eh', '$drgt_eh$', binning(0,10,0.1))),
+    'drgt_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('drgt_uh', '$drgt_uh$', binning(0,10,0.1))),
+
+    'drlg_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('drlg_eh', '$drlg_eh$', binning(0,10,0.1))),
+    'drlg_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('drlg_uh', '$drlg_uh$', binning(0,10,0.1))),
+
+    'dphilg_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('dphilg_eh', '$dphilg_eh$', binning(-4,4,0.1))),
+    'dphilg_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('dphilg_uh', '$dphilg_uh$', binning(-4,4,0.1))),
+
+    'dphilt_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('dphilt_eh', '$dphilt_eh$', binning(-4,4,0.1))),
+    'dphilt_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('dphilt_uh', '$dphilt_uh$', binning(-4,4,0.1))),
+
+    'dphigt_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('dphigt_eh', '$dphigt_eh$', binning(-4,4,0.1))),
+    'dphigt_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('dphigt_uh', '$dphigt_uh$', binning(-4,4,0.1))),
+
+    'invarmass_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('invarmass_eh', '$invarmass_eh$', binning(0,70,1))),
+    'invarmass_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('invarmass_uh', '$invarmass_uh$', binning(0,70,1))),
+
+    'MET':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('MET', '$MET$', binning(0,100,1))),
+
+    'PhotonPt_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('PhotonPt_eh', '$PhotonP_teh(GeV)$', binning(4,50,1))),
+    'Photoneta_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Photoneta_eh', '$Photoneta_eh$', binning(-4,4,0.1))),
+    'Photonphi_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Photonphi_eh', '$Photonphi_eh$', binning(-4,4,0.1))),
+
+    'PhotonPt_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('PhotonPt_uh', '$PhotonPt_uh(GeV)$', binning(4,50,0.1))),
+    'Photoneta_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Photoneta_uh', '$Photoneta_uh$', binning(-4,4,0.1))),
+    'Photonphi_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Photonphi_uh', '$Photonphi_uh$', binning(-4,4,0.1)))
+}
 
 
 def myanalysis(logger, h, ev, dataset, isData, histAxisName, year, xsec, sow, pass_options, doweight=True):
-    
+    from modules.hcoll import hcoll,binning
     hists = hcoll(h, isData, xsec, sow, doweight, process=histAxisName)
     ET.autolog(f"{len(ev)} Events at the start of your analysis", logger, 'i')
     # Start your analysis``
@@ -53,24 +75,33 @@ def myanalysis(logger, h, ev, dataset, isData, histAxisName, year, xsec, sow, pa
     #-------------------------------------------------------------------------------------------------------
     # For MC
     if not isData:
-         if pass_options=='Xsecweight':
+         if 'Xsecweight' in pass_options:
             genw = ev["genWeight"]
             ev["weight_norm"] = (xsec / sow) * genw
-            #ev["weight_norm"] =1
          else:
-            ev["weight_norm"]=1
+            ev["weight_norm"]=(1/ev.nEvents)
+
+        if 'tight' in pass_options:
+            XXXXXX
+        else:
+            XXXXXXX
+
+
     
-   
-    
+    ev_tight=ev[ev.tight]
+    ev_tight.invarmass
     #-------------------------------------------------------------------------------------------------------
     # Masks
     #-------------------------------------------------------------------------------------------------------
     #Dilepton events
     #-------------------------------------------------------------------------------------------------------
     #Special masks
-    #-------------------------------------------------------------------------------------------------------
-    # Fill histograms
-    hists.fill('ElectronPt',ev.weight_norm, (abs(ev.lightlepton[:,0].pdgId) ==11), ev.lightlepton[:,0], ElectronPt='pt')
+    #------------------------------------------------------------------------------------------------------- 
+    sel=["loose","medium","tight"]
+
+    # Fill histograms 
+    for sel_i in sel:
+        hists.fill('ElectronPt'+sel_i,ev[ev.sel_i].weight_norm, (abs(ev.lightlepton[:,0].pdgId) ==11), ev.lightlepton[:,0], ElectronPt='pt')
     hists.fill('Electroneta',ev.weight_norm, (abs(ev.lightlepton[:,0].pdgId) ==11), ev.lightlepton[:,0], Electroneta='eta')
     hists.fill('Electronphi',ev.weight_norm, (abs(ev.lightlepton[:,0].pdgId) ==11), ev.lightlepton[:,0], Electronphi='phi')
 
@@ -122,53 +153,3 @@ def myanalysis(logger, h, ev, dataset, isData, histAxisName, year, xsec, sow, pa
     #-------------------------------------------------------------------------------------------------------
     ET.autolog(f"{len(ev)} Events at the end of your analysis", logger, 'i')
     return hists.get()
-
-def binning(a,b,c):
-    return list(np.arange(a,b+c,c))
-histograms = {
-    'ElectronPt':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('ElectronPt', '$E$P_t(GeV)', binning(20,100,10))),
-    'MuonPt':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('MuonPt', '$Mu$P_t(GeV)', binning(20,100,10))),
-    'TauPt_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('TauPt_eh', '$Tau$P_teh(GeV)', binning(30,100,10))),
-    'TauPt_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('TauPt_uh', '$Tau$P_tuh(GeV)', binning(30,100,10))),
-
-    'Electroneta':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Electroneta', '$Electroneta$', binning(-4,4,1))),
-    'Muoneta':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Muoneta', '$Muoneta$', binning(-4,4,1))),
-    'Taueta_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Taueta_eh', '$Taueta_eh$', binning(-4,4,1))),
-    'Taueta_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Taueta_uh', '$Taueta_uh$', binning(-4,4,1))),
-
-    'Electronphi':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Electronphi', '$Electronphi$', binning(-4,4,1))),
-    'Muonphi':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Muonphi', '$Muonphi$', binning(-4,4,1))),
-    'Tauphi_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Tauphi_eh', '$Tauphi_eh$', binning(-4,4,1))),
-    'Tauphi_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Tauphi_uh', '$Tauphi_uh$', binning(-4,4,1))),
-
-    'drlt_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('drlt_eh', '$drlt_eh$', binning(0,10,1))),
-    'drlt_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('drlt_uh', '$drlt_uh$', binning(0,10,1))),
-
-    'drgt_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('drgt_eh', '$drgt_eh$', binning(0,10,1))),
-    'drgt_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('drgt_uh', '$drgt_uh$', binning(0,10,1))),
-
-    'drlg_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('drlg_eh', '$drlg_eh$', binning(0,10,1))),
-    'drlg_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('drlg_uh', '$drlg_uh$', binning(0,10,1))),
-
-    'dphilg_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('dphilg_eh', '$dphilg_eh$', binning(-4,4,0.1))),
-    'dphilg_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('dphilg_uh', '$dphilg_uh$', binning(-4,4,0.1))),
-
-    'dphilt_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('dphilt_eh', '$dphilt_eh$', binning(-4,4,0.1))),
-    'dphilt_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('dphilt_uh', '$dphilt_uh$', binning(-4,4,0.1))),
-
-    'dphigt_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('dphigt_eh', '$dphigt_eh$', binning(-4,4,0.1))),
-    'dphigt_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('dphigt_uh', '$dphigt_uh$', binning(-4,4,0.1))),
-
-    'invarmass_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('invarmass_eh', '$invarmass_eh$', binning(0,70,1))),
-    'invarmass_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('invarmass_uh', '$invarmass_uh$', binning(0,70,1))),
-
-    'MET':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('MET', '$MET$', binning(0,100,1))),
-
-    'PhotonPt_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('PhotonPt_eh', '$PhotonP_teh(GeV)$', binning(4,50,1))),
-    'Photoneta_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Photoneta_eh', '$Photoneta_eh$', binning(-4,4,1))),
-    'Photonphi_eh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Photonphi_eh', '$Photonphi_eh$', binning(-4,4,1))),
-
-    'PhotonPt_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('PhotonPt_uh', '$PhotonPt_uh(GeV)$', binning(4,50,1))),
-    'Photoneta_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Photoneta_uh', '$Photoneta_uh$', binning(-4,4,1))),
-    'Photonphi_uh':hist.Hist('Events',hist.Cat('process', 'process'),hist.Bin('Photonphi_uh', '$Photonphi_uh$', binning(-4,4,1)))
-}

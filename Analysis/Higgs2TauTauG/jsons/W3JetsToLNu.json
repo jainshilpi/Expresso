@@ -1,0 +1,32 @@
+{
+  "xsec": 948.761,
+  "year": "2016",
+  "treeName": "Events",
+  "histAxisName": "W3JetsToLNu",
+  "options": "",
+  "WCnames": [],
+  "nEvents": 7269474,
+  "nGenEvents": 14807242,
+  "nSumOfWeights": 16108564.839480998,
+  "isData": false,
+  "path": "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/221116_181318/0000/",
+  "files": [
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/221116_181318/0000/tree_1.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/221116_181318/0000/tree_8.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/221116_181318/0000/tree_12.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/221116_181318/0000/tree_19.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/221116_181318/0000/tree_10.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/221116_181318/0000/tree_7.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/221116_181318/0000/tree_17.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/221116_181318/0000/tree_11.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/221116_181318/0000/tree_4.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/221116_181318/0000/tree_14.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/221116_181318/0000/tree_6.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/221116_181318/0000/tree_16.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/221116_181318/0000/tree_9.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/221116_181318/0000/tree_18.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/221116_181318/0000/tree_15.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/221116_181318/0000/tree_5.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/crab_W3JetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/221116_181318/0000/tree_13.root"
+  ]
+}

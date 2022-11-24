@@ -1,0 +1,32 @@
+{
+  "xsec": 102.468,
+  "year": "2016",
+  "treeName": "Events",
+  "histAxisName": "DY3JTLL50",
+  "options": "",
+  "WCnames": [],
+  "nEvents": 5468548,
+  "nGenEvents": 9553830,
+  "nSumOfWeights": 9553830.0,
+  "isData": false,
+  "path": "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/crab_DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/221116_180352/0000/",
+  "files": [
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/crab_DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/221116_180352/0000/tree_1.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/crab_DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/221116_180352/0000/tree_8.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/crab_DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/221116_180352/0000/tree_12.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/crab_DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/221116_180352/0000/tree_3.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/crab_DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/221116_180352/0000/tree_10.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/crab_DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/221116_180352/0000/tree_7.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/crab_DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/221116_180352/0000/tree_17.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/crab_DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/221116_180352/0000/tree_11.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/crab_DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/221116_180352/0000/tree_4.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/crab_DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/221116_180352/0000/tree_14.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/crab_DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/221116_180352/0000/tree_6.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/crab_DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/221116_180352/0000/tree_16.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/crab_DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/221116_180352/0000/tree_9.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/crab_DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/221116_180352/0000/tree_15.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/crab_DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/221116_180352/0000/tree_5.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/crab_DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/221116_180352/0000/tree_2.root",
+    "/publicfs/cms/data/TopQuark/HtTTG/samples/HiggsToTauTauGamma_BKG/mc/DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/crab_DY3JetsToLL_M-50_MatchEWPDG20_TuneCP5_13TeV-madgraphMLM-pythia8/221116_180352/0000/tree_13.root"
+  ]
+}

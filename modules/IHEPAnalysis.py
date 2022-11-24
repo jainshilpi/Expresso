@@ -38,9 +38,10 @@ class IHEPAnalysis:
     def preprocess(self,preprocessor):
         self.preprocess=preprocessor
 
-    def preselection(self,preselection,extraselection):
+    def preselection(self,preselection,extraselection,analysispoint):
         self.preselect=preselection
         self.extraselection=extraselection
+        self.analysispoint=analysispoint
         
 
     def SetHists(self,histfile):
@@ -123,7 +124,7 @@ class IHEPAnalysis:
         runner = processor.Runner(executor, schema=Schema, chunksize=chunksize, maxchunks=maxchunks, skipbadfiles=False, xrootdtimeout=360)
         processor_instance=IHEPProcessor.IHEPProcessor(logfolder,treefolder,dt,ET,self.loglevel,self.AnalysisName,self.varstosave,
                                                        self.preprocess,self.preselect,self.analysis,
-                                                       self.hists,sample,self.saveroot,self.passoptions,self.extraselection,self.debug)
+                                                       self.hists,sample,self.saveroot,self.passoptions,self.extraselection,self.analysispoint, self.debug)
         if self.debug:
             op(processor_instance)
                 

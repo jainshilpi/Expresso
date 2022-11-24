@@ -31,6 +31,7 @@ if __name__=='__main__':
     parser.add_argument("--Analysis","-ana"   , default='chflip', help = 'Analysis name')
     parser.add_argument("--PassOptions","-QSkim"   , default='', help = 'A quick skim')
     parser.add_argument("--ExtraSelection","-QSel"   , default='', help = 'An extra preselection')
+    parser.add_argument("--AnalysisPoint","-ASel"   , default='', help = 'A analysis point customizable')
     parser.add_argument("--AnalysisScript","-anascr"   , default='', help = 'Analysis script, default Analysis/YourAnalysis/analysis.py')
     parser.add_argument("--Schema","-schema"   , default='NanoAODSchema', help = 'schema')
     parser.add_argument("--PreProcessor","-pre"   , default='', help = 'preprocessor path default Analysis/YourAnalysis/preprocessor.py')
@@ -88,7 +89,7 @@ if __name__=='__main__':
     #PreSelection='Analysis/'+args.Analysis+'/preselection.py'
     PreSelection=PreSelection.replace(".py","").replace("/",".")
     exec(f"from {PreSelection} import preselection")
-    Ana.preselection(preselection,args.ExtraSelection)
+    Ana.preselection(preselection,args.ExtraSelection,args.AnalysisPoint)
     #---------------------------
     #------------------- Initialize the analysis and hists #-------------------###########
     AnalysisPath=AnalysisScript.replace(".py","").replace("/",".")

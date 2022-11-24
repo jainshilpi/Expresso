@@ -44,7 +44,7 @@ def reset_logging():
 
 @add_objprint
 class IHEPProcessor(processor.ProcessorABC):
-    def __init__(self,outfolder,treefolder,dt,ET,loglevel,analysisname,varstosave,preprocess,preselect,analysis,histos,samples,saveroot,passoptions,extraselection,debug=False):
+    def __init__(self,outfolder,treefolder,dt,ET,loglevel,analysisname,varstosave,preprocess,preselect,analysis,histos,samples,saveroot,passoptions,extraselection,analysispoint,debug=False):
         histos['sumw']=hist.Hist(axes=[hist.Bin("sumw", "sumw", 10, 0, 10)],
                                  label="sumw")
         histos['cutflow']=hist.Hist(axes=[hist.Cat("selection", "selection","placement"),
@@ -58,6 +58,7 @@ class IHEPProcessor(processor.ProcessorABC):
         self._accumulator = processor.dict_accumulator(histos)
         self._samples = samples
         self._analysis = analysis
+        self._analysispoint = analysispoint
         self._preprocess = preprocess
         self._preselect = preselect
         self._varstosave = varstosave
@@ -194,7 +195,7 @@ class IHEPProcessor(processor.ProcessorABC):
         #------- preselect and store cutflow
         try:
             selections = PackedSelection(dtype='uint64')
-            events,out,selections=self._preselect(year,isData,events,out,selections)
+            events,out,selections=self._preselect(year,isData,events,out,selections,self._analysispoint)
             if self._extraselection:
                 extraselection=self._extraselection.split("=")
                 e_name=extraselection[0]
@@ -232,8 +233,9 @@ class IHEPProcessor(processor.ProcessorABC):
 
         #print(events.fields)
         try:
-            out = self._analysis(self._logger,out,events,dataset,isData,histAxisName,year,xsec,sow,self._passoptions)
             ev_analysis=len(events)
+            events['nAnalysisEvents']=ev_analysis
+            out = self._analysis(self._logger,out,events,dataset,isData,histAxisName,year,xsec,sow,self._passoptions)
             self._ET.autolog(f'{len(events)} Events after full analysis to root',self._logger,'i')
         except Exception:
             ev_analysis=0

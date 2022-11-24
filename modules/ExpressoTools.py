@@ -142,4 +142,4 @@ def getInfo(events,samples):
     xsec               = samples["xsec"]
     sow                = samples["nSumOfWeights"]
     nEvents                = samples["nEvents"]
-    return dataset,isData,histAxisName,year,xsec,sow,nEvents
+    return dataset,isData,histAxisName,year,xsec,sow

@@ -36,7 +36,7 @@ ana () {
 }
 
 testana () {
-    ./expresso.py --Samples Analysis/testAnalysis/samples.txt --Analysis testAnalysis --NumberOfTasks 2 --Debug --SaveRoot
+    ./expresso.py --Samples Analysis/testAnalysis/samples.txt --Analysis testAnalysis --NumberOfTasks 2 --Debug --SaveRoot --AnalysisPoint tight
 }
 testplot () {
     python plot+.py --PlotterScript Analysis/testAnalysis/allplots.yaml --HistoFolder Output/Analysis/testAnalysis/output/analysis/ --SaveLocation Output/Analysis/testAnalysis/output/analysis/

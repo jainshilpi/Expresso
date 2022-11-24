@@ -13,8 +13,7 @@ def preprocess(sample,ev,AttachSF=True):
     
 
     ###################################
-    dataset,isData,histAxisName,year,xsec,sow,nEvents=ET.getInfo(ev,sample)
-    ev['nEvents']=nEvents
+    dataset,isData,histAxisName,year,xsec,sow=ET.getInfo(ev,sample)
     ###################################
     #--------------------------------------------------------------------- Electrons
     ev["ele_loose"],ev["ele_fo"]=base_electrons(ev.Electron,year,AttachSF,isData)

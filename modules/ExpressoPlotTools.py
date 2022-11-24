@@ -21,6 +21,11 @@ def get_hist_from_pkl(path_to_pkl,allow_empty=True):
             h = {k:v for k,v in h.items() if v.values() != {}}
         return h
 
+def geths(h,scale=-1):
+        if scale==-1:
+                return h*(1/sum(list(h.counts())))
+        else:
+                return h*scale
 
 def dictprint(di):
         for key, value in di.items():
@@ -161,9 +166,9 @@ def alldictplot(histodictall,outputfolder,SSaveLocation='./',plotsetting='module
 
                 if 'normal' in allkey:
                         if len(stack)!=0:
-                                        hep.histplot([st.to_hist()*scaleit for st,scaleit in zip(stack,stackscales)],lw=1,stack=True,histtype='fill',label=stacklabels, color=stackcolors)
+                                        hep.histplot([geths(st.to_hist(),scaleit) for st,scaleit in zip(stack,stackscales)],lw=1,stack=True,histtype='fill',label=stacklabels, color=stackcolors)
                         if len(nostack)!=0:
-                                        hep.histplot([nst.to_hist()*scaleit for nst,scaleit in zip(nostack,nostackscales)],lw=1,stack=False,histtype='step',label=nostacklabels,
+                                        hep.histplot([geths(nst.to_hist(),scaleit) for nst,scaleit in zip(nostack,nostackscales)],lw=1,stack=False,histtype='step',label=nostacklabels,
                                                      color=nostackcolors)
 
                 #if 'normal' in allkey or '2D' in allkey:

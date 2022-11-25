@@ -81,12 +81,14 @@ Check --`SaveLocation` to find your plots
 
 The plotter script has two parts, year and plots.
 A simple script is:
-`
+
+```
 '2016':
   HG: test_anap_tight.pkl.gz,red,nostack,1
 plots:
   normal_Nele: Nele
-`
+```
+
 This means the plots will have a label 2016, and use one file `test_anap_tight.pkl.gz`, with label `HG` on plots and will plot histogram `Nele` from the file. Color will be read, plot won't be stacked and will be scaled by `1`. `normal` is a keyword. Please use this as is.
 
 Other possible example:

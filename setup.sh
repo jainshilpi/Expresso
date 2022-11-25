@@ -36,8 +36,11 @@ ana () {
 }
 
 testana () {
-    ./expresso.py --Samples Analysis/testAnalysis/samples.txt --Analysis testAnalysis --NumberOfTasks 2 --Debug --SaveRoot --AnalysisPoint tight
+    ./expresso.py --Samples Analysis/barebones/samples.txt --Analysis barebones --NumberOfTasks 2 --Debug --SaveRoot
+}
+testanatight () {
+    ./expresso.py --Samples Analysis/barebones/samples.txt --Analysis barebones --NumberOfTasks 2 --Debug --SaveRoot --AnalysisPoint tight_ele_tight_mu
 }
 testplot () {
-    python plot+.py --PlotterScript Analysis/testAnalysis/allplots.yaml --HistoFolder Output/Analysis/testAnalysis/output/analysis/ --SaveLocation Output/Analysis/testAnalysis/output/analysis/
+    python plot+.py --PlotterScript Analysis/barebones/allplots.yaml --HistoFolder Output/Analysis/barebones/output/analysis/ --SaveLocation Output/Analysis/barebones/output/analysis/
     }

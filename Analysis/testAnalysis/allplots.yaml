@@ -1,8 +1,10 @@
 2016:
     ######## format samplename: filename,color,stack(nostack),scale
-    test: test.pkl.gz,red,nostack,1
-    test1: test.pkl.gz,green,stack,1
-    test2: test.pkl.gz,blue,nostack,2
+    # A scale of -1 normalizes the distribution to one
+    # A positive scale like 1,2,50 multiplies the histogram by that value
+    test: test_anap_tight.pkl.gz,red,nostack,-1
+    test1: test_anap_tight.pkl.gz,green,stack,-1
+    test2: test_anap_tight.pkl.gz,blue,nostack,-1
 plots:
     ######## format plottype_ref: axisname
     normal_sumw: sumw

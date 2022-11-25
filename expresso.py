@@ -139,7 +139,7 @@ if __name__=='__main__':
         if args.AnalysisPoint:
             histfilename=histfilename+'_anap_'+args.AnalysisPoint
             
-        histfilename=histfilename+".pkl.gz"
+        histfilename=histfilename
         saveHist(result,JobFolder,histfilename)
 
         cprint(f'#---- pkl files with results: {JobFolder}/{histfilename}  ----#',"HEADER")
@@ -155,7 +155,7 @@ if __name__=='__main__':
                 plotdict['plots']={}
                 for i,pl in enumerate(Plots):
                     plotdict['plots'][str(Plotnames[i])]=str(pl)
-                    plotdict['2016']={'filename':histfilename+',red,nostack,1'}
+                    plotdict['2016']={'filename':histfilename+'.pkl.gz,red,nostack,1'}
 
                 Histolist='Analysis/'+args.Analysis+'/temp.yaml'
                 Histofolder=JobFolder

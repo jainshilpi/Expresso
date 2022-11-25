@@ -55,7 +55,7 @@ To debug
 To pass some options can be used as strings to use in scripts, similar to analysis point.
 
 ```
-./expresso.py --Analysis barebones --NumberOfTasks 2 --PassOptions 2e2u` ## This will do nothing is defined, but in analysis.py, you can write what to do ig PassOptions is `2e2u
+./expresso.py --Analysis barebones --NumberOfTasks 2 --PassOptions 2e2u` ## This will do nothing as nothing is defined, but in analysis.py, you can write what to do if PassOptions is `2e2u
 ```
 
 

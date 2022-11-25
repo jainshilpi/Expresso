@@ -1,8 +1,0 @@
-2016:
-    #format samplename: filename,color,stack(nostack),scale
-    DY: rnd.pkl.gz,blue,stack,1
-    DYA: rnd.pkl.gz,red,nostack,2
-    DYB: rnd.pkl.gz,green,nostack,1
-plots:
-    #format plottype_ref: axisname
-    normal_hsumw: sumw

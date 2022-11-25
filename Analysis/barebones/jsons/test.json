@@ -1,0 +1,16 @@
+{
+  "xsec": 1.0,
+  "year": "2016",
+  "treeName": "Events",
+  "histAxisName": "test",
+  "options": "",
+  "WCnames": [],
+  "nEvents": 30409,
+  "nGenEvents": 70602,
+  "nSumOfWeights": 1197763221.7319999,
+  "isData": false,
+  "path": "modules/testsample/",
+  "files": [
+    "modules/testsample/tree_6.root"
+  ]
+}

@@ -1,0 +1,34 @@
+files:
+  DY: rnd.pkl.gz
+  DYA: rnd.pkl.gz
+  DYB: rnd.pkl.gz
+normal_hsumw:
+  '1':
+    args:
+      color: blue
+      label: DY
+    sumw:
+      axis: sumw
+      file: DY
+      scale: 1
+      stack: true
+  '2':
+    args:
+      color: red
+      label: DYA
+    sumw:
+      axis: sumw
+      file: DYA
+      scale: 2
+      stack: false
+  '3':
+    args:
+      color: green
+      label: DYB
+    sumw:
+      axis: sumw
+      file: DYB
+      scale: 1
+      stack: false
+year: 2016
+

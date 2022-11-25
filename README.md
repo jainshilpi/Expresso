@@ -36,22 +36,36 @@ python modules/createJSON.py --prefix root://cms-xrd-global.cern.ch// --sampleNa
 see the script examples from Analysis/barebones (check preselection.py, preprocessor.py, analysis.py)
 
 #### Then run the analysis, can run in several ways:
-`./expresso.py --Analysis barebones --NumberOfTasks 2 --AnalysisPoint tight_ele_tight_mu`
-`./expresso.py --Analysis barebones --NumberOfTasks 2`
+```
+./expresso.py --Analysis barebones --NumberOfTasks 2 --AnalysisPoint tight_ele_tight_mu
+```
+
+```
+./expresso.py --Analysis barebones --NumberOfTasks 2
+```
 
 The `--AnalysisPoint` argument is a string is available to be used to your scripts to that you can customize what you want to do
 See example in Analysis/barebones (check preselection.py, preprocessor.py, analysis.py). This is an optional argument.
 
 To debug
-`./expresso.py --Analysis barebones --NumberOfTasks 2 --Debug`
+```
+./expresso.py --Analysis barebones --NumberOfTasks 2 --Debug
+```
 
 To pass some options can be used as strings to use in scripts, similar to analysis point.
-`./expresso.py --Analysis barebones --NumberOfTasks 2 --PassOptions 2e2u` ## This will do nothing is defined, but in analysis.py, you can write what to do ig PassOptions is `2e2u`
+
+```
+./expresso.py --Analysis barebones --NumberOfTasks 2 --PassOptions 2e2u` ## This will do nothing is defined, but in analysis.py, you can write what to do ig PassOptions is `2e2u
+```
+
 
 ### Make Quick plots along with the analysis
 
 To make quick plots you add a `--QuickPlots` option to the previous command in fact:
-`./expresso.py --Analysis barebones --NumberOfTasks 2 --AnalysisPoint tight --QuickPlots Nele,sumw`
+
+```.
+/expresso.py --Analysis barebones --NumberOfTasks 2 --AnalysisPoint tight --QuickPlots Nele,sumw
+```
 
 To make more comprehensive plots (multiple backgrounds, signal, data), write a plot file, example `Analysis/ZG/allplots.yaml` allplots.yaml
 Then run

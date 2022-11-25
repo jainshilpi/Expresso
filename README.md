@@ -44,6 +44,8 @@ see the script examples from Analysis/barebones (check preselection.py, preproce
 ./expresso.py --Analysis barebones --NumberOfTasks 2
 ```
 
+`--NumberOfTasks` is the maximum number of indivudual tasks to run as the analysis will be broken down to several jobs automatically. Give a very large number to run over all events. Each task will run 30,000 events. So if your total events is 60,000, you need atleast 2 tasks. So `--NumberOfTasks 4` is certainly sufficient.
+
 The `--AnalysisPoint` argument is a string is available to be used to your scripts to that you can customize what you want to do
 See example in Analysis/barebones (check preselection.py, preprocessor.py, analysis.py). This is an optional argument.
 

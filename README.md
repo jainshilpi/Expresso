@@ -6,15 +6,15 @@
 
 Every analysis (small or large) has to be divided into three steps: (the first two of which need to be done only once)
 
-### Create an analysis folder in Analysis/ (could copy from testAnalysis to start a basic analysis)
-For now we will use the testAnalysis out of the box.
+### Create an analysis folder in Analysis/ (could copy from barebones to start a basic analysis)
+For now we will use the barebones out of the box.
 
 ### Creating a one or more sample/process jsons
 a sample nanoaod root file to test is here `modules/testsample/tree_6.root`
 
-`python modules/createJSON.py --sampleName test --xsec 1.0 --year 2016 --treename Events --histAxisName test --outname Analysis/testAnalysis/jsons/test.json modules/testsample/`
+`python modules/createJSON.py --sampleName test --xsec 1.0 --year 2016 --treename Events --histAxisName test --outname Analysis/barebones/jsons/test.json modules/testsample/`
 
-Add this json in a `sample.txt` file in the analysis folder, which will be input for next step. Example txt file canbe found here: `Analysis/testAnalysis/samples.txt`
+Add this json in a `sample.txt` file in the analysis folder, which will be input for next step. Example txt file canbe found here: `Analysis/barebones/samples.txt`
 If you call it something else other than samples.txt, you can pass it with the `--Samples` option in the next command.
 
 If you just want to pass a single json, you can pass it using `--Sample bla-bla/bla-bla/something.json`
@@ -33,14 +33,14 @@ python modules/createJSON.py --prefix root://cms-xrd-global.cern.ch// --sampleNa
  - `preprocess`
  - `analyze`
 
-see the script examples from Analysis/testAnalysis (check preselection.py, preprocessor.py, analysis.py)
+see the script examples from Analysis/barebones (check preselection.py, preprocessor.py, analysis.py)
 
 #### Then run the analysis, can run in several ways:
 `./expresso.py --Analysis barebones --NumberOfTasks 2 --AnalysisPoint tight_ele_tight_mu`
 `./expresso.py --Analysis barebones --NumberOfTasks 2`
 
 The `--AnalysisPoint` argument is a string is available to be used to your scripts to that you can customize what you want to do
-See example in Analysis/testAnalysis (check preselection.py, preprocessor.py, analysis.py). This is an optional argument.
+See example in Analysis/barebones (check preselection.py, preprocessor.py, analysis.py). This is an optional argument.
 
 To debug
 `./expresso.py --Analysis barebones --NumberOfTasks 2 --Debug`
@@ -51,13 +51,13 @@ To pass some options can be used as strings to use in scripts, similar to analys
 ### Make Quick plots along with the analysis
 
 To make quick plots you add a `--QuickPlots` option to the previous command in fact:
-`./expresso.py --Analysis testAnalysis --NumberOfTasks 2 --AnalysisPoint tight --QuickPlots Nele,sumw`
+`./expresso.py --Analysis barebones --NumberOfTasks 2 --AnalysisPoint tight --QuickPlots Nele,sumw`
 
 To make more comprehensive plots (multiple backgrounds, signal, data), write a plot file, example `Analysis/ZG/allplots.yaml` allplots.yaml
 Then run
 
 ```
-python plot+.py --PlotterScript Analysis/testAnalysis/allplots.yaml --HistoFolder Output/Analysis/testAnalysis/output/analysis/ --SaveLocation Output/Analysis/testAnalysis/output/analysis/
+python plot+.py --PlotterScript Analysis/barebones/allplots.yaml --HistoFolder Output/Analysis/barebones/output/analysis/ --SaveLocation Output/Analysis/barebones/output/analysis/
 ```
 
 In the above `--HistoFolder` is where you can find all the histograms that are loaded in `--PlotterScript`, the Analyze step will print this histogram location on screen.

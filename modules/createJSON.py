@@ -1,45 +1,3 @@
-'''
-  createJSON.py
-
-  This script looks for samples an create a json with paths and metadata
-  You can use the json file to run on a dataset, providing a prefix (rxd redirector, local path...)
-
-  You can execute this script in different modes:
-  1) Rootfiles locally or through xrootd with the format:
-       Directory: [Prefix]/path/to/files/
-       Names:     sampleName1_0.root sampleName1_1.root ... sampleName2_0.root sampleName2_1.root ...
-     (a single dir containing files for multiple datasets.. you can pass a list of sample names)
-  2) Rootfiles in a local dir or accesible through xrootd with the format:
-       [Prefix]/path/to/files/
-       subdir1/ subdir2/...
-       tree_0.root tree_1.root...
-     (similar to the output from crab, where you have a structure of folders and want to collect all the rootfiles inside a parent folder)
-  3) Dataset published in DAS
-     
-  Inputs:
-  - year
-  - cross section (or file to read the cross section + name in file)
-
-  - tree name ('Events' by default)
-
-  Example Usage:
-    1) and 2)
-    MC:
-    >> python createJSON.py [path] --prefix "root:/REDIRECTOR/" --sampleName "ttllnunu0, ttllnunu1" --xsec modules/xsec_list.cfg --xsecName TTTo2L2Nu  --year 2018
-    Data:
-    >> python createJSON.py [path] --prefix "root:/REDIRECTOR/" --sampleName MuonEG_2018 --year 2018
-
-    3)
-    MC:
-    >> python createJSON.py [DAS_dataset] --DAS --sampleName TTTo2L2Nu --xsec modules/xsec_list.cfg --prefix root://your.favorite.redirector/
-    Data:
-    >> python createJSON.py [DAS_dataset] --DAS --sampleName DoubleMuon_2017 --year 2017
-
-  Note: the "--xsecName TTTo2L2Nu" argument is only needed if sampleName does not exist in modules/xsec_list.cfg
-
-
-'''
-
 import os, sys
 from coffea.util import save
 from modules.DASsearch import GetDatasetFromDAS, RunDasGoClientCommand
@@ -165,6 +123,47 @@ def main():
     print('>> New json file: %s'%outname)
 
 if __name__ == '__main__':
-  main()
+  print('''
+  createJSON.py
 
+  This script looks for samples an create a json with paths and metadata
+  You can use the json file to run on a dataset, providing a prefix (rxd redirector, local path...)
+
+  You can execute this script in different modes:
+  1) Rootfiles locally or through xrootd with the format:
+       Directory: [Prefix]/path/to/files/
+       Names:     sampleName1_0.root sampleName1_1.root ... sampleName2_0.root sampleName2_1.root ...
+     (a single dir containing files for multiple datasets.. you can pass a list of sample names)
+  2) Rootfiles in a local dir or accesible through xrootd with the format:
+       [Prefix]/path/to/files/
+       subdir1/ subdir2/...
+       tree_0.root tree_1.root...
+     (similar to the output from crab, where you have a structure of folders and want to collect all the rootfiles inside a parent folder)
+  3) Dataset published in DAS
+     
+  Inputs:
+  - year
+  - cross section (or file to read the cross section + name in file)
+
+  - tree name ('Events' by default)
+
+  Example Usage:
+    1) and 2)
+    MC:
+    >> python createJSON.py [path] --prefix "root:/REDIRECTOR/" --sampleName "ttllnunu0, ttllnunu1" --xsec modules/xsec_list.cfg --xsecName TTTo2L2Nu  --year 2018
+    Data:
+    >> python createJSON.py [path] --prefix "root:/REDIRECTOR/" --sampleName MuonEG_2018 --year 2018
+
+    3)
+    MC:
+    >> python createJSON.py [DAS_dataset] --DAS --sampleName TTTo2L2Nu --xsec modules/xsec_list.cfg --prefix root://your.favorite.redirector/
+    Data:
+    >> python createJSON.py [DAS_dataset] --DAS --sampleName DoubleMuon_2017 --year 2017
+
+  Note: the "--xsecName TTTo2L2Nu" argument is only needed if sampleName does not exist in modules/xsec_list.cfg
+
+
+  ''')
+  main()
+  
 

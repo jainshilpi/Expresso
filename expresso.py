@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-
+"""
 ####
 ##  Expresso Framework is designed to perform high energy physics analysis 
+"""
 
 if __name__=='__main__':
     import sys
@@ -23,6 +24,7 @@ if __name__=='__main__':
     import argparse
     parser = argparse.ArgumentParser(description='Expresso Framework Options')
     parser.add_argument("--Samples","-s", default='', help = 'path of samples')
+    parser.add_argument("--Sample","-sj", default='', help = 'path of single jsons')
     parser.add_argument("--QuickPlots","-qp", default='', help = 'some quick plots')
     parser.add_argument("--FullPlots","-fp", default='', help = 'full plots')
     parser.add_argument("--OutputFolder","-oF"   , default='./Output', help = 'Path to the output directory')
@@ -41,8 +43,12 @@ if __name__=='__main__':
     parser.add_argument("--Mode","-mode"   , default='local', help = 'mode of running: local, wq')
     parser.add_argument("--Port","-port"   , default='8866', help = 'port of running: wq')
     parser.add_argument("--Debug",default=False, action='store_true',help = 'if debug')
-    
+
     args = parser.parse_args()
+    
+    if args.Samples and args.Sample:
+        sys.exit("You can not provide both --Sample and --Samples at the same time")
+        
     if args.Debug: pprint(vars(args))
         
     from modules.ExpressoTools import cprint,saveHist
@@ -51,8 +57,12 @@ if __name__=='__main__':
     anasplit=args.Analysis.split('/')
     if anasplit[0]=='Analysis':
         args.Analysis=anasplit[1]
+    Samples=args.Samples
     if not args.Samples:
-        args.Samples="Analysis/"+args.Analysis+"/samples.txt"    
+        if not args.Sample:
+            Samples="Analysis/"+args.Analysis+"/samples.txt"
+        else:
+            Samples=args.Sample
     
     #---------------------------
     if not args.PreSelector:
@@ -70,7 +80,7 @@ if __name__=='__main__':
     else:
         AnalysisScript=args.AnalysisScript
         
-    cprint(f'Samples will be picked from: {args.Samples}',"OKCYAN")
+    cprint(f'Samples will be picked from: {Samples}',"OKCYAN")
     cprint(f'Pre-processor will be picked from: {PreProcessor}',"OKCYAN")
     cprint(f'Pre-selector will be picked from: {PreSelection}',"OKCYAN")
     cprint(f'Main-analysis will be picked from: {AnalysisScript}','OKCYAN')
@@ -100,12 +110,17 @@ if __name__=='__main__':
     OutputName=(AnalysisScript).split('/')[2].replace(".py","")
     #---------------------------
     #------------------- GetTheSamples #-------------------###########
-    my_file = open(str(args.Samples), "r")
-    sampledata = my_file.read()
-    print(f'reading:')
-    print(f'{sampledata}')
-    SampleList=sampledata.split("\n")
-    Ana.SampleList = [i for i in SampleList if i]
+    
+    if not args.Sample:
+            my_file = open(str(Samples), "r")
+            sampledata = my_file.read()
+            print(f'reading:')
+            print(f'{sampledata}')
+            SampleList=sampledata.split("\n")
+            Ana.SampleList = [i for i in SampleList if i]
+    if args.Sample:    
+        Ana.SampleList = [Samples]
+    
     Ana.GetSamples()
     Ana.SetVarsToSave(args.Analysis)
     #---------------------------

@@ -34,3 +34,16 @@ class hcoll:
 
 def binning(a,b,c):
     return list(np.arange(a,b+c,c))
+
+if __name__=='__main__':
+
+    print('''
+        This the main histogramming class of expresso
+
+    Every instance of hcoll contains a collection of hist histograms
+
+    ''')
+
+    print('''
+        See testAnalysis folder to create your own barebones analysis
+    ''')

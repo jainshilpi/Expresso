@@ -40,7 +40,10 @@ class ExpressoPlotter():
         self._year=year
         self._plots=[]
         self.plot_live=False
-        self.SSaveLocation=''
+        self._SSaveLocation='./'
+        settingspath = Path('modules/plotsettings.yaml')
+        with open(settingspath) as stream:
+            self._ps=yaml.safe_load(stream)
         
     def settings(self,file):
         path = Path(file)

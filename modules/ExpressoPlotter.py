@@ -82,7 +82,12 @@ class ExpressoPlotter():
         self._loc=loc
     def savelocation(self,loc):
         self._SSaveLocation=loc
-    
+        isExist = os.path.exists(self._SSaveLocation)
+        if not isExist:
+            os.makedirs(self._SSaveLocation)
+            print("created folder : ", self._SSaveLocation)
+            
+        
     def addfile(self,label,file,color,stack,scale):
         self._files.append({'label':label,'file':file,'color':color,'stack':stack,
                             'scale':scale,

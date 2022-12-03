@@ -121,8 +121,3 @@ def tightSelElec(clean_and_FO_selection_TTH, mvaTTH):
 
 def tightSelMuon(clean_and_FO_selection_TTH, mediumId, mvaTTH):
     return (clean_and_FO_selection_TTH) & (mediumId>0) & (mvaTTH > get_param("mva_TTH_m_cut"))
-
-def isClean(obj_A, obj_B, drmin=0.4):
-    objB_near, objB_DR = obj_A.nearest(obj_B, return_metric=True)
-    mask = ak.fill_none(objB_DR > drmin, True)
-    return (mask)

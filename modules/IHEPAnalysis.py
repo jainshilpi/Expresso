@@ -3,7 +3,7 @@ os.environ['OPENBLAS_NUM_THREADS'] = '1'
 from coffea import processor#,hist
 import modules.ExpressoTools as ET
 import modules.IHEPProcessor as IHEPProcessor
-from coffea.nanoevents import NanoAODSchema
+from coffea.nanoevents import NanoAODSchema, BaseSchema, DelphesSchema
 import json
 import logging
 import threading
@@ -118,9 +118,11 @@ class IHEPAnalysis:
             ar={'workers':20}
             executor = processor.futures_executor(**ar)
             
-            
-        Schema=NanoAODSchema
-        exec('Schema='+schema)
+        
+        if schema=='NanoAODSchema': Schema=NanoAODSchema
+        elif schema=='BaseSchema': Schema=BaseSchema
+        else :
+            print(f"What is {'schema'} ??? Only NanoAODSchema and BaseSchema allowed");quit()
         runner = processor.Runner(executor, schema=Schema, chunksize=chunksize, maxchunks=maxchunks, skipbadfiles=False, xrootdtimeout=360)
         processor_instance=IHEPProcessor.IHEPProcessor(logfolder,treefolder,dt,ET,self.loglevel,self.AnalysisName,self.varstosave,
                                                        self.preprocess,self.preselect,self.analysis,
@@ -145,6 +147,7 @@ class IHEPAnalysis:
         kk=[]
         for isa in self.samples:
             print(f'############ Running analysis for :{isa["histAxisName"]} ############')
+            print(f'Reading schema {schema}')
             elapsed,kki=self.runasample(tstart,isa,OutputName,
                                              xrootd,chunksize,maxchunks,
                                              mode,schema,port)

@@ -1,0 +1,18 @@
+{
+  "xsec": 21.46,
+  "year": -1,
+  "treeName": "Events",
+  "histAxisName": "",
+  "options": "",
+  "WCnames": [],
+  "nEvents": 400000,
+  "nGenEvents": 400000,
+  "nSumOfWeights": 8590259.391042387,
+  "isData": false,
+  "path": "/GluGluHToZG_ZToLL_M-125_13TeV_powheg_pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM",
+  "files": [
+    "root://store/cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZG_ZToLL_M-125_13TeV_powheg_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/40000/0096A969-0B43-E811-813F-001E677928D4.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZG_ZToLL_M-125_13TeV_powheg_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/20000/48179E52-8743-E811-91A2-0CC47A1E0DCE.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZG_ZToLL_M-125_13TeV_powheg_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/20000/A2AD0857-8743-E811-889B-001E67E6F864.root"
+  ]
+}

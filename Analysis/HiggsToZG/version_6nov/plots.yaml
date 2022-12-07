@@ -1,0 +1,14 @@
+files:
+  GluGluToZGToLLG: GluGluHToZG.pkl.gz
+normal_Mmmg:
+  '1':
+    Mmmg:
+      axis: Mmmg
+      file: GluGluToZGToLLG
+      scale: 1
+      stack: false
+    args:
+      color: red
+      label: GluGluToZGToLLG
+year: 2016
+

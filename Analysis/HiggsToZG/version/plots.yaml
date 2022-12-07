@@ -1,0 +1,14 @@
+files:
+  GluGluHZG: GluGluHToZG.pkl.gz
+normal_Meeg:
+  '1':
+    M_eeg:
+      axis: M_eeg
+      file: GluGluHZG
+      scale: 1
+      stack: false
+    args:
+      color: red
+      label: GluGluHZG
+year: 2016
+

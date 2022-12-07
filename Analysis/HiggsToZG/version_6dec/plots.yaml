@@ -1,0 +1,90 @@
+files:
+  GluGluToZGToLLG: GluGluHToZG.pkl.gz
+  Zgamma: Zgamma.pkl.gz
+  Zjets: Zjets.pkl.gz
+normal_Meeg:
+  '1':
+    Meeg:
+      axis: Meeg
+      file: GluGluToZGToLLG
+      scale: 1
+      stack: false
+    args:
+      color: red
+      label: GluGluToZGToLLG
+  '2':
+    Meeg:
+      axis: Meeg
+      file: Zgamma
+      scale: 1
+      stack: false
+    args:
+      color: blue
+      label: Zgamma
+  '3':
+    Meeg:
+      axis: Meeg
+      file: Zjets
+      scale: 1
+      stack: false
+    args:
+      color: green
+      label: Zjets
+normal_Mmmg:
+  '1':
+    Mmmg:
+      axis: Mmmg
+      file: GluGluToZGToLLG
+      scale: 1
+      stack: false
+    args:
+      color: red
+      label: GluGluToZGToLLG
+  '2':
+    Mmmg:
+      axis: Mmmg
+      file: Zgamma
+      scale: 1
+      stack: false
+    args:
+      color: blue
+      label: Zgamma
+  '3':
+    Mmmg:
+      axis: Mmmg
+      file: Zjets
+      scale: 1
+      stack: false
+    args:
+      color: green
+      label: Zjets
+normal_Mttg:
+  '1':
+    Mttg:
+      axis: Mttg
+      file: GluGluToZGToLLG
+      scale: 1
+      stack: false
+    args:
+      color: red
+      label: GluGluToZGToLLG
+  '2':
+    Mttg:
+      axis: Mttg
+      file: Zgamma
+      scale: 1
+      stack: false
+    args:
+      color: blue
+      label: Zgamma
+  '3':
+    Mttg:
+      axis: Mttg
+      file: Zjets
+      scale: 1
+      stack: false
+    args:
+      color: green
+      label: Zjets
+year: 2016
+

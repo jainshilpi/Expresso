@@ -1,0 +1,32 @@
+{
+  "xsec": 29.38,
+  "year": "2018",
+  "treeName": "Events",
+  "histAxisName": "GluGluHToZG",
+  "options": "",
+  "WCnames": [],
+  "nEvents": 335300,
+  "nGenEvents": 335300,
+  "nSumOfWeights": 9744705.612661123,
+  "isData": false,
+  "path": "/GluGluHToZG_M-125_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM",
+  "files": [
+    "root://xrootd-cms.infn.it//store/mc/RunIIAutumn18NanoAODv7/GluGluHToZG_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/100000/C18439D2-7124-2F40-887B-803EB5ED11A1.root",
+    "root://xrootd-cms.infn.it//store/mc/RunIIAutumn18NanoAODv7/GluGluHToZG_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/260000/056D0526-4D21-264A-B20F-F14D583A54CC.root",
+    "root://xrootd-cms.infn.it//store/mc/RunIIAutumn18NanoAODv7/GluGluHToZG_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/260000/671613F8-7878-004E-B991-DA7DA4BAC06A.root",
+    "root://xrootd-cms.infn.it//store/mc/RunIIAutumn18NanoAODv7/GluGluHToZG_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/60000/35ABAF5A-26FA-714E-8D82-A80E15856897.root",
+    "root://xrootd-cms.infn.it//store/mc/RunIIAutumn18NanoAODv7/GluGluHToZG_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/70000/E069C4A4-9EC9-524C-9797-E57129F5A9DA.root",
+    "root://xrootd-cms.infn.it//store/mc/RunIIAutumn18NanoAODv7/GluGluHToZG_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/60000/D40F306C-2C16-5C46-BBCA-4003BE4A326A.root",
+    "root://xrootd-cms.infn.it//store/mc/RunIIAutumn18NanoAODv7/GluGluHToZG_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/110000/FBDD3300-8EDD-1D4A-9D5C-A6EA7EC5A9D4.root",
+    "root://xrootd-cms.infn.it//store/mc/RunIIAutumn18NanoAODv7/GluGluHToZG_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/110000/C3A7741B-915E-A449-BAB6-20F38C9AC347.root",
+    "root://xrootd-cms.infn.it//store/mc/RunIIAutumn18NanoAODv7/GluGluHToZG_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/130000/D17EDFE9-F5BE-494E-A9A0-9AEF3AA26D99.root",
+    "root://xrootd-cms.infn.it//store/mc/RunIIAutumn18NanoAODv7/GluGluHToZG_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/130000/5F92B9FA-5AE7-4E4B-B0C4-17D914965B81.root",
+    "root://xrootd-cms.infn.it//store/mc/RunIIAutumn18NanoAODv7/GluGluHToZG_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/60000/9F3EE1E3-44FA-3144-A6B3-A8D481B4EBC0.root",
+    "root://xrootd-cms.infn.it//store/mc/RunIIAutumn18NanoAODv7/GluGluHToZG_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/100000/2E28DC82-CB4C-F744-BE31-A3E1BC031C18.root",
+    "root://xrootd-cms.infn.it//store/mc/RunIIAutumn18NanoAODv7/GluGluHToZG_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/70000/22B8EE40-AF88-DE45-8D13-21992F367618.root",
+    "root://xrootd-cms.infn.it//store/mc/RunIIAutumn18NanoAODv7/GluGluHToZG_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/110000/B2C1D84D-8C4D-E946-9E17-D03813363839.root",
+    "root://xrootd-cms.infn.it//store/mc/RunIIAutumn18NanoAODv7/GluGluHToZG_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/260000/B0994759-F56A-2541-9D2A-7573D01B5BFC.root",
+    "root://xrootd-cms.infn.it//store/mc/RunIIAutumn18NanoAODv7/GluGluHToZG_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/130000/839FF072-FF25-6344-9882-07B6A3285A92.root",
+    "root://xrootd-cms.infn.it//store/mc/RunIIAutumn18NanoAODv7/GluGluHToZG_M-125_TuneCP5_13TeV-powheg-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/120000/7BB889C0-0816-3A44-A14D-18446DEE79D7.root"
+  ]
+}

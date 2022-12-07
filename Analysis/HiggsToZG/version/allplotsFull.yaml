@@ -1,0 +1,12 @@
+2016:
+    ######## format samplename: filename,color,stack(nostack),scale
+    GluGluHZG: GluGluHToZG.pkl.gz,red,nostack,1
+    ZGToLLG: Zgamma.pkl.gz,green,nostack,1
+    Zjets: Zjets.pkl.gz,blue,nostack,1
+plots:
+    ######## format plottype_ref: axisname
+    normal_Mtt: M_tt
+    normal_Mee: M_ee
+    normal_Muu: M_uu
+    normal_Tau_pt: Tau_pt
+    

@@ -1,0 +1,3 @@
+Analysis/HiggsToZG/jsons/ggH.json
+Analysis/HiggsToZG/jsons/Zg.json
+Analysis/HiggsToZG/jsons/Zjets.json

@@ -1,0 +1,18 @@
+{
+  "xsec": 51.92,
+  "year": "2018",
+  "treeName": "Events",
+  "histAxisName": "Zgamma",
+  "options": "",
+  "WCnames": [],
+  "nEvents": 1418508,
+  "nGenEvents": 1418508,
+  "nSumOfWeights": 139613227.29204592,
+  "isData": false,
+  "path": "/ZGToLLG_01J_5f_PDFWeights_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM",
+  "files": [
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIAutumn18NanoAODv7/ZGToLLG_01J_5f_PDFWeights_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/60000/D05B1E10-19A3-134F-BBCC-8F4D3A77297F.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIAutumn18NanoAODv7/ZGToLLG_01J_5f_PDFWeights_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/60000/F143F8FB-C127-C54A-BE80-9762162E17ED.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIAutumn18NanoAODv7/ZGToLLG_01J_5f_PDFWeights_TuneCP5_13TeV-amcatnloFXFX-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/60000/30CF6C78-A1D4-9E42-9106-DEF1F4FD1644.root"
+  ]
+}

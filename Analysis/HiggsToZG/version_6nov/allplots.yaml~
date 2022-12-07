@@ -1,0 +1,10 @@
+2016:
+    ######## format samplename: filename,color,stack(nostack),scale
+    GluGluToZGToLLG: GluGluHToZG.pkl.gz,red,nostack,1
+plots:
+    ######## format plottype_ref: axisname
+    normal_Meeg: Meeg
+    normal_Mmmg: Mmmg
+    normal_Mttg: Mttg
+
+    

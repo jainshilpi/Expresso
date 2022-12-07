@@ -1,0 +1,32 @@
+{
+  "xsec": 29.38,
+  "year": "2016",
+  "treeName": "Events",
+  "histAxisName": "GluGluHToZG",
+  "options": "",
+  "WCnames": [],
+  "nEvents": 183639,
+  "nGenEvents": 183639,
+  "nSumOfWeights": 526.994356141,
+  "isData": false,
+  "path": "/GluGluHToZGToMuMuG_M125_MLL-50To1000_012j_13TeV_amcatnloFXFX_pythia8/RunIIFall17NanoAOD-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/NANOAODSIM",
+  "files": [
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZGToMuMuG_M125_MLL-50To1000_012j_13TeV_amcatnloFXFX_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/C603AD09-12B5-E811-AC7E-0025904403FE.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZGToMuMuG_M125_MLL-50To1000_012j_13TeV_amcatnloFXFX_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/34135E63-11B5-E811-A8F7-002590E7E02E.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZGToMuMuG_M125_MLL-50To1000_012j_13TeV_amcatnloFXFX_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/4E10C058-11B5-E811-AE9B-008CFAFC4340.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZGToMuMuG_M125_MLL-50To1000_012j_13TeV_amcatnloFXFX_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/C8199361-11B5-E811-8989-14187763B811.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZGToMuMuG_M125_MLL-50To1000_012j_13TeV_amcatnloFXFX_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/CA39A41F-11B5-E811-AF7C-B499BAAC0694.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZGToMuMuG_M125_MLL-50To1000_012j_13TeV_amcatnloFXFX_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/96E5ECF0-10B5-E811-ABD9-A0369FE2C206.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZGToMuMuG_M125_MLL-50To1000_012j_13TeV_amcatnloFXFX_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/76BEEC46-11B5-E811-A60F-001E67DFFB31.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZGToMuMuG_M125_MLL-50To1000_012j_13TeV_amcatnloFXFX_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/B86DCA31-11B5-E811-805F-0CC47A4D7664.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZGToMuMuG_M125_MLL-50To1000_012j_13TeV_amcatnloFXFX_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/24316729-11B5-E811-9076-0025905D1E00.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZGToMuMuG_M125_MLL-50To1000_012j_13TeV_amcatnloFXFX_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/189A21FD-11B5-E811-9A30-001E675811CC.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZGToMuMuG_M125_MLL-50To1000_012j_13TeV_amcatnloFXFX_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/B019AD55-11B5-E811-872E-B496910919E0.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZGToMuMuG_M125_MLL-50To1000_012j_13TeV_amcatnloFXFX_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/14BF3A2D-11B5-E811-9BCD-001E67E6F7E7.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZGToMuMuG_M125_MLL-50To1000_012j_13TeV_amcatnloFXFX_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/E0937D62-11B5-E811-A50A-A0369FC51AD4.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZGToMuMuG_M125_MLL-50To1000_012j_13TeV_amcatnloFXFX_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/B01DABF3-11B5-E811-A4DB-D4AE5269F611.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZGToMuMuG_M125_MLL-50To1000_012j_13TeV_amcatnloFXFX_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/1AF64E22-11B5-E811-857B-EC0D9A847EAA.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZGToMuMuG_M125_MLL-50To1000_012j_13TeV_amcatnloFXFX_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/9A5929F0-11B5-E811-A547-0017A477106C.root",
+    "root://cms-xrd-global.cern.ch//store/mc/RunIIFall17NanoAOD/GluGluHToZGToMuMuG_M125_MLL-50To1000_012j_13TeV_amcatnloFXFX_pythia8/NANOAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/80FEE73D-11B5-E811-ABDB-44A8420CC916.root"
+  ]
+}
